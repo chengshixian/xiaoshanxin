@@ -1,3 +1,9 @@
+# Instructions for Language Switching
+You can switch between Chinese and English content by viewing the following language blocks.
+
+[中文介绍](https://github.com/chengshixian/xiaoshanxin)
+[English](https://github.com/chengshixian/xiaoshanxin/blob/main/README.en.md)
+
 ![输入图片说明](https://img.xiaoshanxin.com/images/gitee/jieshao.png)
 # Instructions for Use
 -This system is a medical software. To ensure the security of medical services, the code of this software is encrypted.
