@@ -1,0 +1,132 @@
+{template './common/mainHeader'}
+<div class="app-container-right">
+	<ul class="nav nav-tabs">
+		<li class="active">
+			<a href="javascript:;">问卷列表</a>
+		</li>
+	</ul>
+	<div class="app-content">
+		<div class="app-filter">
+			<div class="filter-action">
+				<!--<span class="btn btn-primary" id="addCate">-->
+				<!--	<i class="fa fa-plus"></i> 新增问卷-->
+				<!--</span>-->
+				<a class="btn btn-primary" href="/web/index.php?c=site&a=entry&do=follow&op=wenjuanadd&ac=wenjuanadd&m=xsx_v3&zid={$zid}&hid={$_SESSION['hid']}">新增问卷</a>
+			</div>
+			<div class="filter-list">
+				<form action="" method="get">
+					<input type="hidden" name="c" value="site" />
+					<input type="hidden" name="a" value="entry" />
+					<input type="hidden" name="m" value="xsx_v3" />
+					<input type="hidden" name="op" value="wenjuanlist" />
+					<input type="hidden" name="ac" value="wenjuanlist" />
+					<input type="hidden" name="do" value="wenjuan" />
+					<div class="form-group">
+						<label class="col-sm-2 control-label">关键字</label>
+						<div class="col-sm-9">
+							<input type="text" name="keyword" class="form-control" value="{$keyword}" placeholder="请输入关键字" />
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="col-sm-2 control-label"></label>
+						<div class="col-sm-9">
+							<button class="btn btn-primary">筛选</button>
+						</div>
+					</div>
+				</form>
+			</div>
+		</div>
+		<div class="app-table-list">
+			<div class="table-responsive">
+				<table class="table table-hover table-bordered">
+					<thead class="navbar-inner">
+						<tr>
+							<th style="width: 10%;">ID</th>
+							<th style="width: 15%;">一级分类名称</th>
+							<th style="width: 15%;">二级分类名称</th>
+							<th style="width: 15%;">问卷名称(点击编辑)</th>
+							<th style="width: 15%;">排序(点击编辑)</th>
+							<th style="width: 15%;">状态(点击编辑)</th>
+							<th style="width: 15%;">操作</th>
+						</tr>
+					</thead>
+					<tbody>
+					    {loop $row $item}
+						<tr>
+							<td>{$item['id']}</td>
+							<td>
+								{$item['one_name']}
+							</td>
+							<td>
+								{$item['two_name']}
+							</td>
+							<td>
+								<a href='javascript:;' data-toggle='ajaxEdit' data-href="{php echo $this->createWeburl('follow',array('op'=>'change3','change'=>'name','id'=>$item['id']));}">
+									{$item['name']} </a>
+							</td>
+							<td>
+								<a href='javascript:;' data-toggle='ajaxEdit' data-href="{php echo $this->createWeburl('follow',array('op'=>'change3','change'=>'strot','id'=>$item['id']));}">
+									{$item['strot']} </a>
+							</td>
+							<td>
+								<span class="change">
+								    <span style="float: left;" class='label {if $item['type'] == '0'} label-primary {else} label-default {/if}'
+										  data-toggle='ajaxSwitch'
+										  data-switch-value="{$item['type']}"
+                                          
+										  data-switch-value0='1|禁用|label label-default|./index.php?c=site&a=entry&op=change3&change=type&id={$item['id']}&do=follow&m=xsx_v3&value=0'
+                                       
+										  data-switch-value1='0|启用|label label-primary|./index.php?c=site&a=entry&op=change3&change=type&id={$item['id']}&do=follow&m=xsx_v3&value=1'
+										  >
+									
+										  {if $item['type'] == '1'} 启用 {else} 禁用 {/if} </span>
+								</span>
+							</td>
+							<td style="position: relative;">
+								<!--<a class="btn btn-primary btn-sm editCate" onclick="editCate(this)" data-id="{$item['id']}" title="编辑">编辑</a>-->
+								<a class="btn btn-primary btn-sm" href="/web/index.php?c=site&a=entry&do=follow&op=wenjuanadd&ac=wenjuanadd&m=xsx_v3&id={$item['id']}&hid={$_SESSION['hid']}">编辑</a>
+								<!--<a class="btn btn-sm btn-danger" data-toggle="ajaxRemove" href="{php echo $this->createWebUrl('wenjuan',array('op'=>'wenjuanlistdel','id'=>$item['id']))}" data-confirm="确认删除此问卷吗？">删除</a>-->
+								<a class="btn btn-sm btn-danger" onclick="confirmDel(this)" data-id="{$item['id']}" data-confirm="确认删除此问卷吗？">删除</a>
+							</td>
+						</tr>
+                        {/loop}
+					</tbody>
+				</table>
+			</div>
+			<div class="app-table-foot clearfix">
+				<div class="pull-left">
+
+				</div>
+				<div class="pull-right">
+				</div>
+			</div>
+		</div>
+	</div>
+
+    <script type="text/javascript" src="{php echo XSX_ADMIN}/js/table_edit.js"></script>
+	<script type="text/javascript">
+        function confirmDel(data){
+            var data_confirm = $(data).attr("data-confirm");
+            var data_id = $(data).attr("data-id");
+            console.log(data_id)
+            if(confirm(data_confirm)){
+                var url = "{$_W['siteroot']}web/index.php?c=site&a=entry&do=follow&op=wenjuanlistdel&ac=wenjuanlistdel&m=xsx_v3";
+                $.post(url, {
+                    id: data_id,
+                }, function (ret) {
+                	console.log(ret)
+                    util.tips("操作成功！");
+                    setTimeout(function () {
+                        location.reload();
+                    }, 500);
+                }, 'json');
+            }
+        }
+	</script>
+</div>
+</div>
+</div>
+
+
+</body>
+</html>

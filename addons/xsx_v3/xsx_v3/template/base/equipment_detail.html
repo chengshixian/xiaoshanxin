@@ -1,0 +1,48 @@
+{template './common/mainHeader'}
+<ul class="nav nav-tabs">
+	<li class="active"><a href="#">设备管理</a></li>
+</ul>
+<div class="app-content">
+	<div class="app-filter">
+	
+		<div class="filter-action">
+			<a class="btn btn-primary" href="/web/index.php?c=site&a=entry&op=add_equipmentdetail&ac=equipment_detail&do=base&m=xsx_v3">添加设备</a>
+		</div>
+		
+	</div>
+	
+	<div class="app-table-list">
+		<div class="table-responsive">
+			<table class="table table-hover">
+				<thead>
+					<tr>
+						<th class="text-center">id</th>
+						<th class="text-center">设备名</th>
+						<th class="text-center">图片</th>
+						<th class="text-center">操作</th>
+					</tr>
+				</thead>
+				<tbody>
+					{loop $list $adv}
+						<tr  class="text-center">
+							
+							<td>{$adv['id']}</td>
+							<td><img class="scrollLoading" src="{php echo tomedia($adv['thumb'])}" data-url="{php echo tomedia($adv['thumb'])}" onerror="this.src='{php echo tomedia($adv['thumb'])}'" height="50" width="100"/></td>
+							<td>{$adv['title']}</td>
+							<td>
+								<a href="/web/index.php?c=site&a=entry&op=add_equipmentdetail&ac=add_equipmentdetail&do=base&m=xsx_v3&id={$adv['id']}" class="btn btn-default btn-sm" data-toggle="tooltip" data-placement="top" title="查看"><i class="fa fa-edit"></i>查看</a>
+								<a href="/web/index.php?c=site&a=entry&op=del_equipmentdetail&ac=del_equipmentdetail&do=base&m=xsx_v3&id={$adv['id']}" class="btn btn-default btn-sm" data-toggle="tooltip" data-placement="top" title="删除"><i class="fa fa-times">删除</i></a>
+							</td>
+						</tr>
+					{/loop}
+				</tbody>
+			</table>
+		</div>
+		
+	</div>
+</div>
+<script type="text/javascript">
+	$("#search").click(function(){
+		$('#form1')[0].submit();
+	});
+</script>

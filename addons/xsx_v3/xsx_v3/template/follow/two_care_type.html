@@ -1,0 +1,64 @@
+{template './common/mainHeader'}
+<div class="app-container-right">
+            <style>
+    td>i{cursor:pointer; display:inline-block; width:100%; height:100%; color:#428bca;}
+    .category-caret{display:inline-block; width:20px; margin: 0 10px; text-align:center; cursor:pointer; color:#d9534f;}
+    .add.add_level0{cursor:pointer;}
+    .scrollLoading{border-radius: 50px;}
+</style>
+<ul class="nav nav-tabs">
+    <li  class="active" ><a href="#">关心提醒二级分类管理</a></li>
+    <li>
+        <a href="./index.php?c=site&a=entry&do=follow&op=edit_two_care&ac=care_type&pid={$pid}&m=xsx_v3">添加关心提醒二级分类</a>
+    </li>
+</ul>
+<div class="app-content">
+    <div class="app-table-list">
+        <div class="table-responsive">
+                <table class="table table-hover">
+                    <thead>
+                        <tr>
+                            <th class="text-center" width="10%">ID</th>
+                            <th class="text-center" width="10%">分类图片</th>
+                            <th class="text-center" width="30%">分类名称</th>
+                            <th class="text-center" width="10%">开启状态</th>
+                            <th class="text-center" width="20%">操作</th>
+                        </tr>
+                    </thead>
+                    <tbody >
+                        {loop $res $list}
+                        <tr class="text-center">
+                            <td>{$list['id']}</td>
+                            <td class="text-center">
+                                <img class="scrollLoading" src="{if empty($list['thumb'])}../web/resource/images/nopic.jpg{else}{php echo tomedia($list['thumb'])}{/if}"  height="45" width="45" >
+                            </td>
+                            <td class="text-center">
+                                <div>
+                                    <span>{$list['title']}</span>
+                                </div>
+                            </td>
+                            <td  class="text-center">
+                                <label class='label label-success'>{if $list['status']=='1'}开启{else}关闭{/if}</label>
+                            </td>
+                            
+                            <td  class="text-center">
+                                <a href="{php echo $this->createWebUrl('follow',array('ac'=>'care_type','op'=>'edit_two_care','id'=>$list['id'],'pid'=>$list['pid']))}" class="btn btn-default btn-sm" data-toggle="tooltip" data-placement="top" title="修改">
+                                    编辑
+                                </a>
+                                -
+                                <a href="{php echo $this->createWebUrl('follow',array('ac'=>'care_type','op'=>'del_care_type','pid'=>$list['pid'],'id'=>$list['id']))}" class="btn btn-danger btn-sm" data-toggle="tooltip" data-placement="top" title="删除">
+                                    删除
+                                </a>
+                            </td>
+                        </tr>
+                        
+                        {/loop}
+                </tbody>
+
+                </table>
+            </div>
+            {$pager}
+    </div>
+</div>
+
+{template './common/mainfooter'}

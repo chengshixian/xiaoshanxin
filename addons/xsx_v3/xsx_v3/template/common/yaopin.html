@@ -1,0 +1,34 @@
+<div style='max-height:500px;overflow:auto;min-width:580px;'>
+    <table class="table table-hover" style="min-width:580px;">
+        <thead>
+            <th></th>
+        </thead>
+        <tbody>   
+            {loop $records $row}
+            <tr>
+                <td>
+                    <img src='{$row['sthumb']}' style='width:30px;height:30px;padding1px;border:1px solid #ccc' /> 
+                    <span class="bold-text">{$row['sname']}</span> <!-- 使用CSS类 -->
+                    </br> {if $row['yaopin_leixin'] == 1}  <span style="font-weight: bold; color: red;">中药</span> {/if} 规格: {$row['guige']}
+                    单位:{$row['company']}  供应商:{$row['supplier']}
+                </td>
+                <td style="width:80px;">
+                    <!-- 传递 timestamp 给选择按钮 -->
+                    <a href="javascript:;" onclick='select_yaopin({php echo json_encode($row);},"{php echo $_POST['id']; }")'>选择</a>
+                </td>
+            </tr>
+            {/loop}
+            {if count($records) <= 0}
+            <tr> 
+                <td colspan='4' align='center'>未找到</td>
+            </tr>
+            {/if}
+        </tbody>
+    </table>
+</div> 
+
+<style>
+    .bold-text {
+        font-weight: bold;
+    }
+</style>

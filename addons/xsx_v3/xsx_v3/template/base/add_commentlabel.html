@@ -1,0 +1,119 @@
+{template './common/mainHeader'}
+<ul class="nav nav-tabs">
+	<li ><a href="/web/index.php?c=site&a=entry&op=comment_label&ac=comment_label&do=base&m=xsx_v3">评分标签管理</a></li>
+	<li {if empty($id)}class="active"{/if}><a href="">添加评分标签</a></li>
+	{if !empty($id)}
+	<li class="active"><a href="#">编辑标签</a></li>
+	{/if}
+</ul>
+<div class="app-content">
+	<div class="app-form">
+		<form action="" method="post" class="form-horizontal form" enctype="multipart/form-data" >
+			<input type="hidden" name="id" value="{$id}" />
+			<div class="panel panel-default">
+				<div class="panel-heading">标签设置</div>
+				
+				<div class="form-group">
+					<label class="col-sm-2 control-label">标题<span class="must-fill">*</span></label>
+					<div class="col-sm-9">
+						<input type="text" name="title" class="form-control" value="{$item['title']}" >
+					</div>
+				</div>
+				<div class="form-group" id="noleveldiv">
+                    <label class="col-sm-2 control-label">评分等级</label>
+                    <div class="col-sm-9">
+                        <div class="star-rating rating-xs rating-active">
+                            <input type="hidden" name="score" id="star" value="{$item['score']}">
+                            <div class="rating-container rating-gly-star">
+                                <img src="../addons/xsx_v3/public/resource/images/star-on-big.png" alt="1" class="star">
+                                <img src="../addons/xsx_v3/public/resource/images/star-on-big.png" alt="2" class="star">
+                                <img src="../addons/xsx_v3/public/resource/images/star-on-big.png" alt="3" class="star">
+                                <img src="../addons/xsx_v3/public/resource/images/star-on-big.png" alt="4" class="star">
+                                <img src="../addons/xsx_v3/public/resource/images/star-on-big.png" alt="5" class="star">
+                            </div>
+                        </div>
+                        <span class="help-block text-danger" id="nolevel" style="display:none">请选择评分等级</span>
+                    </div>
+                </div>
+				<div class="form-group">
+					<label class="col-sm-2 control-label">是否显示</label>
+					<div class="col-sm-9">
+						<div class="radio-inline">
+							<input type="radio" name='status' value='1' {if $item['status']==1}checked{/if}>是
+						</div>
+						<div class="radio-inline">
+							<input type="radio" name='status' value='0' {if $item['status']==0}checked{/if}>否
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="form-group">
+				<label class="col-sm-2 control-label"></label>
+				<div class="col-sm-9">
+					<input type="submit" name="submit" value="提交" class="btn btn-primary min-width" />
+					<input type="hidden" name="token" value="{$_W['token']}" />
+				</div>
+			</div>
+		</form>
+	</div>
+</div>
+{template './common/menulist'}
+<script type="text/javascript">
+	$(function(){
+		bindEvents();
+		url_system();
+		hideModal();
+
+	});
+	function bindEvents() {
+		require(['jquery', 'util'], function ($, util) {
+			$('.btn-select-pic').unbind('click').click(function () {
+				var imgitem = $(this).closest('.img-item');
+				util.image('', function (data) {
+					imgitem.find('img').attr('src', data['url']);
+					imgitem.find('input').val(data['attachment']);
+				});
+			});
+		});
+	}
+</script>
+<script type="text/javascript">
+var res = $("#star").val();
+$(".star").each(function(){
+    $(".rating-container").find('img').each(function(){
+        var _this = $(this);
+        if(_this.attr('alt') <= res){
+            _this.attr('src','../addons/xsx_v3/public/resource/images/star-on-big.png');
+        }else{
+            _this.attr('src','../addons/xsx_v3/public/resource/images/star-off-big.png');
+        }
+    }
+    );
+});
+    $('.star').click(function(){
+        var _t = $(this);
+        var star = _t.attr('alt');
+        $('#star').val(star);
+        $('.caption').html('');
+        
+        $(".star").each(function(){
+            $(".rating-container").find('img').each(function(){
+                var _this = $(this);
+                if(_this.attr('alt') <= star){
+                    _this.attr('src','../addons/xsx_v3/public/resource/images/star-on-big.png');
+                }else{
+                    _this.attr('src','../addons/xsx_v3/public/resource/images/star-off-big.png');
+                }
+            }
+            );
+        });
+
+    });
+</script>
+<script type="text/javascript" src="{php echo XSX_ADMIN}/js/showmodel.js"></script>
+<script>
+	$('input[name="nav[thumb]"]').attr('required','required');
+	$("#reset").on('click',function(){
+		$("#color").val('#666').trigger('propertychange');
+	});
+</script>

@@ -1,0 +1,20 @@
+{
+  "name": "yourproject/yourproject",
+  "type": "library",
+  "license": "MIT",
+  "authors": [
+    {
+      "name": "bytedance"
+    }
+  ],
+  "require": {
+    "volcengine/volc-sdk-php": "*",
+    "guzzlehttp/guzzle": "7.0"
+  },
+  "description": "",
+  "autoload": {
+    "psr-4": {
+      "YourProject\\": "./"
+    }
+  }
+}

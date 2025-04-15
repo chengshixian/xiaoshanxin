@@ -1,0 +1,89 @@
+<div class="el-dialog__wrapper" >
+    <div role="dialog" aria-modal="true" aria-label="dialog" class="el-dialog" style="margin-top: 15vh;">
+        <div class="el-dialog__header">
+            <span class="el-dialog__title"></span>
+            <!---->
+        </div>
+        <div class="el-dialog__body">
+            <div class="boxPresMain">
+                <p class="presId">
+
+<!--                    <span class="sub floatR">-->
+<!--                        普通-->
+<!--                    </span>-->
+                </p>
+                <div class="cardHead">
+<!--                    <p class="title">-->
+<!--                        {$content['docdetail']['z_name']}医生的处方单-->
+<!--                    </p>-->
+<!--                    <p class="presType">-->
+<!--                        处方单-->
+<!--                    </p>-->
+<!--                    <p class="row1 flex justyBetween">-->
+<!--                        <span>姓名：{$content['names']}</span>-->
+<!--                        <span>性别：{$content['sex']}</span>-->
+<!--                        <span>年龄：<span>{$content['age']}岁</span>-->
+<!--                        </span>-->
+<!--                        <span>科室：{$content['docdetail']['name']}</span>-->
+<!--                        <span>费用：自费</span>-->
+<!--                    </p>-->
+<!--                    <p class="row1 flex justyBetween">-->
+<!--                        <span>病历号：{$content['users']['randnum']}</span>-->
+<!--&lt;!&ndash;                        <span>住址：{$content['region']}</span>&ndash;&gt;-->
+<!--                        <span>电话：{$content['tel']}</span>-->
+<!--                    </p>-->
+<!--                    <p class="row1 flex justyBetween">-->
+<!--                        <span>病情描述：{$content['content']['text']}</span>-->
+<!--                        <span>过敏史：{$content['content']['text4']}</span>-->
+<!--                        <span>既往病史：{$content['content']['text5']}</span>-->
+<!--                        <span>家族史：{$content['content']['text6']}</span>-->
+<!--                        <span>开具日期：{$content['createTime']}</span>-->
+<!--                    </p>-->
+                </div>
+                <div class="cardBody chinese">
+                         地址:{$content['cfimg']}
+                        <img class="chufangimg" src="{$content['cfimg']}">
+                       
+<!--                    <p class="rp">-->
+<!--                        Rp：-->
+<!--                    </p>-->
+<!--                    <div class="itemMed read ">-->
+<!--                        诊断信息：{$content['content']['text1']}-->
+<!--                    </div>-->
+<!--                    <div class="chineseTotalRead">-->
+
+<!--&lt;!&ndash;                        <p>建议用药：{$cartlist['sname']}</p>&ndash;&gt;-->
+
+<!--                        <p>医嘱：{$content['content']['text3']}</p>-->
+
+<!--                    </div>-->
+<!--                    <p class="boxSign flex justyBetween" style="margin-bottom: 60px;">-->
+<!--                        <span>审核药师：<span class="area">{$content['yaoname1']['name']}</span>-->
+<!--                        </span>-->
+<!--                        <span>复核药师：<span class="area">{$content['yaoname2']['name']}</span>-->
+<!--                        </span>-->
+<!--                    </p>-->
+<!--                    <p class="boxSign flex justyBetween">-->
+
+<!--                        <span>金额：<span class="area">{$content['totalMoney']}元</span>-->
+<!--                        </span>-->
+<!--                    </p>-->
+                </div>
+            </div>
+        </div>
+        <div class="el-dialog__footer">
+            <div class="dialog-footer">
+                <button type="button" class="el-button el-button--primary close2">
+                    <span>
+                        关闭
+                    </span>
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+<script type="text/javascript">
+                  $('.close2').click(function(){
+                $('.el-dialog__wrapper').hide()
+              })
+</script>

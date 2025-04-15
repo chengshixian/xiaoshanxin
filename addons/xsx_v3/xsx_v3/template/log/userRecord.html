@@ -1,0 +1,137 @@
+{template '/common/mainHeader'}
+<div class="app-container-right">
+	<ul class="nav nav-tabs">
+		<ul class="nav nav-tabs">
+			<li>
+			  <a href="index.php?c=site&a=entry&m=xsx_v3&dir=log&do=copysite&op=index&ac=index&act=log.index">管理员日志</a>
+			</li>
+			<li>
+			  <a href="index.php?c=site&a=entry&m=xsx_v3&dir=log&do=copysite&op=userRecord&ac=userRecord&act=log.userRecord">用户操作日志</a>
+			</li>
+		</ul>
+	</ul>
+	<div class="app-content">
+		<div class="app-filter">
+			<div class="filter-list">
+				<form action="" method="get" class="form-horizontal" id="form1">
+					<input type="hidden" name="c" value="site" />
+					<input type="hidden" name="a" value="entry" />
+					<input type="hidden" name="m" value="xsx_v3" />
+					<input type="hidden" name="op" value="userRecord" />
+					<input type="hidden" name="ac" value="userRecord" />
+					<input type="hidden" name="do" value="datum" />
+
+					<div class="form-group">
+						<label class="col-sm-2 control-label">时间</label>
+						<div class="col-sm-9 js-daterange" data-form="#form1">
+							<div class="btn-group">
+								<a href="javascript:;" class="btn js-btn-custom {if $times == '1'} btn-primary {else} btn-default {/if}" onclick="changes()">自定义</a>
+								<input type="hidden" name="times" value="{$times}" id="times">
+								<script type="text/javascript">
+									function changes(){
+										var times = $("#times").val();
+										if(times == '')
+										{
+											$("#times").val('1');
+										}else{
+											$("#times").val();
+										}
+									}
+								</script>
+							</div>
+							<span class="btn-daterange js-btn-daterange">
+
+							<script type="text/javascript">
+								require(["daterangepicker"], function(){
+									$(function(){
+										$(".daterange.daterange-date").each(function(){
+											var elm = this;
+											$(this).daterangepicker({
+												startDate: $(elm).prev().prev().val(),
+												endDate: $(elm).prev().val(),
+												format: "YYYY-MM-DD"
+											}, function(start, end){
+												$(elm).find(".date-title").html(start.toDateStr() + " 至 " + end.toDateStr());
+												$(elm).prev().prev().val(start.toDateStr());
+												$(elm).prev().val(end.toDateStr());
+												var times = $("#times").val();
+												if(times == '')
+												{
+													$("#times").val('1');
+												}else{
+													$("#times").val();
+												}
+											});
+										});
+									});
+								});
+							</script>
+
+							<input name="start" type="hidden" value="{$starts}" />
+							<input name="end" type="hidden" value="{$ends}" />
+							<button class="btn btn-default daterange daterange-date" type="button">
+								<span class="date-title">{$starts} 至 {$ends}</span>
+								<i class="fa fa-calendar"></i>
+							</button>
+						</span>
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="col-sm-2 control-label"></label>
+						<div class="col-md-9">
+							<button class="btn btn-primary" id="search">筛选</button>
+						</div>
+					</div>
+				</form>
+			</div>
+		</div>
+		<div class="app-table-list">
+			<div class="table-responsive">
+				<table class="table table-bordered table-hover">
+					<thead class="navbar-inner">
+					<tr>
+						<th>角色</th>
+						<th>微信昵称</th>
+						<th>姓名</th>
+						<th>操作行为</th>
+						<th>操作时间</th>
+						<!--						<th>盈亏</th>-->
+					</tr>
+					</thead>
+					<tbody>
+					{loop $data $item}
+					<tr>
+						<td>{$item['role']}</td>
+						<td>{$item['u_name']}</td>
+						<td>
+							{if $item['role'] == '医生'}
+								{$item['z_name']}
+							{else if $item['role'] == '药师'}
+								{$item['name']}
+							{else}
+							   无
+							{/if}
+						</td>
+						<td><strong>{$item['action']}</strong></td>
+						<td><strong>{$item['event_time']}</strong></td>
+						<!--						<td><strong>￥{$item['profit']}</strong></td>-->
+					</tr>
+					{/loop}
+					</tbody>
+				</table>
+			</div>
+		</div>
+		{$pager}
+	</div>
+</div>
+</div>
+</div>
+<div class="foot" id="footer">
+	
+</div>
+<div>
+
+
+</div>
+</body>
+</html>

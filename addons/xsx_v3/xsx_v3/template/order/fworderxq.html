@@ -1,0 +1,603 @@
+{template './common/mainHeader'}
+<div class="app-container-right">
+	<ul class="nav nav-tabs">
+		<li class="active">
+			<a href="">服务订单详情</a>
+		</li>
+	</ul>
+	<div class="app-content">
+		<div class="order-detail">
+			<div class="col-sm-4 padding-0">
+				<div class="panel panel-display">
+					<div class="panel-heading">
+						<h3>订单信息</h3>
+					</div>
+					<div class="panel-body">
+						<table class="table">
+							<tr>
+								<td width="150">下单人微信：</td>
+								<td>
+									<img src="{$itemone['u_thumb']}" style="width: 30px;height: 30px;margin-right: 5px;">{$itemone['u_name']}</td>
+							</tr>
+							<tr>
+								<td width="150">就诊人姓名：</td>
+								<td>{$itemone['names']}</td>
+							</tr>
+							<tr>
+								<td width="150">就诊人性别：</td>
+								<td>{$itemone['sex']}</td>
+							</tr>
+							<tr>
+								<td width="150">就诊人年龄：</td>
+								<td>{$itemone['age']}</td>
+							</tr>
+                            <tr>
+								<td width="150">身份证号：</td>
+								<td>{$itemone['cardnum']}</td>
+							</tr>
+							<tr>
+								<td width="150">订单编号：</td>
+								<td>{$itemone['ordersn']}</td>
+							</tr>
+							<tr>
+								<td>下单时间：</td>
+								<td>{$itemone['creattime']}</td>
+							</tr>
+							<tr>
+								<td>订单状态：</td>
+								<td>
+                                    <span class="label label-info">
+										{if $itemone['state'] == '0'}
+										待审核,
+										{else if $itemone['state'] == '1'}
+										待付款,
+										{else if $itemone['state'] == '2'}
+										进行中,
+										{else if $itemone['state'] == '3'}
+										已完成,
+										{else if $itemone['state'] == '4'}
+										已拒绝,
+										{else if $itemone['state'] == '5'}
+										已取消,
+										{/if}
+									</span>
+								</td>
+							</tr>
+						</table>
+					</div>
+				</div>
+				<div class="panel panel-display">
+					<div class="panel-heading">
+						<h3>订单日志</h3>
+					</div>
+					<div class="panel-body">
+						<table class="table">
+							<tr>
+								<td>
+									<p>
+										<i class="fa fa-info-circle"></i>
+										<strong>{$itemone['creattime']} 订单提交成功</strong>
+									</p>
+									<p style="padding-left:15px; ">单号:{$itemone['ordersn']}，等待审核</p>
+								</td>
+							</tr>
+                            {if $itemone['state'] == '1'}
+							<tr>
+								<td>
+									<p>
+										<i class="fa fa-info-circle"></i>
+										<strong>{$itemone['audittime']} 订单审核成功</strong>
+									</p>
+									<p style="padding-left:15px; ">审核成功，等待用户付款</p>
+								</td>
+							</tr>
+							{/if}
+							{if $itemone['state'] == '2'}
+							<tr>
+								<td>
+									<p>
+										<i class="fa fa-info-circle"></i>
+										<strong>{$itemone['paytime']} 订单支付成功</strong>
+									</p>
+									<p style="padding-left:15px; ">支付成功，等待确认发货</p>
+								</td>
+							</tr>
+							{/if}
+
+							{if $itemone['orderStatus'] == '3'}
+							<tr>
+								<td>
+									<p>
+										<i class="fa fa-info-circle"></i>
+										<strong>服务已完成</strong>
+									</p>
+									<p style="padding-left:15px; ">本次服务已完成</p>
+								</td>
+							</tr>
+							{/if}
+						</table>
+					</div>
+				</div>
+			</div>
+			<div class="col-sm-8 padding-r-0">
+				<div class="panel panel-display">
+					<div class="panel-heading">
+						<h3>订单费用</h3>
+					</div>
+					<div class="panel-body">
+						<table class="table">
+							<tr>
+								<td width="150">费用：</td>
+								<td>+￥ {$itemone['money']} </td>
+							</tr>
+						<tr>
+								<td width="150">分销推广支出：</td>
+								<td>-￥ {php echo empty($itemone['tkmoney']) ? '0.00' : $itemone['tkmoney']} </td>
+
+							</tr> 
+							<tr>
+								<td width="150">推荐人：</td>
+								<td>{php echo empty($itemone['tk']) ? '暂无' : $itemone['tk']} </td>
+
+							</tr>
+							<tr>
+
+						</tr>
+						<tr>
+							<td width="150">会员抵扣：</td>
+							<td>-￥ 0.00</td>
+
+						</tr> 
+						
+						<tr>
+							<td width="150">平台抽成：</td>
+							<td>-￥  0.00</td>
+
+						</tr> 
+							<tr>
+								<td width="150">机构实际收入：</td>
+								<td>
+									(本单用户实际支付:￥{$itemone['money']})</td>
+							</tr>
+
+						</table>
+					</div>
+				</div>
+				<div class="panel panel-display">
+					<div class="panel-heading">
+						<h3>服务信息</h3>
+					</div>
+					<div class="panel-body">
+						<table class="table table-hover">
+							<thead>
+								<tr>
+									<th style="width: 20rem;">服务名</th>
+									<th>简称</th>
+									<th>数量</th>
+									<th>费用(元)</th>
+									<!-- <th>操作</th> -->
+								</tr>
+							</thead>
+							
+							<tr>
+								<td>
+									<img src="{$itemone['main_image']}" style="width: 30px;height: 30px;margin-right: 5px;"> {$itemone['fname']}</td>
+								<td> {$itemone['minname']}</td>
+								<td>{$itemone['num']}</td>
+								<td>{$itemone['money']} 元</td>
+								<!-- <td class="text-right">
+									<a class="btn btn-primary btn-sm" target="_blank" href="{php echo $this->createWeburl('medicine',array('op'=>'add','sid'=>$item['sid']))}">查看详情</a>
+								</td> -->
+							</tr>
+						
+						</table>
+					</div>
+				</div>
+	
+				<div class="panel panel-display">
+					<div class="panel-heading">
+						<h3>订单信息</h3>
+					</div>
+					<div class="panel-body">
+						<table class="table">
+							<tr>
+								<td width="150">联系电话：</td>
+								<td>
+                                    {$itemone['tel']}
+								</td>
+							</tr>
+                            <tr>
+								<td width="150">转诊服务：</td>
+								<td>
+                                    {$itemone['fuwu']}
+								</td>
+							</tr>
+                            <tr>
+								<td width="150">医院名称：</td>
+								<td>
+                                    {$itemone['yiyuan']}
+								</td>
+							</tr>
+                            <tr>
+								<td width="150">科室名称：</td>
+								<td>
+                                    {$itemone['keshi']}
+								</td>
+							</tr>
+							<tr>
+								<td width="150">医生名称：</td>
+								<td>
+                                    {$itemone['yisheng']}
+								</td>
+							</tr>
+                            <tr>
+								<td width="150">预计就诊时间：</td>
+								<td>
+                                    {$itemone['yujijiuzhenshijian']}
+								</td>
+							</tr>
+                            <tr>
+								<td width="150">身份证号码：</td>
+								<td>
+                                    {$itemone['cardnum']}
+								</td>
+							</tr>
+                            <tr>
+								<td width="150">身份证正面：</td>
+								<td>
+                                    <img src="  {$itemone['shenfenzhengzm']}" style="width: 100px;height: 100px;margin-right: 5px;">
+								</td>
+							</tr>
+                            <tr>
+								<td width="150">身份证反面：</td>
+                                <td>
+                                    <img src="  {$itemone['shenfenzhengfm']}" style="width: 100px;height: 100px;margin-right: 5px;">
+								</td>
+							</tr>
+                            <tr>
+								<td width="150">订单备注：</td>
+								<td>
+                                    {$itemone['dingdanbeizhu']}
+								</td>
+							</tr>
+                            <tr>
+								<td width="150">交通工具：</td>
+								<td>
+                                    {$itemone['jiaotong']}
+								</td>
+							</tr>
+                            <tr>
+								<td width="150">车次：</td>
+								<td>
+                                    {$itemone['checi']}
+								</td>
+							</tr>
+                            <tr>
+								<td width="150">到达时间：</td>
+								<td>
+                                    {$itemone['daoyuan']}
+								</td>
+							</tr>
+                            <tr>
+								<td width="150">行程备注：</td>
+								<td>
+                                    {$itemone['xingchengbeizhu']}
+								</td>
+							</tr>
+						</table>
+					</div>
+				</div>
+			
+			</div>
+		</div>
+
+		<div class="modal fade" id="addCateModal" aria-hidden="false">
+			<div class="modal-dialog">
+				<div class="modal-content">
+					<div class="modal-header">
+						<button data-dismiss="modal" class="close" type="button">×</button>
+						<h4 class="modal-title">新建分类</h4>
+					</div>
+					<div class="modal-body form-horizontal">
+						<div class="form-group">
+							<div class="col-sm-2 control-label must">分类名称</div>
+							<div class="col-sm-10">
+								<input class="form-control input-sm" placeholder="请输入分类名称" id="saveTempName" value="未命名分类" />
+							</div>
+						</div>
+					</div>
+					<div class="modal-footer">
+						<div class="btn btn-primary" id="saveCate">保存</div>
+					</div>
+				</div>
+			</div>
+		</div>
+
+	</div>
+
+	<script type="text/javascript">
+		$("#addRemark").unbind('click').click(function () {
+		        $("#addCateModal").modal();
+		        $("#saveCate").unbind('click').click(function () {
+		            var status = $(this).data('status');
+		            if(status) {
+		                tip.msgbox.err("正在保存，请稍候。");
+		                return;
+		            }
+		            var name = $.trim($("#saveTempName").val());
+		            if(!name) {
+		                tip.msgbox.err("请填写备注内容！");
+		                $("#saveTempName").focus();
+		                return;
+		            }
+		            $(this).data('status',1).text('保存中')
+		            $.post("https://test3.xiaoshanxin.com/web/index.php?c=site&a=entry&m=weliam_merchant&p=rush&ac=category&do=add&", {
+		                name: name
+		            }, function (ret) {
+		                if(ret.status==0){
+		                    tip.msgbox.err(ret.result.message);
+		                }else{
+		                    tip.msgbox.suc("保存成功！");
+		                }
+		                $("#addCateModal .close").trigger('click');
+		                setTimeout(function () {
+		                    location.reload();
+		                }, 500);
+		            }, 'json');
+		        });
+		    });
+	</script>
+
+</div>
+</div>
+</div>
+
+<!-- 处方单详情 -->
+<div id="module-menus-doc"></div>
+<style type="text/css">
+    .el-dialog__wrapper {
+     position:fixed;
+     top:0;
+     right:0;
+     bottom:0;
+     left:0;
+     overflow:auto;
+     margin:0;
+     background: rgba(0,0,0,0.5);
+    }
+    .el-dialog {
+     position:relative;
+     margin:0 auto 50px;
+     border-radius:2px;
+     -webkit-box-shadow:0 1px 3px rgba(0,0,0,.3);
+     box-shadow:0 1px 3px rgba(0,0,0,.3);
+     -webkit-box-sizing:border-box;
+     box-sizing:border-box;
+     width:50%;
+     background: #fff;
+    
+    }
+    .el-dialog__body {
+     padding:30px 20px;
+     color:#606266;
+     font-size:14px;
+     word-break:break-all;
+    }
+     .el-dialog__wrapper .el-dialog .el-dialog__body .boxPresMain {
+     margin:0;
+     width:calc(100% - 26px);
+     position:relative;
+     border-radius:4px;
+     background-color:#fff;
+     padding:24px 13px 30px 13px
+    }
+    .el-dialog__wrapper .el-dialog .el-dialog__body .boxPresMain p {
+     margin:0
+    }
+    .el-dialog__wrapper .el-dialog .el-dialog__body .boxPresMain .cardHead {
+     color:#b9b9b9;
+     font-size:14px;
+     line-height:14px;
+     border-bottom:1px dashed rgba(0,0,0,.15)
+    }
+    .el-dialog__wrapper .el-dialog .el-dialog__body .boxPresMain .cardHead .title {
+     color:#4a4a4a;
+     font-size:16px;
+     line-height:16px;
+     text-align:center;
+     margin-top:33px
+    }
+     .el-dialog__wrapper .el-dialog .el-dialog__body .boxPresMain .cardHead .presType {
+     color:#4a4a4a;
+     font-size:20px;
+     line-height:20px;
+     text-align:center;
+     margin-top:17px;
+     margin-bottom:44px
+    }
+     .el-dialog__wrapper .el-dialog .el-dialog__body .boxPresMain .cardHead .row1 {
+     margin-bottom:22px;
+     padding:0 25px 0 12px
+    }
+    .floatR {
+     float:right;
+    }
+    .flex{
+      display: flex;
+    }
+    .justyBetween{
+      justify-content: space-between;
+    }
+    .el-dialog__wrapper .el-dialog .el-dialog__body .boxPresMain .cardBody.chinese {
+        padding: 30px 25px 100px 12px;
+    }
+    .el-dialog__wrapper .el-dialog .el-dialog__body .boxPresMain .cardBody {
+        color: #6b6b6b;
+        font-size: 14px;
+    }
+    .rp {
+        color: #4a4a4a;
+        font-size: 16px;
+        margin-bottom: 8px;
+    }
+     .el-dialog__wrapper .el-dialog .el-dialog__body .boxPresMain .cardBody .itemMed.read.chinese {
+        display: inline-block;
+        width: 33%;
+        border-bottom: none;
+        padding: 0;
+        margin-top: 22px;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+    }
+    .yellow {
+        color: #ffa726;
+    }
+    .el-dialog__wrapper .el-dialog .el-dialog__body .boxPresMain .cardBody .chineseTotalRead {
+        color: #6b6b6b;
+        font-size: 14px;
+    }
+     .el-dialog__wrapper .el-dialog .el-dialog__body .boxPresMain .cardBody .chineseTotalRead p:first-child {
+        margin: 20px 0 25px;
+    }
+    .el-dialog__wrapper .el-dialog .el-dialog__body .boxPresMain .cardBody .chineseTotalRead p {
+        margin-top: 12px;
+    }
+    .area {
+        display: inline-block;
+        min-width: 60px;
+        border-bottom: 1px solid #6b6b6b;
+    }
+    .el-dialog__wrapper .el-dialog .el-dialog__footer .el-button.el-button--primary:hover {
+        background-color: #2f6eb4;
+    }
+    .el-dialog__wrapper .el-dialog .el-dialog__footer .el-button {
+        padding: 0;
+        height: 32px;
+        line-height: 32px;
+        width: 100px;
+    }
+    .el-button {
+        display: inline-block;
+        line-height: 1;
+        white-space: nowrap;
+        cursor: pointer;
+        background: #fff;
+        border: 1px solid #dcdfe6;
+        color: #606266;
+        -webkit-appearance: none;
+        text-align: center;
+        -webkit-box-sizing: border-box;
+        box-sizing: border-box;
+        outline: 0;
+        margin: 0;
+        -webkit-transition: .1s;
+        transition: .1s;
+        font-weight: 500;
+        padding: 12px 20px;
+        font-size: 14px;
+        border-radius: 4px;
+    }
+    .el-dialog__wrapper .el-dialog .el-dialog__footer .el-button {
+        padding: 0;
+        height: 32px;
+        line-height: 32px;
+        width: 100px;
+        background: 
+    }
+    .el-dialog__footer {
+        padding: 10px 35px 25px;
+    }
+    .el-dialog__footer {
+        text-align: right;
+    }
+    .el-dialog__wrapper .el-dialog .el-dialog__footer .el-button.el-button--primary {
+        background-color: #4381c6;
+    }
+    .el-button--primary {
+        color: #fff;
+        background-color: #409eff;
+        border-color: #409eff;
+    }
+    .el-dialog__wrapper .el-dialog .el-dialog__body .boxPresMain .cardBody .boxSign {
+        position: absolute;
+        bottom: 20px;
+        left: 34px;
+        right: 34px;
+    }
+</style>
+<!--处方单详情结束  -->
+
+
+<div class="foot" id="footer">
+	<ul class="links ft">
+		<li class="links_itemone">
+			
+		</li>
+	</ul>
+</div>
+
+<script>
+    function showOrHide(a,b){
+                $('#profile_'+b).toggle()
+                $('#profile_'+a).toggle()
+            
+            }
+            $('#tab3 ul li').on('click',function(){
+              console.log($(this))
+                $('#tab3 ul li').removeClass('ractive')
+                $(this).addClass('ractive')
+            })
+              
+              $(document).on('click','.remove',function(){
+                $(this).parents('tbody').remove()
+              })
+              $('.btnGoInfo').click(function(e){
+                  
+                $('.el-dialog__wrapper').show()
+                var id = e.currentTarget.dataset.id
+                var url ="/web/index.php?c=site&a=entry&do=copysite&m=xsx_v3&act=profile.userchufang&id="+id
+             
+                $.ajax({
+                    url:url,
+                    type: "POST",  
+                    dataType: "html",  
+                    cache:false, 
+
+                    success:function(res){
+                        console.log(res)
+                        $('#module-menus-doc').html(res)
+                    }
+                })
+              })
+
+</script>
+
+
+<script>
+	require(['bootstrap'], function ($) {
+			    $('[data-toggle="tooltip"]').tooltip({
+		            container: $(document.body)
+		        });
+		        $('[data-toggle="popover"]').popover({
+		            container: $(document.body)
+		        });
+		        $('[data-toggle="dropdown"]').dropdown({
+		            container: $(document.body)
+		        });
+		    });
+			myrequire(['js/init']);
+					$('.app-login-info-name, .app-login-info-sel').mouseover(function(){
+				$('.app-login-info-sel').show();
+			});
+			$('.app-login-info-name, .app-login-info-sel').mouseout(function(){
+				$('.app-login-info-sel').hide();
+			});
+			$('.app-login-info-sel .login-out').hover(function(){
+				$('.app-login-info-sel-arrow').css('border-color', '#1ab394 transparent transparent transparent');
+			},function(){
+				$('.app-login-info-sel-arrow').css('border-color', '#f2f2f2 transparent transparent transparent');
+			});
+</script>
+</body>
+</html>

@@ -1,0 +1,267 @@
+{template './common/mainHeader'}
+<style>
+  .df{
+    display:flex;
+    align-items: center;
+  }
+  .tab_cg{
+    border:1px solid #eaeaea;
+    margin-left:20px;
+  }
+  .tab_text,.tab_btn{
+    padding: 5px 10px;
+  }
+  .tab_btn{
+    border-left:1px solid #eaeaea;
+  }
+  button{
+    outline: none;
+  }
+  .tabBox{
+    margin-top:20px;
+  }
+  label{
+    margin:0;
+  }
+  .tab_box{
+    height:200px;
+    overflow:hidden;
+    overflow-y:auto;
+    margin-top:20px;
+  }
+  .tab{
+    display:inline-block;
+    padding:5px;
+    border:1px solid #eaeaea;
+    margin-right:10px;
+    cursor: pointer;
+  }
+  
+  .tabBox label{
+    white-space: nowrap;
+  }
+  #tabBox_xz{
+    flex-wrap:wrap;
+    max-height:200px;
+    overflow:hidden;
+    overflow-y:auto;
+  }
+    #tabBox_xz .tab_cg{
+    margin-bottom:10px;
+  }
+  .tab:hover{
+    background:#2aabd2;
+    color:#fff;
+  }
+  #myModal{
+    background: rgba(0,0,0,0.5)
+  }
+  .we7-modal-dialog, .modal-dialog{
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    margin-top: 100px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+  /*账户充值样式*/
+   .recharge_info{display: -webkit-box;display: -webkit-flex;display: -ms-flexbox;display: flex;justify-content: space-around;margin-bottom: 10px;}
+.recharge_info>div{-webkit-box-flex: 1;-webkit-flex: 1;-ms-flex: 1;flex: 1;border:1px solid #efefef;padding:10px 22px;line-height: 25px;color: #333;}
+.recharge_info>div:first-child{margin-right: 10px;}
+.recharge_info>div:last-child{margin-left: 10px;}
+.zhe{background: rgba(0,0,0,0.6);position: fixed;display: flex;align-items: center;justify-content: center;width: 100%;height: 100%;top: 0;left: 0;}
+.modal-dialog{position: initial;}
+  /*账户充值end*/
+  .text-warning {
+    color: #f8ac59;
+    white-space: nowrap;
+    width: 180px;
+    display: block;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+</style>
+<div class="app-container-right">
+    <ul class="nav nav-tabs">
+        <li class="active">
+            <a href="#">电子病历</a>
+        </li>
+    </ul>
+    <div class="app-content">
+        <div class="app-filter">
+            <div class="filter-list">
+                <form action="" method="get" class="form-horizontal" role="form" id="form1">
+                    <input type="hidden" name="c" value="site" />
+                    <input type="hidden" name="a" value="entry" />
+                    <input type="hidden" name="m" value="xsx_v3" />
+                    <input type="hidden" name="op" value="patientlist" />
+                    <input type="hidden" name="ac" value="patientlist" />
+                    <input type="hidden" name="do" value="copysite" />
+                    <input type="hidden" name="act" value="profile.patientlist" />
+                    <input type="hidden" name="zhuangtai" value="{$_GPC['zhuangtai']}">
+                    <div class="form-group form-inline">
+                        <label class="col-sm-2 control-label">用户筛选</label>
+                        <div class="col-sm-9">
+                            
+                            <input type="text" name="keyword" class="form-control" value="{$_GPC['keyword']}" placeholder="请输入关键字" />
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label"></label>
+                        <div class="col-md-9">
+                            <button class="btn btn-primary" type="submit">筛选</button>
+                        </div>
+                    </div>
+                </form>
+     
+                <div class="filter-action">
+           
+        </div>
+                
+            </div>
+        </div>
+        <div class="app-table-list">
+            <div class="table-responsive">
+                <table class="table table-responsive">
+                    <thead>
+                        <tr>
+                            <th style="width: 250px;">患者真实姓名</th>
+                            <!-- <th style="">所在地区</th> -->
+                            <th style="">关联微信</th>
+                            <th style="">成员关系</th>
+                            <th style="">患者标签</th>
+                            <th style="">签约医生</th>
+                            <th style="">用户身份</th>
+                            <!-- <th style="">处方单</th> -->
+                            <th style="width: 350px;text-align: right;">操作</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    {loop $list $item}
+                        <tr>
+                            <td style="overflow: visible"><!-- <span>总消费：</span>6000元<br/>-->
+                                <div rel="pop" style="display: flex" data-content=" 
+                                    <span>ID: </span>{$item['j_id']} </br>                                                                    
+                                    <span>真实姓名：</span> {if empty($item['zhenshixingming'])} 未填写 {else} {$item['zhenshixingming']} {/if}<br/>
+                                    <span>手机号：</span>{if $item['tel'] ==''} 未绑定 {else} {$item['tel']}   {/if}<br/>
+                                    <span>性别：</span>{$item['sex']} <br/>
+                                    <span>年龄：</span>{$item['age']} <br/>
+                                    <span>病历号：</span>{$item['randnum']} <br/>">
+                                    
+                                    <span style="display: flex;flex-direction: column;justify-content: center;align-items: flex-start;padding-left: 5px">
+                                        <span class="nickname">
+                                            {$item['names']} </span>
+                                    </span>
+                                </div>
+                            </td>
+                            <!-- <td style="position: relative;">
+                                <a>{$item['region']}</a>
+                            </td> -->
+                            <td style="position: relative;">
+                                <a>{$item['username']}</a>
+                            </td>
+                            <td style="position: relative;">
+                                {if $item['sick_index'] == 0}
+                                本人
+                                {elseif $item['sick_index'] == 1}
+                                家庭成员
+                                {elseif $item['sick_index'] == 2}
+                                亲戚
+                                {elseif $item['sick_index'] == 3}
+                                朋友
+                                {elseif $item['sick_index'] == 4}
+                                其他
+                                {/if}
+                            </td>
+                            <td style="overflow: visible">
+                                {if empty($item['u_label'])}
+                                无
+                                {else}
+                                <div rel="pop" style="display: flex" data-content=" <span>{$item['u_label']} </br>">
+                                    
+                                    <span style="display: flex;flex-direction: column;justify-content: center;align-items: flex-start;padding-left: 5px">
+                                        <span class="nickname">{$item['u_label']} </span>
+                                    </span>
+                                </div>
+                                {/if}
+                            </td>
+                            <td style="position: relative;"> {$item['zctime']}</td>
+                            <td style="position: relative;">
+                                <span class="text-info">{if $item['admintype'] =='1'}会员用户{else} 普通用户{/if}</span>
+                            </td>
+                            
+                            <!-- <td style="position: relative;"> <a>共计{$item['cfcount']}单</a></td> -->
+                            <td style="position: relative;text-align: right;">
+                                <a class="btn btn-primary btn-sm" href="/web/index.php?c=site&a=entry&m=xsx_v3&do=order&op=binglimingxi&ac=binglimingxi&u_id={$item['u_id']}&openid={$item['openid']}" title="">电子病历</a>  
+                            </td>
+                        </tr>
+                    {/loop}
+                    </tbody>
+                </table>
+            </div>
+            <div class="app-table-foot clearfix">
+                <div class="pull-left">
+
+                </div>
+                <div class="pull-right">{$pager}</div>
+            </div>
+        </div>
+    </div>
+</div>
+  {template './common/mainfooter'}
+<script>
+    $(function(){
+        require(['bootstrap'], function () {
+            $("[rel=pop]").popover({
+                trigger: 'manual',
+                placement: 'right',
+                title: $(this).data('title'),
+                html: 'true',
+                content: $(this).data('content'),
+                animation: false
+            }).on("mouseenter", function () {
+                var _this = this;
+                $(this).popover("show");
+                $(this).siblings(".popover").on("mouseleave", function () {
+                    $(_this).popover('hide');
+                });
+            }).on("mouseleave", function () {
+                var _this = this;
+                setTimeout(function () {
+                    if (!$(".popover:hover").length) {
+                        $(_this).popover("hide")
+                    }
+                }, 100);
+            });
+        });
+    });
+</script> 
+<script>
+    require(['bootstrap'], function ($) {
+        $('[data-toggle="tooltip"]').tooltip({
+            container: $(document.body)
+        });
+        $('[data-toggle="popover"]').popover({
+            container: $(document.body)
+        });
+        $('[data-toggle="dropdown"]').dropdown({
+            container: $(document.body)
+        });
+    });
+    myrequire(['js/init']);
+        $('.app-login-info-name, .app-login-info-sel').mouseover(function(){
+      $('.app-login-info-sel').show();
+    });
+    $('.app-login-info-name, .app-login-info-sel').mouseout(function(){
+      $('.app-login-info-sel').hide();
+    });
+    $('.app-login-info-sel .login-out').hover(function(){
+      $('.app-login-info-sel-arrow').css('border-color', '#1ab394 transparent transparent transparent');
+    },function(){
+      $('.app-login-info-sel-arrow').css('border-color', '#f2f2f2 transparent transparent transparent');
+    });
+</script>
+
+
+

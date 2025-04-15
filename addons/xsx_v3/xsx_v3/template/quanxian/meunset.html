@@ -1,0 +1,197 @@
+{template './common/mainHeader'}
+<div class="app-container-right">
+	<ul class="nav nav-tabs">
+		<li class="active">
+			<a href="javascript:;">菜单列表</a>
+		</li>
+	</ul>
+	<div class="app-content">
+		<div class="app-filter">
+			<div class="filter-action">
+				<span class="btn btn-primary" id="addCate">
+					<i class="fa fa-plus"></i> 新建菜单
+				</span>
+			</div>
+		</div>
+		<div class="app-table-list">
+			<div class="table-responsive">
+				<table class="table table-hover table-bordered">
+					<thead class="navbar-inner">
+						<tr>
+							<th style="width: 50px;">ID</th>
+							<th style="">菜单名称</th>
+							<th style="">菜单url</th>
+							<th style="">父级菜单</th>
+							<th style="">菜单排序</th>
+							<th style="width: 50px;">菜单状态</th>
+							<th style="width: 80px">操作</th>
+						</tr>
+					</thead>
+					<tbody>
+					    {loop $row $item}
+						<tr>
+							<td>{$item['id']}</td>
+							<td>{$item['menuname']}</td>
+							<td>{$item['url']}</td>
+							<td>{$item['parent_name']}</td>
+							<td>{$item['order_no']}</td>
+							<td>{if $item['visible'] == '0'} 禁用 {else} 启用 {/if}</td>
+							<td><span class="btn btn-primary editCate" data-id="{$item['id']}" data-name="{$item['menuname']}" data-url="{$item['url']}" data-parent="{$item['parent_name']}" data-sort="{$item['order_no']}" data-status="{$item['visible']}">
+        <i class="fa fa-pencil"></i> 修改菜单
+    </span></td>
+						</tr>
+                        {/loop}
+					</tbody>
+				</table>
+			</div>
+			<div class="app-table-foot clearfix">
+				<div class="pull-left">
+
+				</div>
+				<div class="pull-right">
+				</div>
+			</div>
+		</div>
+		<div class="modal fade" id="addCateModal" aria-hidden="false">
+			<div class="modal-dialog">
+				<div class="modal-content">
+					<div class="modal-header">
+						<button data-dismiss="modal" class="close" type="button">×</button>
+						<h4 class="modal-title">新建菜单</h4>
+					</div>
+					<div class="modal-body form-horizontal">
+						<div class="form-group">
+							<div class="col-sm-2 control-label">菜单名称</div>
+							<div class="col-sm-9">
+							<input class="form-control" placeholder="请输入菜单名称" id="menuname" value="" />
+							</div>
+						</div>
+						<div class="form-group">
+							<div class="col-sm-2 control-label">父级菜单</div>
+							<div class="col-sm-9">
+								<select class="form-control" id="parentname">
+            {loop $data $item}
+            <option value="{$item['id']}">{$item['name']}</option>
+            {/loop}
+        </select>
+							</div>
+						</div>
+						<div class="form-group">
+							<div class="col-sm-2 control-label">菜单url</div>
+							<div class="col-sm-9">
+								<input class="form-control" placeholder="请输入url" id="url" value="" />
+							</div>
+						</div>
+						<div class="form-group">
+							<div class="col-sm-2 control-label">菜单排序</div>
+							<div class="col-sm-9">
+							<input class="form-control" type="tel" placeholder="请输入标签排序" id="saveSort" value="" />
+							</div>
+						</div>
+						<div class="form-group">
+							<div class="col-sm-2 control-label">菜单状态</div>
+							<div class="col-sm-9">
+								<label class="radio-inline">
+									<input type="radio" value="1" name="visible" checked="checked">启用</label>
+                                        <label class="radio-inline">
+                                    <input type="radio" value="0" name="visible">禁用</label>
+							</div>
+						</div>
+					</div>
+					<div class="modal-footer">
+						<div class="btn btn-primary" id="saveCate">保存</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+
+    <script type="text/javascript" src="{php echo XSX_ADMIN}/js/table_edit.js"></script>
+	<script type="text/javascript">
+
+		$("#addCate").unbind('click').click(function () {
+		    // 清空弹出窗的内容
+		    $("#menuname").val("");
+		    $("#menuname").attr("menuid", "");
+		    $("#url").val("");
+		    $("#saveSort").val("");
+		    $('input[name="visible"][value="1"]').prop('checked', true);
+
+		    $("#addCateModal").modal();
+		});
+
+$(".editCate").unbind('click').click(function () {
+    var id = $(this).data('id');
+    var name = $(this).data('name');
+    var url = $(this).data('url');
+    var parent = $(this).data('parent');
+    var sort = $(this).data('sort');
+    var status = $(this).data('status');
+    console.log($(this).data('status'));
+    $("#parentname option").each(function() {
+        // console.log($(this).text())
+        if ($(this).text() === parent) {
+            $(this).prop("selected", true);
+        }
+    });
+// console.log(name);
+    $("#menuname").val(name);
+    $("#menuname").attr("menuid", id);
+    $("#url").val(url);
+    $("#saveSort").val(sort);
+    // $('input[name="visible"]').removeAttr('checked');
+    console.log(status);
+    $('input[name="visible"][value="' + status + '"]').prop('checked', true);
+
+    $("#addCateModal").modal();
+});
+$("#saveCate").unbind('click').click(function () {
+		            var status = $(this).data('status');
+		            if(status) {
+		                util.tips("正在保存，请稍候。");
+		                return;
+		            }
+		            var name = $.trim($("#menuname").val());
+		            console.log(name);
+		            if(!name) {
+		                util.tips("请填写名称！");
+		                $("#menuname").focus();
+		                return;
+		            }
+		            var sort = $.trim($("#saveSort").val());
+		            var menuurl = $.trim($("#url").val());
+		            var parentname = $.trim($("#parentname").val());
+		            var status = $('input[name="visible"]:checked').val();
+		            var id = $("#menuname").attr("menuid");
+		          //  console.log(sort);
+		          //  console.log(menuurl);
+		          //  console.log(name);
+		          //  console.log(status);
+		          //  console.log(parentname);
+		          //  console.log(id);
+		          //  return;
+		            $(this).data('status',1).text('保存中');
+		            var url = "{$_W['siteroot']}web/index.php?c=site&a=entry&do=quanxian&op=meunset&ac=meunset&m=xsx_v3";
+		            $.post(url, {
+		                menuname: name,
+		                sort: sort,
+		                parentname: parentname,
+		                menuurl: menuurl,
+		                status: status,
+		                id:id,
+		            }, function (ret) {
+		            	console.log(ret)
+                        util.tips("保存成功！");
+		                $("#addCateModal .close").trigger('click');
+		                setTimeout(function () {
+		                    location.reload();
+		                }, 500);
+		            }, 'json');
+		        });
+
+	</script>
+</div>
+</div>
+</div>
+</body>
+</html>

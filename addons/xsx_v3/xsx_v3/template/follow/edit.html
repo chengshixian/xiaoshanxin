@@ -1,0 +1,587 @@
+{template './common/mainHeader'}
+<ul class="nav nav-tabs">
+	<li>
+	
+	<a href="/web/index.php?c=site&a=entry&do=follow&m=xsx_v3&op=edit&ac=list">随访计划</a>
+	
+	</li>
+	<li {if empty($id)}class="active"{/if}><a href="">添加随访计划</a></li>
+	{if !empty($id)}
+	<li class="active"><a href="#">编辑随访计划</a></li>
+	{/if}
+</ul>
+<div class="app-content">
+	<div class="app-form">
+		<form action="" method="post" class="form-horizontal form" enctype="multipart/form-data" >
+			<input type="hidden" name="id" value="{$id}" />
+			<div class="panel panel-default">
+				<div class="panel-heading">随访计划设置</div>
+				
+				<div class="form-group">
+					<label class="col-sm-2 control-label">标题<span class="must-fill">*</span></label>
+					<div class="col-sm-9">
+						<input type="text" name="title" required class="form-control" value="{$item['title']}" >
+					</div>
+
+				
+				</div>
+				<div class="form-group">
+					<label class="col-sm-2 control-label">时长(/天)<span class="must-fill">*</span></label>
+					<div class="col-sm-9">
+						<input type="number" name="time_length" required class="form-control" value="{$item['time_length']}" >
+					</div>
+
+				
+				</div>
+				<div class="form-group">
+					<label class="col-sm-2 control-label">分类<span class="must-fill">*</span></label>
+
+					<div class="col-sm-9">
+		      			<select name="type" class="form-control valid" aria-invalid="false" required="">
+		      				<option value="" {if $item['type'] == ''} selected="" {/if}>请选择分类</option>
+		      				{loop $type $types}
+        					<option value="{$types['id']}" {if $item['type'] == $types['id']} selected="" {/if}>{$types['title']}</option>
+        					{/loop}
+      					</select>
+		    		</div>
+				</div>
+				<div class="form-group">
+					<label class="col-sm-2 control-label">图片<span class="must-fill">*</span></label>
+					<div class="col-sm-9">
+						{php echo tpl_form_field_image('thumb', $item['thumb'])}
+						<span class="help-block">建议图片大小80*80</span>
+					</div>
+				</div>
+				
+                <div class="form-group">
+					<label class="col-sm-2 control-label">健康须知一级分类<span class="must-fill">*</span></label>
+
+					<div class="col-sm-9">
+		      			<select name="hj_onetype" id="hj_onetype" class="form-control valid" aria-invalid="false" onchange="changehlone()">
+		      				<option value="" {if $item['hj_onetype'] == ''} selected="" {/if}>请选择健康须知一级分类</option>
+		      				{loop $hj_type $hjtype}
+        					<option value="{$hjtype['hj_id']}" {if $item['hj_onetype'] == $hjtype['hj_id']} selected="" {/if}>{$hjtype['hj_name']}</option>
+        					{/loop}
+      					</select>
+		    		</div>
+				</div>
+				<div class="form-group">
+					<label class="col-sm-2 control-label">健康须知二级分类<span class="must-fill">*</span></label>
+
+					<div class="col-sm-9">
+		      			<select name="hj_twotype" id="hj_twotype" class="form-control valid" aria-invalid="false" onchange="changehltwo()">
+		      				<option value="" {if $item['hj_twotype'] == ''} selected="" {/if}>请选择健康须知二级分类</option>
+		      				{loop $hj_twotype $hjtypetwo}
+        					<option value="{$hjtypetwo['hj_id']}" {if $item['hj_twotype'] == $hjtypetwo['hj_id']} selected="" {/if}>{$hjtypetwo['hj_name']}</option>
+        					{/loop}
+      					</select>
+		    		</div>
+				</div>
+				<div class="form-group layui-form-item">
+					<label class="col-xs-12 col-sm-3 col-md-2 col-lg-2 control-label">健康须知</label>
+					<div class="col-md-9">
+						<div class="layui-input-block" id="hj_data">
+						    {loop $article_arr $article}
+							<label class="checkbox-inline">
+								<input type="checkbox" value="{$article['h_id']}" name="article_ids[]" {if in_array($article['h_id'],$item['article_ids'])} checked="" {/if}> {$article['h_title']}
+							</label>
+							{/loop}
+						</div>
+					</div>
+				</div>
+				<script>
+				    function changehlone()
+				    {
+				        var type = $("#hj_onetype option:selected").val();
+				        console.log(type);
+				        $.ajax({
+				            'url':"/web/index.php?c=site&a=entry&op=hl_two&do=follow&m=xsx_v3",
+				            data:{
+				                type:type,
+				            },
+				            dataType:"json",
+				            success:function(res)
+				            {
+				                var html = "<select name='hj_twotype' id='hj_twotype' class='form-control valid' aria-invalid='false' onchange='changehltwo()'><option value=''>请选择患教二级分类</option>";
+				                for(var i=0;i<res.length;i++)
+				                {
+				                    html += "<option value='"+res[i].hj_id+"'>"+res[i].hj_name+"</option>";
+				                }
+				                $("#hj_twotype").html(html);
+				            }
+				        })
+				        $.ajax({
+				            'url':"/web/index.php?c=site&a=entry&op=hj_data&do=follow&m=xsx_v3",
+				            data:{
+				                type:type,
+				            },
+				            dataType:"json",
+				            success:function(res)
+				            {
+				                var html = "<div class='layui-input-block' id='hj_data'>";
+				                for(var i=0;i<res.length;i++)
+				                {
+				                    html += "<label class='checkbox-inline'><input type='checkbox' value="+res[i].h_id+" name='article_ids[]'>"+res[i].h_title+"</label>";
+				                }
+				                $("#hj_data").html(html);
+				            }
+				        })
+				    }
+				    
+				    function changehltwo()
+				    {
+				        var type = $("#hj_twotype option:selected").val();
+				        console.log(type);
+				       
+				        $.ajax({
+				            'url':"/web/index.php?c=site&a=entry&op=hj_data&do=follow&m=xsx_v3",
+				            data:{
+				                type:type,
+				            },
+				            dataType:"json",
+				            success:function(res)
+				            {
+				                var html = "<div class='layui-input-block' id='hj_data'>";
+				                for(var i=0;i<res.length;i++)
+				                {
+				                    html += "<label class='checkbox-inline'><input type='checkbox' value="+res[i].h_id+" name='article_ids[]'>"+res[i].h_title+"</label>";
+				                }
+				                $("#hj_data").html(html);
+				            }
+				        })
+				    }
+				</script>
+				<div class="form-group">
+					<label class="col-sm-2 control-label">问卷一级分类<span class="must-fill">*</span></label>
+
+					<div class="col-sm-9">
+		      			<select name="wj_onetype" id="wj_onetype" class="form-control valid" aria-invalid="false" onchange="changewlone()">
+		      				<option value="" {if $item['wj_onetype'] == ''} selected="" {/if}>请选择问卷一级分类</option>
+		      				{loop $wj_type $wjtype}
+        					<option value="{$wjtype['id']}" {if $item['wj_onetype'] == $wjtype['id']} selected="" {/if}>{$wjtype['one_name']}</option>
+        					{/loop}
+      					</select>
+		    		</div>
+				</div>
+				<div class="form-group">
+					<label class="col-sm-2 control-label">问卷二级分类<span class="must-fill">*</span></label>
+
+					<div class="col-sm-9">
+		      			<select name="wj_twotype" id="wj_twotype" class="form-control valid" aria-invalid="false" onchange="changewltwo()">
+		      				<option value="" {if $item['wj_twotype'] == ''} selected="" {/if}>请选择问卷二级分类</option>
+		      				{loop $wj_twotype $wjtypetwo}
+        					<option value="{$wjtypetwo['id']}" {if $item['wj_twotype'] == $wjtypetwo['id']} selected="" {/if}>{$wjtypetwo['two_name']}</option>
+        					{/loop}
+      					</select>
+		    		</div>
+				</div>
+				<div class="form-group layui-form-item">
+					<label class="col-xs-12 col-sm-3 col-md-2 col-lg-2 control-label">问卷</label>
+					<div class="col-md-9">
+						<div class="layui-input-block" id="wj_data">
+						    {loop $answer_arr $answer}
+							<label class="checkbox-inline">
+								<input type="checkbox" value="{$answer['id']}" name="answer_ids[]" {if in_array($answer['id'],$item['answer_ids'])} checked="" {/if}> {$answer['name']}
+							</label>
+							{/loop}
+						</div>
+					</div>
+				</div>
+				<script>
+				    function changewlone()
+				    {
+				        var type = $("#wj_onetype option:selected").val();
+				        console.log(type);
+				        $.ajax({
+				            'url':"/web/index.php?c=site&a=entry&op=wenj_two&do=follow&m=xsx_v3",
+				            data:{
+				                type:type,
+				            },
+				            dataType:"json",
+				            success:function(res)
+				            {
+				                var html = "<select name='wj_twotype' id='wj_twotype' class='form-control valid' aria-invalid='false' onchange='changewltwo()'><option value=''>请选择问卷二级分类</option>";
+				                for(var i=0;i<res.length;i++)
+				                {
+				                    html += "<option value='"+res[i].id+"'>"+res[i].two_name+"</option>";
+				                }
+				                $("#wj_twotype").html(html);
+				            }
+				        })
+				        $.ajax({
+				            'url':"/web/index.php?c=site&a=entry&op=wenjuan&do=follow&m=xsx_v3",
+				            data:{
+				                type:type,
+				            },
+				            dataType:"json",
+				            success:function(res)
+				            {
+				                var html = "<div class='layui-input-block' id='wj_data'>";
+				                for(var i=0;i<res.length;i++)
+				                {
+				                    html += "<label class='checkbox-inline'><input type='checkbox' value="+res[i].id+" name='answer_ids[]'>"+res[i].name+"</label>";
+				                }
+				                $("#wj_data").html(html);
+				            }
+				        })
+				    }
+				    
+				    function changewltwo()
+				    {
+				        var type = $("#wj_twotype option:selected").val();
+				        console.log(type);
+				       
+				        $.ajax({
+				            'url':"/web/index.php?c=site&a=entry&op=wenjuan&do=follow&m=xsx_v3",
+				            data:{
+				                type:type,
+				            },
+				            dataType:"json",
+				            success:function(res)
+				            {
+				                var html = "<div class='layui-input-block' id='wj_data'>";
+				                for(var i=0;i<res.length;i++)
+				                {
+				                    html += "<label class='checkbox-inline'><input type='checkbox' value="+res[i].id+" name='answer_ids[]'>"+res[i].name+"</label>";
+				                }
+				                $("#wj_data").html(html);
+				            }
+				        })
+				    }
+				</script>
+				<div class="form-group">
+					<label class="col-sm-2 control-label">检查单一级分类<span class="must-fill">*</span></label>
+
+					<div class="col-sm-9">
+		      			<select name="check_onetype" id="check_onetype" class="form-control valid" aria-invalid="false" onchange="changecheckone()">
+		      				<option value="" {if $item['check_onetype'] == ''} selected="" {/if}>请选择检查单一级分类</option>
+		      				{loop $check_type $chtype}
+        					<option value="{$chtype['id']}" {if $item['check_onetype'] == $chtype['id']} selected="" {/if}>{$chtype['title']}</option>
+        					{/loop}
+      					</select>
+		    		</div>
+				</div>
+				<div class="form-group">
+					<label class="col-sm-2 control-label">检查单二级分类<span class="must-fill">*</span></label>
+
+					<div class="col-sm-9">
+		      			<select name="check_twotype" id="check_twotype" class="form-control valid" aria-invalid="false" onchange="changechecktwo()">
+		      				<option value="" {if $item['check_twotype'] == ''} selected="" {/if}>请选择患教二级分类</option>
+		      				{loop $check_twotype $chtypetwo}
+        					<option value="{$chtypetwo['id']}" {if $item['check_twotype'] == $chtypetwo['id']} selected="" {/if}>{$chtypetwo['title']}</option>
+        					{/loop}
+      					</select>
+		    		</div>
+				</div>
+				<div class="form-group layui-form-item">
+					<label class="col-xs-12 col-sm-3 col-md-2 col-lg-2 control-label">检查单</label>
+					<div class="col-md-9">
+						<div class="layui-input-block" id="ch_data">
+						    {loop $checklist_arr $checklist}
+							<label class="checkbox-inline">
+								<input type="checkbox" value="{$checklist['id']}" name="checklist[]" {if in_array($checklist['id'],$item['checklist'])} checked="" {/if}> {$checklist['title']}
+							</label>
+							{/loop}
+						</div>
+					</div>
+				</div>
+				<script>
+				    function changecheckone()
+				    {
+				        var type = $("#check_onetype option:selected").val();
+				        console.log(type);
+				        $.ajax({
+				            'url':"/web/index.php?c=site&a=entry&op=two_checklist_types&do=follow&m=xsx_v3",
+				            data:{
+				                id:type,
+				            },
+				            dataType:"json",
+				            success:function(res)
+				            {
+				                var html = "<select name='check_twotype' id='check_twotype' class='form-control valid' aria-invalid='false' onchange='changechecktwo()'><option value=''>请选择检查单二级分类</option>";
+				                for(var i=0;i<res.length;i++)
+				                {
+				                    html += "<option value='"+res[i].id+"'>"+res[i].title+"</option>";
+				                }
+				                $("#check_twotype").html(html);
+				            }
+				        })
+				        $.ajax({
+				            'url':"/web/index.php?c=site&a=entry&op=check_data&do=follow&m=xsx_v3",
+				            data:{
+				                type:type,
+				            },
+				            dataType:"json",
+				            success:function(res)
+				            {
+				                var html = "<div class='layui-input-block' id='ch_data'>";
+				                for(var i=0;i<res.length;i++)
+				                {
+				                    html += "<label class='checkbox-inline'><input type='checkbox' value="+res[i].id+" name='checklist[]'>"+res[i].title+"</label>";
+				                }
+				                $("#ch_data").html(html);
+				            }
+				        })
+				    }
+				    
+				    function changechecktwo()
+				    {
+				        var type = $("#check_twotype option:selected").val();
+				        console.log(type);
+				       
+				        $.ajax({
+				            'url':"/web/index.php?c=site&a=entry&op=check_data&do=follow&m=xsx_v3",
+				            data:{
+				                type:type,
+				            },
+				            dataType:"json",
+				            success:function(res)
+				            {
+				                var html = "<div class='layui-input-block' id='ch_data'>";
+				                for(var i=0;i<res.length;i++)
+				                {
+				                    html += "<label class='checkbox-inline'><input type='checkbox' value="+res[i].id+" name='checklist[]'>"+res[i].title+"</label>";
+				                }
+				                $("#ch_data").html(html);
+				            }
+				        })
+				    }
+				</script>
+				
+				<div class="form-group">
+					<label class="col-sm-2 control-label">关心提醒一级分类<span class="must-fill">*</span></label>
+
+					<div class="col-sm-9">
+		      			<select name="care_onetype" id="care_onetype" class="form-control valid" aria-invalid="false" onchange="changecareone()">
+		      				<option value="" {if $item['care_onetype'] == ''} selected="" {/if}>请选择关心提醒一级分类</option>
+		      				{loop $care_type $catype}
+        					<option value="{$catype['id']}" {if $item['care_onetype'] == $catype['id']} selected="" {/if}>{$catype['title']}</option>
+        					{/loop}
+      					</select>
+		    		</div>
+				</div>
+				<div class="form-group">
+					<label class="col-sm-2 control-label">关心提醒二级分类<span class="must-fill">*</span></label>
+
+					<div class="col-sm-9">
+		      			<select name="care_twotype" id="care_twotype" class="form-control valid" aria-invalid="false" onchange="changecaretwo()">
+		      				<option value="" {if $item['care_twotype'] == ''} selected="" {/if}>请选择关心提醒二级分类</option>
+		      				{loop $care_twotype $catypetwo}
+        					<option value="{$catypetwo['id']}" {if $item['care_twotype'] == $catypetwo['id']} selected="" {/if}>{$catypetwo['title']}</option>
+        					{/loop}
+      					</select>
+		    		</div>
+				</div>
+				<div class="form-group layui-form-item">
+					<label class="col-xs-12 col-sm-3 col-md-2 col-lg-2 control-label">关心提醒</label>
+					<div class="col-md-9">
+						<div class="layui-input-block" id="care_data">
+						    {loop $care_arr $care}
+							<label class="checkbox-inline">
+								<input type="checkbox" value="{$care['id']}" name="care[]" {if in_array($care['id'],$item['care'])} checked="" {/if}> {$care['title']}
+							</label>
+							{/loop}
+						</div>
+					</div>
+				</div>
+				<script>
+				    function changecareone()
+				    {
+				        var type = $("#care_onetype option:selected").val();
+				        console.log(type);
+				        $.ajax({
+				            'url':"/web/index.php?c=site&a=entry&op=two_care_types&do=follow&m=xsx_v3",
+				            data:{
+				                id:type,
+				            },
+				            dataType:"json",
+				            success:function(res)
+				            {
+				                var html = "<select name='care_twotype' id='care_twotype' class='form-control valid' aria-invalid='false' onchange='changecaretwo()'><option value=''>请选择关心提醒二级分类</option>";
+				                for(var i=0;i<res.length;i++)
+				                {
+				                    html += "<option value='"+res[i].id+"'>"+res[i].title+"</option>";
+				                }
+				                $("#care_twotype").html(html);
+				            }
+				        })
+				        $.ajax({
+				            'url':"/web/index.php?c=site&a=entry&op=care_data&do=follow&m=xsx_v3",
+				            data:{
+				                type:type,
+				            },
+				            dataType:"json",
+				            success:function(res)
+				            {
+				                var html = "<div class='layui-input-block' id='ch_data'>";
+				                for(var i=0;i<res.length;i++)
+				                {
+				                    html += "<label class='checkbox-inline'><input type='checkbox' value="+res[i].id+" name='care[]'>"+res[i].title+"</label>";
+				                }
+				                $("#care_data").html(html);
+				            }
+				        })
+				    }
+				    
+				    function changehltwo()
+				    {
+				        var type = $("#care_twotype option:selected").val();
+				        console.log(type);
+				       
+				        $.ajax({
+				            'url':"/web/index.php?c=site&a=entry&op=care_data&do=follow&m=xsx_v3",
+				            data:{
+				                type:type,
+				            },
+				            dataType:"json",
+				            success:function(res)
+				            {
+				                var html = "<div class='layui-input-block' id='ch_data'>";
+				                for(var i=0;i<res.length;i++)
+				                {
+				                    html += "<label class='checkbox-inline'><input type='checkbox' value="+res[i].id+" name='care[]'>"+res[i].title+"</label>";
+				                }
+				                $("#care_data").html(html);
+				            }
+				        })
+				    }
+				</script>
+				<!--{if $item && $item['content'] != ''}-->
+				<!--		<div class="form-group">-->
+				<!--			<label class="col-sm-2 control-label">测量内容</label>-->
+				<!--			<div class="col-md-9">-->
+				<!--			{loop $item['content'] $tims}-->
+				<!--				<div id="datas" class="sms-template-1" style="display:block;">-->
+				<!--					<div class="col-sm-12 data-item" style="margin-bottom: 10px;padding-left: 0;padding-right: 0;">-->
+    <!--                            	    <div class="input-group form-group col-sm-6" style="margin: 0px;padding-left: 0;float: left;">-->
+    <!--                            	    	<span class="input-group-addon">标题</span>-->
+    <!--                            			<input type="text" name="contents[title][]" class="form-control" value="{$tims['title']}">-->
+				<!--							<span class="input-group-addon">-->
+				<!--								<span class="glyphicon glyphicon-time"></span>-->
+				<!--							</span>-->
+                                	    
+    <!--                            		</div>-->
+
+				<!--						<div class="input-group form-group col-sm-6" style="margin: 0px;padding-right: 0;float: left;">-->
+				<!--							<span class="input-group-addon">提示</span>-->
+				<!--							<input type="text" name="contents[tips][]" class="form-control" value="{$tims['tips']}">-->
+				<!--							<span class="input-group-addon">-->
+				<!--								<span class="glyphicon glyphicon-time"></span>-->
+				<!--							</span>-->
+
+				<!--							<span class="input-group-addon btn btn-default data-item-delete">-->
+				<!--								<i class="fa fa-remove"></i>删除-->
+				<!--							</span>-->
+				<!--						</div>-->
+				<!--					</div>-->
+				<!--					<script type="text/javascript">-->
+				<!--						$(document).on('click', '.data-item-delete', function () {-->
+				<!--						        $(this).closest('.data-item').remove();-->
+				<!--						  });-->
+				<!--					</script>-->
+				<!--				</div>-->
+								
+				<!--				{/loop}-->
+				<!--				<div class="form-group sms-template-1" style="display:block;">-->
+				<!--					<div class="col-sm-6" style="padding-left: 0;">-->
+				<!--						<a class="btn btn-default btn-add-type btn1 col-sm-12 col-xs-12" href="javascript:;" onclick="addType();">-->
+				<!--							<i class="fa fa-plus" title=""></i>增加测量内容-->
+				<!--						</a>-->
+				<!--					</div>-->
+				<!--				</div>-->
+				<!--			</div>-->
+				<!--		</div>-->
+				<!--		{else}-->
+				<!--		<div class="form-group">-->
+				<!--			<label class="col-sm-2 control-label">测量内容</label>-->
+				<!--			<div class="col-md-9">-->
+				<!--				<div id="datas" class="sms-template-1" style="display:block;">-->
+				<!--					<div class="col-sm-12 data-item" style="margin-bottom: 10px;padding-left: 0;padding-right: 0;">-->
+    <!--                            	    <div class="input-group form-group col-sm-6" style="margin: 0px;padding-left: 0;float: left;">-->
+    <!--                            	    	<span class="input-group-addon">标题</span>-->
+    <!--                            			<input type="text" name="contents[title][]" class="form-control" value="">-->
+											
+                                	    
+    <!--                            		</div>-->
+
+				<!--						<div class="input-group form-group col-sm-6" style="margin: 0px;padding-right: 0;float: left;">-->
+				<!--							<span class="input-group-addon">提示</span>-->
+				<!--							<input type="text" name="contents[tips][]" class="form-control" value="">-->
+											
+
+				<!--							<span class="input-group-addon btn btn-default data-item-delete">-->
+				<!--								<i class="fa fa-remove"></i>删除-->
+				<!--							</span>-->
+				<!--						</div>-->
+				<!--					</div>-->
+				<!--					<script type="text/javascript">-->
+				<!--						$(document).on('click', '.data-item-delete', function () {-->
+				<!--						        $(this).closest('.data-item').remove();-->
+				<!--						  });-->
+				<!--					</script>-->
+				<!--				</div>-->
+				<!--				<div class="form-group sms-template-1" style="display:block;">-->
+				<!--					<div class="col-sm-6" style="padding-left: 0;">-->
+				<!--						<a class="btn btn-default btn-add-type btn1 col-sm-12 col-xs-12" href="javascript:;" onclick="addType();">-->
+				<!--							<i class="fa fa-plus" title=""></i>增加测量内容-->
+				<!--						</a>-->
+				<!--					</div>-->
+				<!--				</div>-->
+				<!--			</div>-->
+				<!--		</div>-->
+				<!--		{/if}-->
+				<div class="form-group">
+					<label class="col-sm-2 control-label">是否显示</label>
+					<div class="col-sm-9">
+						<div class="radio-inline">
+							<input type="radio" name='status' value='1' {if $item['status']==1}checked{/if}>是
+						</div>
+						<div class="radio-inline">
+							<input type="radio" name='status' value='0' {if $item['status']==0}checked{/if}>否
+						</div>
+					</div>
+				</div>
+				
+			</div>
+			<div class="form-group">
+				<label class="col-sm-2 control-label"></label>
+				<div class="col-sm-9">
+					<input type="submit" name="submit" value="提交" class="btn btn-primary min-width" />
+					<input type="hidden" name="token" value="{$_W['token']}" />
+				</div>
+			</div>
+		</form>
+	</div>
+</div>
+<script>
+			function addType(){
+				$('#datas').append(`
+						<div class="col-sm-12 data-item" style="margin-bottom: 10px;padding-left: 0;padding-right: 0;">
+	    <div class="input-group form-group col-sm-6" style="margin: 0px;padding-left: 0;float: left;">
+	    	<span class="input-group-addon">标题</span>
+			<input type="text" name="contents[title][]" class="form-control" value="">
+											
+	    
+		</div>
+	
+	    <div class="input-group form-group col-sm-6" style="margin: 0px;padding-right: 0;float: left;">
+	    	<span class="input-group-addon">提示语</span>
+	      	<input type="text" name="contents[tips][]" class="form-control" value="">
+											
+	
+			<span class="input-group-addon btn btn-default data-item-delete"><i class="fa fa-remove"></i>删除</span>
+	    </div>
+	</div>
+	</div>
+					`)
+			}
+
+</script>
+
+<script>
+	$('input[name="nav[thumb]"]').attr('required','required');
+	$("#reset").on('click',function(){
+		$("#color").val('#666').trigger('propertychange');
+	});
+	
+</script>

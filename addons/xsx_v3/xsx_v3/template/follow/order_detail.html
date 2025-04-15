@@ -1,0 +1,367 @@
+{template './common/mainHeader'}
+<div class="app-container-right">
+	<ul class="nav nav-tabs">
+		<li class="active">
+			<a href="">服务订单详情</a>
+		</li>
+	</ul>
+	<div class="app-content">
+		<div class="order-detail">
+			<div class="col-sm-4 padding-0">
+				<div class="panel panel-display">
+					<div class="panel-heading">
+						<h3>订单信息</h3>
+					</div>
+					<div class="panel-body">
+						<table class="table">
+							<tr>
+								<td width="150">下单人微信：</td>
+								<td>
+									<img src="{$userinfo['u_thumb']}" style="width: 30px;height: 30px;margin-right: 5px;">{$userinfo['u_name']}</td>
+							</tr>
+							<tr>
+								<td width="150">患者姓名：</td>
+								<td>{$userjiaren['names']}</td>
+							</tr>
+							<tr>
+								<td width="150">患者电话：</td>
+								<td>{php echo empty($userjiaren['tel']) ? '暂无' : $userjiaren['tel']}</td>
+							</tr>
+							<tr>
+								<td width="150">患者地址：</td>
+								<td>{php echo empty($userjiaren['region']) ? '暂无' : $userjiaren['region']}</td>
+							</tr>
+							<tr>
+								<td width="150">订单编号：</td>
+								<td>{$item['back_orser']}</td>
+							</tr>
+							<tr>
+								<td>下单时间：</td>
+								<td>{$item['create_time']}</td>
+							</tr>
+							<tr>
+								<td>支付时间：</td>
+								<td>
+								{if $item['ifpay'] > 0}
+								{$res['pay_time']}
+								{else}
+								暂未支付
+								{/if}
+								</td>
+							</tr>
+							<tr>
+								<td>订单状态：</td>
+								<td>
+									<span class="label label-info">{if $item['status']=='0'} 待支付 {/if}</span>
+									<span class="label label-info">{if $item['status']=='1'} 已支付 {/if}</span>
+									<span class="label label-info">{if $item['status']=='3'} 申请退款 {/if}</span>
+									<span class="label label-info">{if $item['status']=='4'} 退款成功 {/if}</span>
+									<span class="label label-info">{if $item['status']=='5'} 已取消 {/if}</span>
+									<span class="label label-info">{if $item['status']=='6'} 已发货 {/if}</span>
+									<span class="label label-info">{if $item['status']=='7'} 已收货 {/if}</span>
+									<span class="label label-info">{if $item['status']=='8'} 已到期 {/if}</span>
+								</td>
+							</tr>
+							<tr>
+								<td>付款方式：</td>
+								<td>
+									<span class="label label-info">微信支付</span>
+								</td>
+							</tr>
+							
+						</table>
+					</div>
+				</div>
+				<div class="panel panel-display">
+					<div class="panel-heading">
+						<h3>订单日志</h3>
+					</div>
+					<div class="panel-body">
+						<table class="table">
+						{if $item['status'] =='0'}
+							<tr >
+								<td>
+									<p>
+										<i class="fa fa-info-circle"></i>
+										<strong>{$item['create_time']} 订单提交成功</strong>
+									</p>
+									<p style="padding-left:15px; ">单号:{$item['back_orser']}，等待用户付款</p>
+								</td>
+							</tr>
+							{/if}
+							
+							{if $item['status'] =='1'}
+							<tr >
+								<td>
+									<p>
+										<i class="fa fa-info-circle"></i>
+										<strong>{$res['pay_time']} 订单支付成功</strong>
+									</p>
+									<p style="padding-left:15px; ">支付成功，等待医生接诊</p>
+								</td>
+							</tr>
+							{/if}
+							
+							{if $item['status'] =='3'}
+							<tr >
+								<td>
+									<p>
+										<i class="fa fa-info-circle"></i>
+										<strong>{$res['create_time']} 订单已完成</strong>
+									</p>
+									<p style="padding-left:15px; ">用户申请退款</p>
+								</td>
+							</tr>
+							{/if}
+							{if $item['status'] =='4' }
+							<tr >
+								<td>
+									<p>
+										<i class="fa fa-info-circle"></i>
+										<strong>{$res['create_time']} 退款成功</strong>
+									</p>
+									<p style="padding-left:15px; ">退款成功</p>
+								</td>
+							</tr>
+							{/if}
+							
+							{if  $item['status'] =='5'}
+							<tr >
+								<td>
+									<p>
+										<i class="fa fa-info-circle"></i>
+										<strong>{$res['create_time']} 已取消</strong>
+									</p>
+									<p style="padding-left:15px; ">用户已取消</p>
+								</td>
+							</tr>
+							{/if}
+							
+							{if  $item['status'] =='6'}
+							<tr >
+								<td>
+									<p>
+										<i class="fa fa-info-circle"></i>
+										<strong>{$res['create_time']} 已发货</strong>
+									</p>
+									<p style="padding-left:15px; ">已发货</p>
+								</td>
+							</tr>
+							{/if}
+							{if  $item['status'] =='7'}
+							<tr >
+								<td>
+									<p>
+										<i class="fa fa-info-circle"></i>
+										<strong>{$res['create_time']} 已收货</strong>
+									</p>
+									<p style="padding-left:15px; ">已收货</p>
+								</td>
+							</tr>
+							{/if}
+							{if  $item['status'] =='8'}
+							<tr >
+								<td>
+									<p>
+										<i class="fa fa-info-circle"></i>
+										<strong>{$res['create_time']} 已到期</strong>
+									</p>
+									<p style="padding-left:15px; ">已到期</p>
+								</td>
+							</tr>
+							{/if}
+						</table>
+					</div>
+				</div>
+			</div>
+			<div class="col-sm-8 padding-r-0">
+				<div class="panel panel-display">
+					<div class="panel-heading">
+						<h3>订单费用</h3>
+					</div>
+					<div class="panel-body">
+						<table class="table">
+							<tr>
+								<td width="150">实际到账：</td>
+								<td>+￥ {$item['money']} </td>
+							</tr>
+							 
+
+						</table>
+					</div>
+				</div>
+				<div class="panel panel-display">
+					<div class="panel-heading">
+						<h3>医生信息</h3>
+					</div>
+					<div class="panel-body">
+						<table class="table table-hover">
+							<thead>
+								<tr>
+									<th style="width: 20rem;">医生名</th>
+									<th>科室</th>
+									<th>职称</th>
+									<th>所属机构</th>
+									<th></th>
+								</tr>
+							</thead>
+							<tr>
+								<td>
+									<img src="{$docinfo['advertisement']}" style="width: 30px;height: 30px;margin-right: 5px;"> {$docinfo['z_name']}</td>
+								<td> {$docinfo['name']} </td>
+								<td>{$docinfo['job_name']}</td>
+								<td>{$docinfo['agentname']}</td>
+								<td class="text-right">
+									<a class="btn btn-primary btn-sm" target="_blank" href="./index.php?c=site&a=entry&op=edit&zid={$docinfo['zid']}&do=team&m=xsx_v3">医生信息</a>
+								</td>
+							</tr>
+						</table>
+					</div>
+				</div>
+				<div class="panel panel-display">
+					<div class="panel-heading">
+						<h3>用户信息</h3>
+					</div>
+					<div class="panel-body">
+						<table class="table">
+							<table class="table">
+								<tr>
+									<td width="150">用户：</td>
+									<td>
+										<a href="/web/index.php?c=site&a=entry&op=adduser&do=copysite&m=xsx_v3&act=profile.adduser&ac=notice&u_id={$userinfo['u_id']}&hid={$_SESSION['hid']}" target='_blank'> </a>&nbsp;&nbsp;<a data-toggle='popover' data-trigger="hover" data-html='true' data-placement='right'
+										   data-content="<table tyle='width:100%;s'>
+                <tr>
+                    <td  style='border:none;text-align:right;' colspan='2'><img src='{$userinfo['u_thumb']}' style='width:100px;height:100px;padding:1px;border:1px solid #ccc' /></td>
+                </tr>
+                <tr>
+                    <td  style='border:none;text-align:right;'>ID：</td>
+                    <td  style='border:none;text-align:right;'>{$userinfo['u_id']}</td>
+                </tr>
+                <tr>
+                    <td  style='border:none;text-align:right;'>昵称：</td>
+                    <td  style='border:none;text-align:right;'>{$userinfo['u_name']}</td>
+                </tr>
+                <tr>
+                    <td  style='border:none;text-align:right;'>姓名：</td>
+                    <td  style='border:none;text-align:right;'>{$userjiaren['names']}</td>
+                </tr>
+                <tr>
+                    <td  style='border:none;text-align:right;'>手机号：</td>
+                    <td  style='border:none;text-align:right;'>{$userjiaren['tel']}</td>
+                </tr>
+                </table>
+">
+											<i class='fa fa-question-circle'></i>
+										</a>
+									</td>
+
+								
+								<tr>
+									<td width="150">问题类型：</td>
+									<td class="text-left">
+										<label class="label label-danger">{$docinfo['name']}</label>
+									</td>
+								</tr>
+<!-- 								<tr>
+									<td width="150"></td>
+									<td>
+										<a class="btn btn-primary btn-xs"  href="{php echo $this->createWebUrl('ask',array('id'=>$res['id'],'op'=>'make'))}">确认接诊</a>
+									</td>
+								</tr> -->
+							</table>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<div class="modal fade" id="addCateModal" aria-hidden="false">
+			<div class="modal-dialog">
+				<div class="modal-content">
+					<div class="modal-header">
+						<button data-dismiss="modal" class="close" type="button">×</button>
+						<h4 class="modal-title">新建分类</h4>
+					</div>
+					<div class="modal-body form-horizontal">
+						<div class="form-group">
+							<div class="col-sm-2 control-label must">分类名称</div>
+							<div class="col-sm-10">
+								<input class="form-control input-sm" placeholder="请输入分类名称" id="saveTempName" value="未命名分类" />
+							</div>
+						</div>
+					</div>
+					<div class="modal-footer">
+						<div class="btn btn-primary" id="saveCate">保存</div>
+					</div>
+				</div>
+			</div>
+		</div>
+
+	</div>
+
+	<script type="text/javascript">
+		$("#addRemark").unbind('click').click(function () {
+		        $("#addCateModal").modal();
+		        $("#saveCate").unbind('click').click(function () {
+		            var status = $(this).data('status');
+		            if(status) {
+		                tip.msgbox.err("正在保存，请稍候。");
+		                return;
+		            }
+		            var name = $.trim($("#saveTempName").val());
+		            if(!name) {
+		                tip.msgbox.err("请填写备注内容！");
+		                $("#saveTempName").focus();
+		                return;
+		            }
+		            $(this).data('status',1).text('保存中')
+		            $.post("https://test3.xiaoshanxin.com/web/index.php?c=site&a=entry&m=weliam_merchant&p=rush&ac=category&do=add&", {
+		                name: name
+		            }, function (ret) {
+		                if(ret.status==0){
+		                    tip.msgbox.err(ret.result.message);
+		                }else{
+		                    tip.msgbox.suc("保存成功！");
+		                }
+		                $("#addCateModal .close").trigger('click');
+		                setTimeout(function () {
+		                    location.reload();
+		                }, 500);
+		            }, 'json');
+		        });
+		    });
+	</script>
+
+</div>
+</div>
+</div>
+
+
+
+
+<script>
+	require(['bootstrap'], function ($) {
+			    $('[data-toggle="tooltip"]').tooltip({
+		            container: $(document.body)
+		        });
+		        $('[data-toggle="popover"]').popover({
+		            container: $(document.body)
+		        });
+		        $('[data-toggle="dropdown"]').dropdown({
+		            container: $(document.body)
+		        });
+		    });
+			myrequire(['js/init']);
+					$('.app-login-info-name, .app-login-info-sel').mouseover(function(){
+				$('.app-login-info-sel').show();
+			});
+			$('.app-login-info-name, .app-login-info-sel').mouseout(function(){
+				$('.app-login-info-sel').hide();
+			});
+			$('.app-login-info-sel .login-out').hover(function(){
+				$('.app-login-info-sel-arrow').css('border-color', '#1ab394 transparent transparent transparent');
+			},function(){
+				$('.app-login-info-sel-arrow').css('border-color', '#f2f2f2 transparent transparent transparent');
+			});
+</script>
+</body>
+</html>

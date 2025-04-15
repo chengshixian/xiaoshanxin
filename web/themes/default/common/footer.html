@@ -1,0 +1,23 @@
+			</div>
+		</div>
+	</div>
+</div>
+</div>
+<div class="container-fluid footer text-center" role="footer">	
+	<div class="friend-link">
+		{if empty($_W['setting']['copyright']['footerright'])}
+			<a href="https://www.xiaoshanxin.com/" target="_blank">小善心官网</a>
+			<a href="https://zc.xiaoshanxin.com/" target="_blank">软件低价众筹</a>
+			<a href="https://bbs.xiaoshanxin.com/" target="_blank">交流社区</a>
+			<a href="https://fuwu.xiaoshanxin.com/" target="_blank">云市场</a>
+		{else}
+			{$_W['setting']['copyright']['footerright']}
+		{/if}
+	</div>
+	<div class="copyright">{if empty($_W['setting']['copyright']['footerleft'])}Powered by <a href="https://www.xiaoshanxin.com/"  target="_blank"><b>小善心</b></a> v{IMS_VERSION} &copy; 2023-2024 <a href="https://www.xiaoshanxin.com/"  target="_blank">xiaoshanxin.com</a>{else}{$_W['setting']['copyright']['footerleft']}{/if}</div>
+	{if !empty($_W['setting']['copyright']['icp'])}
+	<div>备案号：<a href="http://www.miitbeian.gov.cn" target="_blank">{$_W['setting']['copyright']['icp']}</a></div>{/if}
+</div>
+{template 'common/footer-base'}
+</body>
+</html>

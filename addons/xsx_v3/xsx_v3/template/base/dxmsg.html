@@ -1,0 +1,100 @@
+{template './common/mainHeader'}
+<div class="app-container-right">
+			<ul class="nav nav-tabs">
+	<li class="active"><a href="/web/index.php?c=site&a=entry&do=base&op=dxmsg&ac=dxmsg&m=xsx_v3">短信模板</a></li>
+</ul>
+<div class="app-content">
+	<div class="app-filter">
+		<div class="filter-action">
+			<a href="/web/index.php?c=site&a=entry&do=base&op=dxmsgadd&ac=dxmsgadd&m=xsx_v3" class="btn btn-primary">添加模板</a>
+		</div>
+	</div>
+	<div class="app-table-list">
+		<div class="table-responsive">
+			<table class="table table-hover">
+				<thead>
+					<tr>
+						<th class="text-center">模板名称</th>
+						<th class="text-center">服务商</th>
+						<th class="text-center">状态</th>
+						<th class="text-center">操作</th>
+					</tr>
+				</thead>
+				<tbody>
+											<tr class="text-center">
+							<td>短信验证码</td>
+							<td>
+																<span class="label label-primary">阿里云</span>
+															</td>
+							<td>
+								<span class="label label-success">
+									开启								</span>
+							</td>
+							<td>
+								<a class='btn btn-default  btn-sm' href="/web/index.php?c=site&a=entry&do=base&op=dxmsg&ac=dxmsg&m=xsx_v3"><i class='fa fa-edit'></i> 编辑</a>
+								<!-- <a href="javascript:;" class='btn btn-default  btn-sm js-dele'  data-id="7" ><i class='fa fa-trash'></i> 删除</a> -->
+							</td>
+						</tr>
+									</tbody>
+			</table>
+		</div>
+		<div class="app-table-foot clearfix">
+			<div class="pull-left">
+
+			</div>
+			<div class="pull-right">
+							</div>
+		</div>
+	</div>
+</div>
+<script type="text/javascript">
+	$('.js-dele').click(function(){
+		var id = $(this).attr("data-id");
+		var url =  "https://test3.xiaoshanxin.com/web/index.php?c=site&a=entry&m=weliam_smartcity&p=news&ac=noticeset&do=dele&" + "id="+id;
+		$.ajax({
+	        type: "POST",
+	        url:url,
+	        dataType:'json',
+	        success: function(data) {
+	        	layer.msg(data.message);
+	        	location.href = "https://test3.xiaoshanxin.com/web/index.php?c=site&a=entry&m=weliam_smartcity&p=news&ac=noticeset&do=smslist&";
+	        }
+	    });
+	})
+</script>
+			</div>
+		</div>
+	</div>
+	<div class="foot" id="footer">
+		
+	</div>
+	
+
+    <script>
+		require(['bootstrap'], function ($) {
+		    $('[data-toggle="tooltip"]').tooltip({
+	            container: $(document.body)
+	        });
+	        $('[data-toggle="popover"]').popover({
+	            container: $(document.body)
+	        });
+	        $('[data-toggle="dropdown"]').dropdown({
+	            container: $(document.body)
+	        });
+	    });
+		myrequire(['js/init']);
+		$('.app-login-info-name, .app-login-info-sel').mouseover(function(){
+			$('.app-login-info-sel').show();
+		});
+		$('.app-login-info-name, .app-login-info-sel').mouseout(function(){
+			$('.app-login-info-sel').hide();
+		});
+		$('.app-login-info-sel .login-out').hover(function(){
+			$('.app-login-info-sel-arrow').css('border-color', '#1ab394 transparent transparent transparent');
+		},function(){
+			$('.app-login-info-sel-arrow').css('border-color', '#f2f2f2 transparent transparent transparent');
+		});
+	</script>
+	</body>
+</html>
+

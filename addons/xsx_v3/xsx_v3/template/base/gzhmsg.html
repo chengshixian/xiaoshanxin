@@ -1,0 +1,156 @@
+{template './common/mainHeader'}
+<div class="app-container-right">
+			<style>
+.select2{width: 100%;}
+.select2-container .select2-choice .select2-arrow b{background-color: #eeeeee}
+.w200{width: 200px;}
+.w60{width: 60px;text-align: right;}
+.form-horizontal .form-group{margin-left: 0;margin-right: 0;}
+.table> thead> tr> th{border: none;}
+.is_default{display: table-block;}
+.is_advanced{display: none;}
+#openids_selector .input-group{width: 100%;}
+.is_sms{display: table-block;}
+</style>
+<ul class="nav nav-tabs">
+    <li {if $op == 'dymsg'} class="active" {/if}>
+        <a href="{php echo $this->createWeburl('base',array('op'=>'dymsg'));}">患者订阅消息
+        </a>
+    </li>
+    <li {if $op == 'gzhmsg'} class="active" {/if}>
+        <a href="{php echo $this->createWeburl('base',array('op'=>'gzhmsg'));}">管理员公众号通知
+        </a>
+    </li>
+</ul>
+<div class="app-content">
+    <div class="app-form">
+        <form action="" method="post" class="form-horizontal form" id="setting-form">
+            <div class="panel panel-default">
+                <div class="panel-heading">公众号消息设置</div>
+                <div class="alert alert-info">
+                    <b>注意：</b>
+                    <p>请先在公众号管理平台：新增功能->模板消息申请权限成功后，再进入广告与服务->模板消息->模板库选择对应的模板进行填入</p>
+                    <p>需手动填写模板ID,消息开启后向管理员发送以下通知</p>
+                </div>
+                <div class="app-table-list">
+
+                    <div class="table-responsive">
+                        <table class="table table-hover">
+                            <thead>
+                            <tr>
+                                <th class="text-center" width="10%">标题</th>
+                                <th class="text-center" width="25%">关键词</th>
+                                <th class="text-center" width="15%">服务类目</th>
+                                 <!-- <th class="text-center" width="15%">订阅类型</th> -->
+                                <th class="text-center" width="25%">模板id</th>
+                                <th class="text-center" width="10%">是否开启</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                                <tr class="text-center">
+                                    <td>付费成功提醒</td>
+                                    <td>就诊人、付费金额、付费时间、付款项目</td>
+                                    <td>医疗服务|互联网医院</td>
+                                    <!-- <td>长期订阅</td> -->
+                                    <td>
+                                        <input type="text" placeholder="请输入模板ID" name="notice[orderSuccess]" value="{$wxapp_gongzhonghao['orderSuccess']}" class="form-control" />
+                                    </td>
+                                    <td>
+                                        <input type="checkbox" class="js-switch" name="notice[orderSuccessSwitch]" {if $wxapp_gongzhonghao['orderSuccessSwitch'] =='on'} checked="checked" {/if} >
+                                    </td>
+                                </tr>
+                                <tr class="text-center">
+                                    <td>订单支付成功通知</td>
+                                    <td>客户名称、订单金额、支付时间、项目名称</td>
+                                    <td>工具|信息查询</td>
+                                    <!-- <td>长期订阅</td> -->
+                                    <td>
+                                        <input type="text" placeholder="请输入模板ID" name="notice[orderpaySuccess]" value="{$wxapp_gongzhonghao['orderpaySuccess']}" class="form-control" />
+                                    </td>
+                                    <td>
+                                        <input type="checkbox" class="js-switch" name="notice[orderpaySuccessSwitch]" {if $wxapp_gongzhonghao['orderpaySuccessSwitch'] =='on'} checked="checked" {/if} >
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="app-table-foot clearfix">
+                        <div class="pull-left">
+                            <input type="submit" name="submit" value="提交" class="btn btn-primary min-width" />
+                            <input type="hidden" name="token" value="{$_W['token']}" />
+                            <input type="hidden" name="p_id" value="{$res['p_id']}" />
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+<script>
+	$(function() {
+		window.optionchanged = false;
+		$('#myTab a').click(function(e) {
+			e.preventDefault(); //阻止a链接的跳转行为
+			$(this).tab('show'); //显示当前选中的链接及关联的content
+		})
+	});
+	
+	function search_members() {
+       	if( $.trim($('#search-kwd').val())==''){
+            Tip.focus('#search-kwd','请输入关键词');
+            return;
+        }
+
+		$("#module-menus").html("正在搜索....")
+		$.get('https://test3.xiaoshanxin.com/web/index.php?c=site&a=entry&m=xsx_v3&p=store&ac=register&do=add&op=selectnickname', {
+			keyword: $.trim($('#search-kwd').val())
+		}, function(dat){
+			$('#module-menus').html(dat);
+		});
+	}
+    function select_member(o) {
+		$("#openid").val(o.openid);
+		$("#saler").val(o.nickname);
+		$('#search-kwd').val(o.nickname)
+		$('#module-menus').html('');
+		$("#modal-module-menus").modal("hide");
+	}
+	
+</script>
+			</div>
+		</div>
+	</div>
+	<div class="foot" id="footer">
+		
+	</div>
+	
+	
+    <script>
+		require(['bootstrap'], function ($) {
+		    $('[data-toggle="tooltip"]').tooltip({
+	            container: $(document.body)
+	        });
+	        $('[data-toggle="popover"]').popover({
+	            container: $(document.body)
+	        });
+	        $('[data-toggle="dropdown"]').dropdown({
+	            container: $(document.body)
+	        });
+	    });
+		myrequire(['js/init']);
+				$('.app-login-info-name, .app-login-info-sel').mouseover(function(){
+			$('.app-login-info-sel').show();
+		});
+		$('.app-login-info-name, .app-login-info-sel').mouseout(function(){
+			$('.app-login-info-sel').hide();
+		});
+		$('.app-login-info-sel .login-out').hover(function(){
+			$('.app-login-info-sel-arrow').css('border-color', '#1ab394 transparent transparent transparent');
+		},function(){
+			$('.app-login-info-sel-arrow').css('border-color', '#f2f2f2 transparent transparent transparent');
+		});
+		
+			</script>
+	</body>
+</html>
+

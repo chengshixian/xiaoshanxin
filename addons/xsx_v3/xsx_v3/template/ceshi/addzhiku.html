@@ -1,0 +1,85 @@
+{template '/common/mainHeader'}
+<div class="app-container-right">
+	<ul class="nav nav-tabs">
+		<li>
+			<a href="/web/index.php?c=site&a=entry&do=copysite&m=xsx_v3&act=ceshi.zhikucat&ac=zhikucat">字典列表</a>
+		</li>
+		<li {if empty($id)}class="active" {/if}> <a href="/web/index.php?c=site&a=entry&do=copysite&m=xsx_v3&act=ceshi.addzhiku&ac=addzhiku">添加选项</a>
+		</li>
+		{if !empty($id)}
+		<li class="active">
+			<a href="#">编辑字典</a>
+		</li>
+		{/if}
+	</ul>
+	<div class="app-content">
+		<div class="app-form">
+			<form action="" method="post" class="form-horizontal form form-validate">
+				<input type="hidden" name="id" value="" />
+				<div class="panel panel-default">
+					<div class="panel-heading">
+						字典设置
+					</div>
+					<div class="panel-body">
+						<div class="form-group">
+							<label class="col-sm-2 control-label">选项名称<span class="must-fill">*</span>
+							</label>
+							<div class="col-sm-9">
+								<input type="text" name="ctname" required placeholder="请输入选项名称" class="form-control" value="{$res['ctname']}">
+							</div>
+						</div>
+						<div class="form-group">
+							<label class="col-sm-2 control-label">选项备注</label>
+							<div class="col-sm-9">
+								<input type="text" name="describe" class="form-control" value="{$res['describe']}">
+							</div>
+						</div>
+						<div class="form-group">
+							<label class="col-sm-2 control-label">所属类型<span class="must-fill">*</span>
+							</label>
+							<div class="col-sm-9 col-xs-12">
+             					<select name="typeint" class="form-control valid" aria-invalid="false">
+                                    <option value="">请选择所属类型</option>
+                                  	<option value="0" {if $res['typeint']=='0'} selected="selected" {/if}>科室类型</option>
+                                  	<option value="1" {if $res['typeint']=='1'} selected="selected" {/if}>疾病类型</option>
+                                  	<option value="2" {if $res['typeint']=='2'} selected="selected" {/if}>症状类型</option>
+                                  	<option value="3" {if $res['typeint']=='3'} selected="selected" {/if}>疫苗类型</option>
+                                  	<option value="4" {if $res['typeint']=='4'} selected="selected" {/if}>检查项类型</option>
+                                  	<option value="5" {if $res['typeint']=='5'} selected="selected" {/if}>备药类型</option>
+                                  	<option value="6" {if $res['typeint']=='6'} selected="selected" {/if}>传染病类型</option>
+									<option value="7" {if $res['typeint']=='7'} selected="selected" {/if}>中药煎法</option>
+									<option value="8" {if $res['typeint']=='8'} selected="selected" {/if}>过敏史</option>
+                                </select> 
+							</div>
+						</div>
+						<div class="form-group">
+							<label class="col-sm-2 control-label">是否开启</label>
+							<div class="col-sm-9">
+								<label class="radio-inline">
+									<input type="radio" name="state" value="1" {if $res['state']==1} checked='checked' {/if}>是
+								</label>
+								<label class="radio-inline">
+									<input type="radio" name="state" value="0" {if $res['state']==0} checked {/if}>否
+										   </label>
+										   </div>
+										   </div>
+										   <div class="form-group">
+									<label class="col-sm-2 control-label"></label>
+									<div class="col-sm-9">
+										<input type="submit" name="submit" lay-submit value="提交" class="btn btn-primary min-width" />
+										<input name="token" type="hidden" value="{$_W['token']}" />
+                                        <input name="id" type="hidden" value="{$id}" />
+									</div>
+							</div>
+						</div>
+					</div>
+			</form>
+		</div>
+	</div>
+</div>
+</div>
+</div>
+
+
+</body>
+</html>

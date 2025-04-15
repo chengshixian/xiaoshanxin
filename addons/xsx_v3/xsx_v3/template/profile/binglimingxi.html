@@ -1,0 +1,1328 @@
+{template './common/mainHeader'}
+<link href="https://img.xiaoshanxin.com/saas/web/style.default.min.css" rel="stylesheet">
+<style>
+    .we7-modal-dialog, .modal-dialog{
+    top:0;
+  left:0;
+  }
+  select{
+    height:41px!important;
+    line-height: 21px!important;
+  }
+  .trbody td {text-align: center; vertical-align:top;border-left:1px solid #ccc; border-bottom: 1px solid #ddd;}
+    .order-rank img{width:16px; height:16px;}
+    .js-remark,.js-admin-remark{word-break:break-all; overflow:hidden; background: #FDEEEE;color: #ED5050;padding: 5px 10px;}
+    td.goods-info{position:relative; padding-left:60px;}
+    .goods-info .img{position:absolute;top:50%; margin-top:-25px; background: url(https://test3.xiaoshanxin.com/addons/xsx_v3/public/resource/images/loading.gif) center center no-repeat; width:50px;height:50px; }
+    .goods-info span {white-space: inherit;overflow: hidden;text-overflow: ellipsis;display: block;}
+    .status-text{cursor:pointer;}
+    .table>thead>tr>th, .table>tbody>tr>th, .table>tfoot>tr>th, .table>thead>tr>td, .table>tbody>tr>td, .table>tfoot>tr>td {border-top: 1px solid rgba(221, 221, 221, 0);}
+    .col-md-1{padding-right: 0px;}
+    .asd{cursor: pointer;}
+    .cont_text{width: 240px;display: block;overflow: hidden;text-overflow: ellipsis;white-space: nowrap;text-align: left;}
+    .name_text{overflow: hidden;text-overflow: ellipsis;width: 200px;white-space: nowrap;}
+  .modal-dialog{
+    margin:15px auto;
+  }
+  .we7-form .form-group, form .form-group{
+   margin-bottom:10px; 
+  }
+  #tab3 .row{
+    display:flex;
+  }
+  #tab3 .row ul li{
+    white-space: nowrap;
+    padding:10px;
+    cursor: pointer;
+    width:100px;
+    text-align:center;
+  }
+  .ractive{
+    color:#fff;
+    background:#1ab394;
+  }
+  .btnBox{
+    display:flex;
+    align-items: center;
+    justify-content: space-around;
+  }
+  .mr10{
+    margin-right:10px;
+  }
+  .content_wrap.image{
+     width: 100px;
+  }
+  .cont_box{
+    display: flex;
+    justify-content: space-between;
+  }
+  .ul_scroll{overflow: hidden;overflow-y: auto;max-height: 600px;margin-right: 10px;width: 8%}
+  .ul_scroll li{padding:10px 0;width:100%;font-size: 18px;border: 1px solid #eaeaea;text-align: center;}
+  .ul_scroll_active{background: #4381c6;color: #fff;}
+</style>
+
+
+<!--就诊记录样式-->
+<style>
+    .labelTip {
+        width: 14px;
+        height: 14px;
+        display: inline-block;
+        margin-right: 7px;
+        margin-top: 1px;
+        background-color: #4381c6;
+        border-radius: 100%;
+    }
+
+    .recordInfo {
+        padding-left: 24px;
+    }
+
+    .boxTitle {
+        margin-bottom: 30px;
+        height: 16px;
+        line-height: 16px;
+        color: #4a4a4a;
+        font-size: 16px;
+    }
+
+    .boxBtn {
+        height: 32px;
+        line-height: 32px;
+    }
+
+    .floatL {
+        float: left;
+    }
+
+    .floatR {
+        float: right;
+    }
+
+    .boxBtn .btnGoInfo {
+        margin-right: 14px;
+        color: #4381c6;
+        font-size: 14px;
+        cursor: pointer;
+    }
+
+    .boxBtn {
+        margin-bottom: 20px;
+    }
+
+    .is-active{
+        background-color: #fff;
+        border-color: #4381c6 !important;
+        color: #4381c6;
+        box-shadow: -1px 0 0 0 #409eff;
+    }
+
+    .el-radio-button__inner {
+        padding: 0;
+        height: 32px;
+        line-height: 32px;
+        text-align: center;
+    }
+
+    .chineseInfo {
+        margin-top: 26px;
+        margin-bottom: 0;
+        color: #f65952;
+        font-size: 14px;
+    }
+
+    .boxMeds {
+        width: calc(80% - 30px);
+        border-right: 1px solid #d8d8d8;
+        padding-right: 17px;
+    }
+
+    .boxDays {
+        width: calc(20% - 33px);
+        padding-left: 20px;
+        position: absolute;
+        bottom: 0;
+        left: calc(80% - 12px);
+    }
+
+    .marginR20 {
+        margin-right: 20px;
+    }
+
+    .boxUse {
+        margin-top: 5px;
+        margin-bottom: 0;
+        color: #f65952;
+    }
+
+    .mb30 {
+        margin-bottom: 30px;
+    }
+
+    .consumption-info, .consumption-info-item {
+        display: -webkit-box;
+        display: -ms-flexbox;
+        display: flex;
+        margin-bottom: 20px;
+    }
+
+    .consumption-info-item {
+        -webkit-box-flex: 1;
+        -ms-flex: 1;
+        flex: 1;
+        -webkit-box-pack: center;
+        -ms-flex-pack: center;
+        justify-content: center;
+        -webkit-box-align: end;
+        -ms-flex-align: end;
+        align-items: flex-end;
+        font-size: 13px;
+        color: #6d7278;
+    }
+
+    .consumption-info-item span {
+        display: inline-block;
+        font-size: 44px;
+        margin: 0 10px;
+        -webkit-transform: translateY(8px);
+        transform: translateY(8px);
+        white-space: nowrap;
+    }
+
+    .consumption-info-item .total {
+        color: #4381c6;
+    }
+
+    .consumption-info-item .cash {
+        color: #ef4646;
+    }
+
+    .consumption-info-item .healthCare {
+        color: #f5a623;
+    }
+
+    .consumption-info-item .wechat {
+        color: #50af64;
+    }
+
+    .consumption-info-item .alipay {
+        color: #30a2ff;
+    }
+    .consumption-search-type-text{
+        color: rgba(0,0,0,.65);
+        white-space: nowrap;
+    }
+    .df{
+        display: flex;
+        align-items: center;
+        margin-right: 20px;
+    }
+    .consumption-search-btn-search {
+        margin-left: 27px;
+        width: 80px;
+        height: 32px;
+        line-height: 32px;
+        font-size: 14px;
+        padding: 0;
+        background-color: #4381c6;
+        border: none;
+        color: #fff;
+    }.df>select{padding: 0}
+    .df>select,.consumption-info input{
+        height: 32px!important;
+        line-height: 32px!important;
+        box-sizing: border-box;
+    }
+    .el-button--primary:focus, .el-button--primary:hover {
+        background: #66b1ff;
+        border-color: #66b1ff;
+        color: #fff;
+        box-shadow: 0 0 4px 0 #66b1ff;
+    }
+    .consumption-table-detail {
+        color: #4381c6;
+        cursor: pointer;
+    }
+    .el-radio-group{
+        display: flex;
+        
+    }
+    .el-radio-button:nth-child(1){
+        border: 1px solid #eaeaea;
+        border-radius: 5px;
+        border-top-right-radius:0; 
+        border-bottom-right-radius:0; 
+    }
+    .el-radio-button{
+        border: 1px solid #eaeaea;
+        border-radius: 5px;
+        border-left: 0;
+        height: 32px;
+        line-height: 32px;
+        padding:0 10px; 
+    }
+
+    .ul_scroll{
+        overflow: hidden;
+        max-height: 500px;
+        overflow-y: auto;
+        scrollbar-width: none; 
+    }
+    .ul_scroll::-webkit-scrollbar {
+	/*滚动条整体样式*/
+　　width:4px;
+	/*高宽分别对应横竖滚动条的尺寸*/
+　　height:4px;
+    }
+    .ul_scroll::-webkit-scrollbar-thumb {
+	/*滚动条里面小方块*/
+　　border-radius:5px;
+	-webkit-box-shadow:inset005pxrgba(0,0,0,0.2);
+	background:rgba(0,0,0,0.2);
+    }
+    .ul_scroll::-webkit-scrollbar-track {
+	/*滚动条里面轨道*/
+　　-webkit-box-shadow:inset005pxrgba(0,0,0,0.2);
+	border-radius:0;
+	background:rgba(0,0,0,0.1);
+    }
+    .ca_stamp{
+        width: 100px;
+    
+    }
+
+</style>
+<!--就诊记录end-->
+</div>
+<div class="pageheader">
+    <h2>
+        <i class="fa fa-user-md"></i> 电子病历
+    </h2>
+    <div class="breadcrumb-wrapper">
+        <a class="btn btn-sm btn-white" onclick="window.history.back();">
+            <i class="fa fa-angle-left"></i> 返回
+        </a>
+    </div>
+</div>
+<div class="contentpanel">
+    <!-- 患者信息 -->
+    <div class="row">
+        <div class="col-xs-12 col-sm-12 col-md-12">
+            <div class="panel panel-success">
+                <div class="panel-body">
+                    <div class="row">
+                        <input type="hidden" class="J-patientId" name="u_id" value="{$u_id}">
+                        <div class="col-sm-12 col-md-2 mb20">
+                            <div class="form-group J-show-img-box">
+                                <div class=" mr0">
+                                    <div class="image-select avatar-view">
+                                        <div class="col-xs-4 col-sm-2 col-md-12">
+                                            <img src="{$res['u_thumb']}" alt="头像">
+                                        </div>
+                                        <div class="col-xs-8 col-sm-10 col-md-12" id="J-basic-info-wrap">
+                                            <h2 class="profile-name">{$res['names']}
+                                                <small class="tooltips font16" data-toggle="tooltip" data-placement="top" data-original-title="{$res['region']} 手机: {$res['tel']}">
+                                                    <i class="fa fa-phone"></i>
+                                                </small>
+                                                <span class="display-block pad-inline">
+                                                    <span>
+                                                        <a href="javascript:void(0);" class="btn btn-default btn-sm J-patient-record">患者记录</a>
+                                                    </span>
+                                                </span>
+                                            </h2>
+                                            <div class="mb20 mbn20"></div>
+                                            <ul class="profile-social-list sm-10">
+                                                <li>
+                                                    <span>病案号：{$res['randnum']}</span>
+                                                </li>
+                                                <li>
+                                                    <span>性别：{$res['my']['sex']}</span>
+                                                </li>
+                                                <li>
+                                                    <span>年龄：
+                                                        <span class="J-age">
+
+                                                            {$res['my']['age']}岁
+
+                                                        </span>
+                                                    </span>
+                                                </li>
+                                                <li>
+                                                    <span>身高：{$res['my']['shengao']}cm
+
+                                                    </span>
+                                                </li>
+                                                <li>
+                                                    <span>体重：{$res['my']['tizhong']}kg
+
+                                                    </span>
+                                                </li>
+                                                <li>
+                                                    <span>
+                                                        患者关系：本人
+                                                    </span>
+                                                </li>
+
+                                                <!-- <li>
+                                                    <span>过敏史：{if $res['my']['allergy_index'] == '1'}药物过敏{else} 无 {/if}</span>
+                                                </li>
+                                                <li>
+                                                    <span>过往病史：
+                                                    {if $res['my']['feritin_index'] == '1'}高血压{/if}
+                                                    {if $res['my']['diabetes_index'] == '1'}糖尿病{/if}
+                                                    {if $res['my']['feritin_index'] == '0' && $res['my']['diabetes_index'] == '0'}无{/if}
+                                                    </span>
+                                                </li>
+                                                <li>
+                                                    <span>肝功能：{if $res['my']['gan_index'] == '1'} 异常 {else} 正常 {/if}</span>
+                                                </li>
+                                                <li>
+                                                    <span>肾功能：{if $res['my']['shen_index'] == '1'} 异常 {else}正常 {/if}</span>
+                                                </li>
+                                                <li>
+                                                    <span>婚姻情况：{$res['my']['hunyin']}</span>
+                                                </li>
+                                                <li>
+                                                    <span>备孕情况：{if $res['my']['be_index'] == '1'} 有 {else}无 {/if}</span>
+                                                </li>
+                                                <li>
+                                                    <span>职业：{$res['my']['zhiye']}</span>
+                                                </li>
+                                                <li>
+                                                    <span>血型：{$res['my']['xuex']}型</span>
+                                                </li>
+                                                <li>
+                                                    <span>所在地：{$res['my']['region']}</span>
+                                                </li>
+                                                <li>
+                                                    <span>用户身份：{if $res['admintype']==0}普通用户{else}会员用户{/if}</span>
+                                                </li>
+                                                {if $res['adminuserdj']!='0'}
+                                                <li>
+                                                    <span>会员等级：{$res['adminuserdj_name']}</span>
+                                                </li>
+                                                <li>
+                                                    <span>会员有效期：{if $res['adminguanbi']>time()} {php echo date("Y-m-d H:i:s",$res['adminoptime'])}~ {php echo date("Y-m-d H:i:s",$res['adminguanbi'])}{else}已到期{/if}</span>
+                                                </li>
+                                                {/if} -->
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- 上传图片 -->
+                            <div class="form-group J-edit-img-box" style="display: none;" id="crop-avatar" data-url="/Index/uploadImage">
+                                <div class="J_image_upload mr0">
+                                    <div class="image-select J_image_select avatar-view empty" data-original-title="" title="">
+                                        <div class="image-preview">
+                                            <img src="//assets.dxycdn.com/app/DXYClinic/test/business/images/child-avatar.png">
+                                        </div>
+                                        <div class="image-upload">
+                                            <a class="btn btn-default btn-sm">上传头像</a>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- Cropping modal -->
+                                <div class="modal fade" id="avatar-modal" aria-hidden="true" aria-labelledby="avatar-modal-label" role="dialog" tabindex="-1">
+                                    <div class="modal-dialog modal-lg">
+                                        <div class="modal-content">
+                                            <div class="avatar-form" action="" enctype="multipart/form-data" method="post">
+                                                <form>
+                                                    <div class="modal-header">
+                                                        <button class="close" data-dismiss="modal" type="button">×</button>
+                                                        <h4 class="modal-title" id="avatar-modal-label">上传图片</h4>
+                                                    </div>
+                                                    <div class="modal-body">
+                                                        <div class="avatar-body">
+                                                            <div class="row">
+                                                                <div class="avatar-upload col-sm-12">
+                                                                    <div class="input-group">
+                                                                        <span class="input-group-btn">
+                                                                            <div class="btn btn-default image-preview-input">
+                                                                                <span class="glyphicon glyphicon-folder-open"></span>
+                                                                                <span class="image-preview-input-title">选择文件</span>
+                                                                                <input class="avatar-src" name="avatar_src" type="hidden">
+                                                                                <input class="avatar-data" name="image_data" type="hidden">
+                                                                                <input name="is_protected" value="true" type="hidden">
+                                                                                <input name="owner_type" value="1" type="hidden">
+                                                                                <input name="type" value="1" type="hidden">
+                                                                                <input name="media_type" value="image" type="hidden">
+                                                                                <input class="avatar-input" id="avatarInput" name="uploadFile" type="file" accept="image/*">
+                                                                            </div>
+                                                                        </span>
+                                                                        <button type="button" class="btn btn-white J-btn-camera ml10 black">
+                                                                            <i class="fa fa-camera"></i> 拍照上传
+                                                                        </button>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                            <!-- Crop and preview -->
+                                                            <div class="row">
+                                                                <div class="col-md-9">
+                                                                    <div class="avatar-wrapper J-show-pic"></div>
+                                                                    <video style="display:none;" class="avatar-wrapper" id="video"></video>
+                                                                </div>
+                                                                <div class="col-md-3">
+                                                                    <div class="avatar-preview preview-lg"></div>
+                                                                    <div class="avatar-preview preview-md"></div>
+                                                                    <div class="avatar-preview preview-sm"></div>
+                                                                </div>
+                                                            </div>
+                                                            <div class="row avatar-btns">
+                                                                <a class="btn btn-primary btn-block avatar-save" type="javascript:;">确定</a>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </form>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-sm-12 col-md-10">
+                            <ul class="nav nav-tabs patient-tabs nav-white mb20 J-pane-body-title">
+                                <!-- <li class="active">
+                                    <a href="#tab1" data-toggle="tab">
+                                        <strong>基本信息</strong>
+                                    </a>
+                                </li> -->
+                                <li class="">
+                                    <a href="#tab2" data-toggle="tab">
+                                        <strong>电子病历</strong>
+                                    </a>
+                                </li>
+                                <!-- <li class="J-module-control" data-modules="16">
+                                    <a href="#tab7" data-toggle="tab">
+                                        <strong>消费信息</strong>
+                                    </a>
+                                </li>
+                                <li class="J-module-control" data-modules="48">
+                                    <a href="#tab8" data-toggle="tab">
+                                        <strong>积分信息</strong>
+                                    </a>
+                                </li>
+                                <li class="J-module-control" data-permission="13">
+                                    <a href="#tab4" data-toggle="tab">
+                                        <strong>预约信息</strong>
+                                    </a>
+                                </li>
+                                <li class="J-module-control" data-permission="72">
+                                    <a href="#tab3" data-toggle="tab" class="J-wechat-panel">
+                                        <strong>问诊记录</strong>
+                                    </a>
+                                </li>
+                                <li class="J-module-control" data-permission="72">
+                                    <a href="#tab11" data-toggle="tab" class="J-wechat-panel">
+                                        <strong>其他报告</strong>
+                                    </a>
+                                </li>
+                                <li class="J-module-control" data-permission="72">
+                                    <a href="#tab5" data-toggle="tab" class="J-wechat-panel">
+                                        <strong>签约医生</strong>
+                                    </a>
+                                </li>
+
+                                <li class="J-module-control" data-permission="72">
+                                    <a href="#tab6" data-toggle="tab" class="J-wechat-panel">
+                                        <strong>我的优惠券</strong>
+                                    </a>
+                                </li>
+                                <li class="J-module-control" data-permission="72">
+                                    <a href="#tab9" data-toggle="tab" class="J-wechat-panel">
+                                        <strong>医生年卡</strong>
+                                    </a>
+                                </li>
+                                <li class="J-module-control" data-permission="72">
+                                    <a href="#tab10" data-toggle="tab" class="J-wechat-panel">
+                                        <strong>动态记录</strong>
+                                    </a>
+                                </li>
+                                <li class="J-module-control" data-permission="72">
+                                    <a href="#tab12" data-toggle="tab" class="J-wechat-panel">
+                                        <strong>健康档案</strong>
+                                    </a>
+                                </li>
+                                <li class="J-module-control" data-permission="72">
+                                    <a href="#tab13" data-toggle="tab" class="J-wechat-panel">
+                                        <strong>设备管理</strong>
+                                    </a>
+                                </li>
+                                <li class="J-module-control" data-permission="72">
+                                    <a href="#tab14" data-toggle="tab" class="J-wechat-panel">
+                                        <strong>血压记录</strong>
+                                    </a>
+                                </li>
+                                <li class="J-module-control" data-permission="72">
+                                    <a href="#tab15" data-toggle="tab" class="J-wechat-panel">
+                                        <strong>血糖记录</strong>
+                                    </a>
+                                </li>
+                                <li class="J-module-control" data-permission="72">
+                                    <a href="#tab16" data-toggle="tab" class="J-wechat-panel">
+                                        <strong>血氧记录</strong>
+                                    </a>
+                                </li>
+                                <li class="J-module-control" data-permission="72">
+                                    <a href="#tab17" data-toggle="tab" class="J-wechat-panel">
+                                        <strong>睡眠记录</strong>
+                                    </a>
+                                </li>
+                                <li class="J-module-control" data-permission="72">
+                                    <a href="#tab18" data-toggle="tab" class="J-wechat-panel">
+                                        <strong>运动记录</strong>
+                                    </a>
+                                </li>
+                                <li class="J-module-control" data-permission="72">
+                                    <a href="#tab19" data-toggle="tab" class="J-wechat-panel">
+                                        <strong>心率记录</strong>
+                                    </a>
+                                </li>
+                                <li class="J-module-control" data-permission="72">
+                                    <a href="#tab20" data-toggle="tab" class="J-wechat-panel">
+                                        <strong>温度记录</strong>
+                                    </a>
+                                </li>
+                                <li class="J-module-control" data-permission="72">
+                                    <a href="#tab21" data-toggle="tab" class="J-wechat-panel">
+                                        <strong>尿酸记录</strong>
+                                    </a>
+                                </li>
+                                <li class="J-module-control" data-permission="72">
+                                    <a href="#tab22" data-toggle="tab" class="J-wechat-panel">
+                                        <strong>胆固醇记录</strong>
+                                    </a>
+                                </li> -->
+                            </ul>
+
+
+
+
+                            
+                                <!-- 基本信息 -->
+                                
+
+                                 <!--电子病历-->
+                                 <div class="tab-pane" id="tab2">
+                                    <div class="table-responsive">
+                                        <table class="table table-profile">
+                                            <thead>
+                                                <tr>
+                                                    <th width="20%">
+                                                        <strong>就诊时间</strong>
+                                                    </th>
+                                                    <th width="20%">
+                                                        <strong>就诊人信息</strong>
+                                                    </th>
+                                                    <th width="20%">
+                                                        <strong>问诊信息</strong>
+                                                    </th>
+                                                    <th width="20%">
+                                                        <strong>诊断医生</strong>
+                                                    </th>
+                                                    <th width="20%">
+                                                        <strong>操作</strong>
+                                                    </th>
+                                                </tr>
+                                            </thead>
+                                            <tbody id="J-points-infos-wrap">
+                                                {loop $bingli $wenzhen}
+                                                <tr>
+                                                    <td>
+                                                        {php echo $wenzhen['createTime']}<br>
+                                                        编号:{php echo $wenzhen['orderNo']}
+
+                                                    </td>
+                                                    <td>
+                                                        姓名:{php echo $wenzhen['hz_conets']['names']}<br>
+                                                        性别:{php echo $wenzhen['hz_conets']['sex']}<br>
+                                                        出生日期:{php echo $wenzhen['hz_conets']['datetime']}<br>
+                                                        年龄:{php echo $wenzhen['hz_conets']['age']}岁<br>
+                                                    </td>
+                                                    <td>
+                                                        就诊科室:{php echo $wenzhen['dept_name']}<br>
+                                                        主诉:{php echo $wenzhen['conets']['text']}<br>
+                                                        诊断结果:{php echo $wenzhen['conets']['text1']}<br>
+                                                        <!-- 线下就诊医院:{php echo $wenzhen['conets']['local_hospital']}<br>
+                                                        线下诊断:{php echo $wenzhen['conets']['zhenduan']}<br> -->
+                                                        过敏史:{php echo $wenzhen['conets']['text4']}<br>
+                                                        既往史:{php echo $wenzhen['conets']['text5']}<br>
+                                                        家族史/遗传病史:{php echo $wenzhen['conets']['text6']}<br>                                                 
+                                                        治疗意见:{php echo $wenzhen['conets']['text9']}<br>
+                                                        <!-- 现病史:{php echo $wenzhen['conets']['text8']}<br> -->
+                                                    </td>
+                                                    <td>
+                                                        接诊医生:{php echo $wenzhen['z_name']}<br>
+                                                        <img class="ca_stamp" src="data:image/png;base64,{php echo $wenzhen['ca_stamp']}" alt="Base64 Image">
+                                                    </td>
+                                                    <td>
+                                                       <a class="btn btn-primary btn-sm" target="_blank" href="/web/index.php?c=site&a=entry&op=binglipdf&do=copysite&m=xsx_v3&act=profile.binglipdf&orderNo={$wenzhen['orderNo']}" title="">查看文件</a>
+                                                    </td>
+                                                </tr>
+                                                {/loop}
+                                            </tbody>
+                                        </table>
+                                    </div>
+
+
+
+                                </div>
+                                
+                                <!--就诊记录-->
+                                <!-- 设备管理 -->
+                               
+                                <!-- 血压记录 -->
+                                
+
+                                <!-- 血糖记录 -->
+                               
+                                <!-- 血氧记录     -->
+                               
+                                <!-- 睡眠记录 -->
+                               
+                                <!-- 运动记录 -->
+                               
+                                <!-- 心率记录 -->
+                               
+                                <!-- 温度记录 -->
+                                
+                                <!-- 尿酸记录 -->
+                               
+                                <!-- 胆固醇记录 -->
+                               
+                                <!-- strat 积分信息 -->
+                                
+                               
+                                <!-- 动态记录 -->
+                               
+                                <!-- 其他报告记录 -->
+                                
+
+                                <!-- 添加其他报告 -->
+
+                                <!-- end 积分信息 -->
+                                <!-- strat 实验室检查 -->
+                                
+                                <!-- end 实验室检查 -->
+                                <!-- strat 辅助检查 -->
+
+                                <!-- end 辅助检查 -->
+                                <!-- 预约信息 -->
+                              
+                                <!-- 预约信息 -->
+                                <!-- 在线交流 -->
+                                
+                                <!-- 在线交流 -->
+                               
+
+                                <!--消费记录-->
+                                
+                                <!--消费记录-->
+                          
+                           
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- 患者信息 -->
+</div>
+
+<!--添加家庭成员弹框 -->
+<div tabindex="-1" class="modal fade" id="myModal" role="dialog" aria-hidden="true" aria-labelledby="myModalLabel">
+    <div class="modal-dialog modal-lg">
+        <form id="J-add-family-form" action="" method="post">
+            <input type="hidden" name="do" value="copysite">
+            <input type="hidden" name="m" value="xsx_v3">
+            <input type="hidden" name="act" value="profile.edituser_list">
+            <input type="hidden" name="ac" value="notice">
+            <input type="hidden" name="u_id" value="{$u_id}">
+            <input type="hidden" name="openid" value="{$openid}">
+            <input type="hidden" name="j_id" value="">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button class="close" aria-hidden="true" type="button" data-dismiss="modal">×</button>
+                    <h4 class="modal-title">添加家庭成员</h4>
+                </div>
+                <div class="modal-body">
+                    <div class="m10">
+                        <div class="row">
+                            <div class="col-sm-6 col-md-6">
+                                <div class="form-group">
+                                    <label class="control-label">成员关系 <span class="asterisk">*</span>
+                                    </label>
+                                    <select class="form-control input-sm mt0 J-member-select" data-placeholder="请选择" select-data="109" name="sick_index">
+
+                                        <option value="1" {if $item['sick_index']=='1' } selected="" {/if}>
+                                                家庭成员
+                                                </option>
+
+                                                <option value="2" {if $item['sick_index']=='2' } selected="" {/if}>
+                                                亲戚
+                                                </option>
+
+                                                <option value="3" {if $item['sick_index']=='3' } selected="" {/if}>
+                                                朋友
+                                                </option>
+
+                                                <option value="4" {if $item['sick_index']=='4' } selected="" {/if}>
+                                                其他
+                                                </option>
+
+                                                </select>
+                                                </div>
+                                                </div>
+                                                <div class="col-sm-6 col-md-6">
+                                            <div class="form-group pos-relative">
+                                                <div class="form-group">
+                                                    <label class="control-label">姓名 <span class="asterisk">*</span>
+                                                    </label>
+                                                    <input name="names" class="form-control J-patient-name" type="text" value="{$item['my']['names']}">
+                                                </div>
+                                                <div class="search-block hidden J-search-name">
+                                                    <div class="tips">请选择患者或继续新增</div>
+                                                    <ul></ul>
+                                                </div>
+                                            </div>
+                                </div>
+                            </div>
+                            <!-- row -->
+                            <div class="row">
+                                <div class="col-sm-6 col-md-6">
+                                    <div class="form-group">
+                                        <label class="control-label">性别 <span class="asterisk">*</span>
+                                        </label>
+                                        <div class="row mt10">
+                                            <div class="col-sm-4 col-pad-sm">
+                                                <div class="rdio rdio-default">
+                                                    <input type="radio" name="sex" id="radioDefault31" value="男" {if $item['sex']=='男' } checked="" {/if} required="">
+                                                    <label for="radioDefault31">男</label>
+                                                </div>
+                                            </div>
+                                            <div class="col-sm-4 col-pad-sm">
+                                                <div class="rdio rdio-default">
+                                                    <input type="radio" name="sex" id="radioDefault32" value="女" {if $item['sex']=='女' } checked="" {/if} required="">
+                                                    <label for="radioDefault32">女</label>
+                                                </div>
+                                            </div>
+
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-sm-6 col-md-6">
+                                    <div class="form-group">
+                                        <label class="control-label">出生年月 <span class="asterisk">*</span>
+                                        </label>
+                                        {php echo tpl_form_field_date('datetime', $item['datetime'])}
+                                    </div>
+                                </div>
+                                <!-- col-sm-4 -->
+                            </div>
+                            <!-- row -->
+                            <div class="row">
+                                <div class="col-sm-6 col-md-6">
+                                    <div class="form-group">
+                                        <label class="control-label">手机号 <span class="asterisk">*</span>
+                                        </label>
+                                        <input name="tel" class="form-control" type="number" value="{$item['tel']}">
+                                    </div>
+                                </div>
+                                <!-- col-sm-4 -->
+                                <div class="col-sm-6 col-md-6 J-module-control" data-modules="32">
+                                    <div class="form-group">
+                                        <label class="control-label">身份证号：</label>
+                                        <div class="form-group input-group">
+                                            <input name="numcard" class="form-control" type="text" value="{$item['numcard']}">
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- col-sm-4 -->
+                            </div>
+                            <div class="row">
+                                <div class="col-sm-6 col-md-6">
+                                    <div class="form-group">
+                                        <label class="control-label">婚姻状况： <span class="asterisk">*</span>
+                                        </label>
+                                        <select class="form-control input-sm mt0" data-placeholder="请选择" name="hunyin">
+                                            <option value="">请选择</option>
+                                            <option value="未婚" {if $item['hunyin']=='未婚' } selected="" {/if}>未婚 </option>
+                                                    <option value="已婚" {if $item['hunyin']=='已婚' }selected="" {/if}>已婚 </option>
+                                                    <option value="" {if $item['hunyin']=='' }selected="" {/if}>保密 </option>
+                                                    </select>
+                                                    </div>
+                                                    </div>
+                                                    <!-- col-sm-4 -->
+                                                <div class="col-sm-6 col-md-6 J-module-control" data-modules="32">
+                                                    <div class="form-group">
+                                                        <label class="control-label">职业：</label>
+                                                        <div class="form-group input-group">
+                                                            <input name="zhiye" class="form-control email" type="text" value="{$item['zhiye']}">
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <!-- col-sm-4 -->
+                                    </div>
+                                    <!-- <div class="row">
+                            <div class="col-sm-6 col-md-6">
+                                <div class="form-group">
+                                    <label class="control-label">肝功能： <span class="asterisk">*</span>
+                                    </label>
+                                    <div class="form-group input-group">
+                                    <div class="col-sm-4 col-pad-sm">
+                                        <div class="rdio rdio-default">
+                                            <input type="radio" name="gan_index" id="radioDefault1" value="0" {if $item['gan_index'] == '0'} checked="" {/if} required="">
+                                            <label for="radioDefault1">正常</label>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-4 col-pad-sm">
+                                        <div class="rdio rdio-default">
+                                            <input type="radio" name="gan_index" id="radioDefault2" value="1" {if $item['gan_index'] == '1'} checked="" {/if} required="">
+                                            <label for="radioDefault2">异常</label>
+                                        </div>
+                                    </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-sm-6 col-md-6 J-module-control" data-modules="32">
+                                <div class="form-group">
+                                    <label class="control-label">肾功能：</label>
+                                    <div class="form-group input-group">
+                                    <div class="col-sm-4 col-pad-sm">
+                                        <div class="rdio rdio-default">
+                                            <input type="radio" name="shen_index" id="radioDefault1" value="0" {if $item['shen_index'] == '0'} checked="" {/if} required="">
+                                            <label for="radioDefault1">正常</label>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-4 col-pad-sm">
+                                        <div class="rdio rdio-default">
+                                            <input type="radio" name="shen_index" id="radioDefault2" value="1" {if $item['shen_index'] == '1'} checked="" {/if} required="">
+                                            <label for="radioDefault2">异常</label>
+                                        </div>
+                                    </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-sm-6 col-md-6">
+                                <div class="form-group">
+                                    <label class="control-label">备孕情况： <span class="asterisk">*</span>
+                                    </label>
+                                    <div class="form-group input-group">
+                                    <div class="col-sm-4 col-pad-sm">
+                                        <div class="rdio rdio-default">
+                                            <input type="radio" name="be_index" id="radioDefault1" value="0" {if $item['be_index'] == '0'} checked="" {/if} required="">
+                                            <label for="radioDefault1">无</label>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-4 col-pad-sm">
+                                        <div class="rdio rdio-default">
+                                            <input type="radio" name="be_index" id="radioDefault2" value="1" {if $item['be_index'] == '1'} checked="" {/if} required="">
+                                            <label for="radioDefault2">备孕中</label>
+                                        </div>
+                                    </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div> -->
+                                    <div class="row J-load-location">
+                                        <!--<div class="col-sm-2 col-md-2">-->
+                                            <div class="form-group">
+                                                <label class="control-label">住址</label>
+                                                {php echo tpl_form_field_district('address',array('province' =>$item['regions'][0],'city'=>$item['regions'][1],'district'=>$item['regions'][2]))}
+                                            </div>
+                                        <!--</div>-->
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="modal-footer modal-btn-col2">
+                                <input type="submit" name="submit" value="提交" class="btn btn-primary J-base-submit" />
+                                <button class="btn btn-default" type="button" data-dismiss="modal">返回</button>
+                            </div>
+                        </div>
+        </form>
+    </div>
+</div>
+
+
+
+
+
+<!--消费详情-->
+<style>
+    .zhe{
+        position: fixed;
+        top:0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0,0,0,0.5);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+    .zhe .cont{
+        width: 60%;
+        background: #fff;
+        position: relative;
+        padding: 20px;
+    }
+    .close_top{
+        padding: 10px;
+    }
+    .cont .title{
+        padding: 10px 0;
+        color:#666;
+        font-size: 16px;
+        font-weight: 400;
+    }
+</style>
+<div class="zhe" style="display: none;">
+    <div class="cont">
+        <div class="close_top">
+            <button type="button" class="el-dialog__headerbtn Close">x</button>
+        </div>
+        <div class="title">13202006011654218323703341</div>
+        <table class="table table-hover">
+            <thead class="table-header">
+                <tr>
+                    <th>名称</th>
+                    <th>单位</th>
+                    <th>单价</th>
+                    <th>数量</th>
+                    <th>金额</th>
+                    <th>接诊医生</th>
+                </tr>
+            </thead>
+            <tbody class="table-body">
+                <tr>
+                    <td>黄芪</td>
+                    <td>副</td>
+                    <td>50元</td>
+                    <td>1副</td>
+                    <td>￥50</td>
+                    <td>李强</td>
+                </tr>
+            </tbody>
+
+        </table>
+        <div class="text-right" style="color: #4381c6;font-size: 14px;">药品金额：￥50</div>
+        <div class="text-right" style="color: #666;font-size: 14px;">支付方式：现金支付：50</div>
+    </div>
+</div>
+<!--消费详情结束-->
+<!-- 查看成员 -->
+<style>
+    .chenyuanzhe{
+        position: fixed;
+        top: 0;
+        left: 0;
+        background: rgba(0,0,0,0.4);
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        width: 100%;
+        height: 100%;
+    }
+    .title{
+        text-align: center;
+        font-size: 30px;
+        color: #666;
+        font-weight: bold;
+        padding:20px;
+    }
+    .cont1{
+        width: 60%;
+        background: #fff;
+        padding: 0 20px;
+
+    }
+    .btnBox3{
+        display: flex;
+        justify-content: flex-end;
+        padding: 20px 0;
+    }
+</style>
+<div class="chenyuanzhe" style="z-index: 2052;display: none;">
+    <div class="cont1">
+        <div class="title">团队成员</div>
+        <table class="table table-profile">
+            <thead>
+                <tr>
+                    <th>成员名字</th>
+                    <th>所属科室</th>
+                    <th>所在医院</th>
+                    <th>职称</th>
+                    <th>加入时间</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>张三</td>
+                    <td>骨科</td>
+                    <td>山西医院</td>
+                    <td>主治医师</td>
+                    <td>2020-02-06 12:35:00</td>
+                </tr>
+            </tbody>
+        </table>
+        <div class="btnBox3">
+            <button class="close3 btn btn-danger el-button el-button--primary">关闭</button>
+        </div>
+
+    </div>
+</div>
+<script>
+    // 查看团队成员
+         $(document).on('click','.chankanBtn',function(){
+                    $('.chenyuanzhe').show()
+                })
+        $(document).on('click','.close3',function(){
+            $('.chenyuanzhe').hide()
+        })
+        // 查看团队成员
+    </script>
+<!-- 查看成员 -->
+
+<!-- 处方单详情 -->
+<div id="module-menus-doc"></div>
+<style type="text/css">
+    .el-dialog__wrapper {
+     position:fixed;
+     top:0;
+     right:0;
+     bottom:0;
+     left:0;
+     overflow:auto;
+     margin:0;
+     background: rgba(0,0,0,0.5);
+    }
+    .el-dialog {
+     position:relative;
+     margin:0 auto 50px;
+     border-radius:2px;
+     -webkit-box-shadow:0 1px 3px rgba(0,0,0,.3);
+     box-shadow:0 1px 3px rgba(0,0,0,.3);
+     -webkit-box-sizing:border-box;
+     box-sizing:border-box;
+     width:50%;
+     background: #fff;
+    
+    }
+    .el-dialog__body {
+     padding:30px 20px;
+     color:#606266;
+     font-size:14px;
+     word-break:break-all;
+    }
+     .el-dialog__wrapper .el-dialog .el-dialog__body .boxPresMain {
+     margin:0;
+     width:calc(100% - 26px);
+     position:relative;
+     border-radius:4px;
+     background-color:#fff;
+     padding:24px 13px 30px 13px
+    }
+    .el-dialog__wrapper .el-dialog .el-dialog__body .boxPresMain p {
+     margin:0
+    }
+    .el-dialog__wrapper .el-dialog .el-dialog__body .boxPresMain .cardHead {
+     color:#b9b9b9;
+     font-size:14px;
+     line-height:14px;
+     border-bottom:1px dashed rgba(0,0,0,.15)
+    }
+    .el-dialog__wrapper .el-dialog .el-dialog__body .boxPresMain .cardHead .title {
+     color:#4a4a4a;
+     font-size:16px;
+     line-height:16px;
+     text-align:center;
+     margin-top:33px
+    }
+     .el-dialog__wrapper .el-dialog .el-dialog__body .boxPresMain .cardHead .presType {
+     color:#4a4a4a;
+     font-size:20px;
+     line-height:20px;
+     text-align:center;
+     margin-top:17px;
+     margin-bottom:44px
+    }
+     .el-dialog__wrapper .el-dialog .el-dialog__body .boxPresMain .cardHead .row1 {
+     margin-bottom:22px;
+     padding:0 25px 0 12px
+    }
+    .floatR {
+     float:right;
+    }
+    .flex{
+      display: flex;
+    }
+    .justyBetween{
+      justify-content: space-between;
+    }
+    .el-dialog__wrapper .el-dialog .el-dialog__body .boxPresMain .cardBody.chinese {
+        padding: 30px 25px 100px 12px;
+    }
+    .el-dialog__wrapper .el-dialog .el-dialog__body .boxPresMain .cardBody {
+        color: #6b6b6b;
+        font-size: 14px;
+    }
+    .rp {
+        color: #4a4a4a;
+        font-size: 16px;
+        margin-bottom: 8px;
+    }
+     .el-dialog__wrapper .el-dialog .el-dialog__body .boxPresMain .cardBody .itemMed.read.chinese {
+        display: inline-block;
+        width: 33%;
+        border-bottom: none;
+        padding: 0;
+        margin-top: 22px;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+    }
+    .yellow {
+        color: #ffa726;
+    }
+    .el-dialog__wrapper .el-dialog .el-dialog__body .boxPresMain .cardBody .chineseTotalRead {
+        color: #6b6b6b;
+        font-size: 14px;
+    }
+     .el-dialog__wrapper .el-dialog .el-dialog__body .boxPresMain .cardBody .chineseTotalRead p:first-child {
+        margin: 20px 0 25px;
+    }
+    .el-dialog__wrapper .el-dialog .el-dialog__body .boxPresMain .cardBody .chineseTotalRead p {
+        margin-top: 12px;
+    }
+    .area {
+        display: inline-block;
+        min-width: 60px;
+        border-bottom: 1px solid #6b6b6b;
+    }
+    .el-dialog__wrapper .el-dialog .el-dialog__footer .el-button.el-button--primary:hover {
+        background-color: #2f6eb4;
+    }
+    .el-dialog__wrapper .el-dialog .el-dialog__footer .el-button {
+        padding: 0;
+        height: 32px;
+        line-height: 32px;
+        width: 100px;
+    }
+    .el-button {
+        display: inline-block;
+        line-height: 1;
+        white-space: nowrap;
+        cursor: pointer;
+        background: #fff;
+        border: 1px solid #dcdfe6;
+        color: #606266;
+        -webkit-appearance: none;
+        text-align: center;
+        -webkit-box-sizing: border-box;
+        box-sizing: border-box;
+        outline: 0;
+        margin: 0;
+        -webkit-transition: .1s;
+        transition: .1s;
+        font-weight: 500;
+        padding: 12px 20px;
+        font-size: 14px;
+        border-radius: 4px;
+    }
+    .el-dialog__wrapper .el-dialog .el-dialog__footer .el-button {
+        padding: 0;
+        height: 32px;
+        line-height: 32px;
+        width: 100px;
+        background: 
+    }
+    .el-dialog__footer {
+        padding: 10px 35px 25px;
+    }
+    .el-dialog__footer {
+        text-align: right;
+    }
+    .el-dialog__wrapper .el-dialog .el-dialog__footer .el-button.el-button--primary {
+        background-color: #4381c6;
+    }
+    .el-button--primary {
+        color: #fff;
+        background-color: #409eff;
+        border-color: #409eff;
+    }
+    .el-dialog__wrapper .el-dialog .el-dialog__body .boxPresMain .cardBody .boxSign {
+        position: absolute;
+        bottom: 20px;
+        left: 34px;
+        right: 34px;
+    }
+</style>
+<!--处方单详情结束  -->
+
+<!--充值-->
+<script>
+    $('.el-radio-button').click(function () {
+            $(this).parents('.boxBtn').find('.el-radio-button').removeClass('is-active')
+            $(this).addClass('is-active')
+        })
+        $('.consumption-table-detail').click(function () {
+            $('.zhe').show()
+        })
+        $('.Close').click(function () {
+            $('.zhe').hide()
+        })
+</script>
+
+<script>
+    function showOrHide(a,b){
+        $('#profile_'+b).toggle()
+        $('#profile_'+a).toggle()
+    
+    }
+    $('#tab3 ul li').on('click',function(){
+        $('#tab3 ul li').removeClass('ractive')
+        $(this).addClass('ractive')
+    })
+      
+      $(document).on('click','.remove',function(){
+        $(this).parents('tbody').remove()
+      })
+      function showss(e)
+      {
+        console.log(e.getAttribute('data-id'));
+        $('.el-dialog__wrapper').show()
+        var id = e.getAttribute('data-id')
+        var url ="/web/index.php?c=site&a=entry&do=copysite&m=xsx_v3&act=profile.userchufang&id="+id
+     
+        $.ajax({
+            url:url,
+            type: "POST",  
+            dataType: "html",  
+            cache:false, 
+
+            success:function(res){
+                $('#module-menus-doc').html(res)
+            }
+        })
+      }
+      // $('.btnGoInfo').click(function(e){
+      //   console.log(e.currentTarget.dataset.id);
+      //   $('.el-dialog__wrapper').show()
+      //   var id = e.currentTarget.dataset.id
+      //   var url ="/web/index.php?c=site&a=entry&do=copysite&m=xsx_v3&act=profile.userchufang&id="+id
+     
+      //   $.ajax({
+      //       url:url,
+      //       type: "POST",  
+      //       dataType: "html",  
+      //       cache:false, 
+
+      //       success:function(res){
+      //           $('#module-menus-doc').html(res)
+      //       }
+      //   })
+      // })
+
+</script>

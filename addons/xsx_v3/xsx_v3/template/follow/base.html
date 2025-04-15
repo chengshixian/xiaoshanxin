@@ -1,0 +1,233 @@
+{template './common/mainHeader'}
+<ul class="nav nav-tabs">
+	<li>
+	
+	<a href="/web/index.php?c=site&a=entry&do=follow&m=xsx_v3&op=edit&ac=list">服务包基础设置</a>
+	
+	</li>
+	
+</ul>
+<div class="app-content">
+	<div class="app-form">
+		<form action="" method="post" class="form-horizontal form" enctype="multipart/form-data" >
+			<input type="hidden" name="id" value="{$id}" />
+			<div class="panel panel-default">
+				<div class="panel-heading">服务包基础设置</div>
+				
+				<div class="form-group">
+					<label class="col-sm-2 control-label">标题<span class="must-fill">*</span></label>
+					<div class="col-sm-9">
+						<input type="text" name="title" required class="form-control" value="{$item['title']}" >
+					</div>
+
+				
+				</div>
+				
+				<div class="form-group">
+					<label class="col-xs-12 col-sm-3 col-md-2 control-label">服务内容</label>
+					<div class="col-sm-9 col-xs-12">
+						{php echo tpl_ueditor('content',$item['content']);}					
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="col-xs-12 col-sm-3 col-md-2 control-label">购买协议</label>
+					<div class="col-sm-9 col-xs-12">
+						{php echo tpl_ueditor('xieyi',$item['xieyi']);}					
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="col-xs-12 col-sm-3 col-md-2 control-label">随访协议</label>
+					<div class="col-sm-9 col-xs-12">
+						{php echo tpl_ueditor('suifang_content',$item['suifang_content']);}					
+					</div>
+				</div>
+				{if $item && $item['detail'] != ''}
+						<div class="form-group">
+							<label class="col-sm-2 control-label">详情</label>
+							<div class="col-md-9">
+							
+								<div id="datas" class="sms-template-1" style="display:block;">
+								    {loop $item['detail'] $tims}
+									<div class="col-sm-12 data-item" style="margin-bottom: 10px;padding-left: 0;padding-right: 0;">
+                                	    <div class="input-group form-group col-sm-6" style="margin: 0px;padding-left: 0;float: left;">
+                                	    	<span class="input-group-addon">标题</span>
+                                			<input type="text" name="details[title][]" class="form-control" value="{$tims['title']}">
+											
+                                	    
+                                		</div>
+
+										<div class="input-group form-group col-sm-6" style="margin: 0px;padding-right: 0;float: left;">
+											<span class="input-group-addon">小标题</span>
+											<input type="text" name="details[small_title][]" class="form-control" value="{$tims['small_title']}">
+											
+										</div>
+										<div class="input-group ">
+                                        	<input type="text" name="details[thumb][]" value="{$tims['thumb']}" class="form-control" autocomplete="off">
+                                        	<span class="input-group-btn">
+                                        		<button class="btn btn-default" type="button" onclick="showImageDialog(this);">选择图片</button>
+                                        	</span>
+                                        </div>
+                                        <div class="input-group " style="margin-top:.5em;">
+                                        	<img src="{$tims['thumb']}" onerror="this.src='./resource/images/nopic.jpg'; this.title='图片未找到.'" class="img-responsive img-thumbnail" width="150">
+                                        	<em class="close" style="position:absolute; top: 0px; right: -14px;" title="删除这张图片" onclick="deleteImage(this)">×</em>
+                                        </div>
+										<div class="input-group form-group col-sm-6" style="margin: 0px;padding-right: 0;float: left;">
+											<span class="input-group-addon btn btn-default data-item-delete">
+												<i class="fa fa-remove"></i>删除
+											</span>
+										</div>
+									</div>
+									<script type="text/javascript">
+										$(document).on('click', '.data-item-delete', function () {
+										        $(this).closest('.data-item').remove();
+										  });
+									</script>
+									{/loop}
+								</div>
+								
+								
+								<div class="form-group sms-template-1" style="display:block;">
+									<div class="col-sm-6" style="padding-left: 0;">
+										<a class="btn btn-default btn-add-type btn1 col-sm-12 col-xs-12" href="javascript:;" onclick="addType();">
+											<i class="fa fa-plus" title=""></i>增加详情
+										</a>
+									</div>
+								</div>
+							</div>
+						</div>
+						{else}
+						<div class="form-group">
+							<label class="col-sm-2 control-label">详情</label>
+							<div class="col-md-9">
+								<div id="datas" class="sms-template-1" style="display:block;">
+									<div class="col-sm-12 data-item" style="margin-bottom: 10px;padding-left: 0;padding-right: 0;">
+                                	    <div class="input-group form-group col-sm-6" style="margin: 0px;padding-left: 0;float: left;">
+                                	    	<span class="input-group-addon">标题</span>
+                                			<input type="text" name="details[title][]" class="form-control" value="">
+											
+                                	    
+                                		</div>
+
+										<div class="input-group form-group col-sm-6" style="margin: 0px;padding-right: 0;float: left;">
+											<span class="input-group-addon">小标题</span>
+											<input type="text" name="details[small_title][]" class="form-control" value="">
+										</div>
+										<div class="input-group ">
+                                        	<input type="text" name="details[thumb][]" value="" class="form-control" autocomplete="off">
+                                        	<span class="input-group-btn">
+                                        		<button class="btn btn-default" type="button" onclick="showImageDialog(this);">选择图片</button>
+                                        	</span>
+                                        </div>
+                                        <div class="input-group " style="margin-top:.5em;">
+                                        	<img src="" onerror="this.src='./resource/images/nopic.jpg'; this.title='图片未找到.'" class="img-responsive img-thumbnail" width="150">
+                                        	<em class="close" style="position:absolute; top: 0px; right: -14px;" title="删除这张图片" onclick="deleteImage(this)">×</em>
+                                        </div>
+										<div class="input-group form-group col-sm-6" style="margin: 0px;padding-right: 0;float: left;">
+											<span class="input-group-addon btn btn-default data-item-delete">
+												<i class="fa fa-remove"></i>删除
+											</span>
+										</div>
+									</div>
+									<script type="text/javascript">
+										$(document).on('click', '.data-item-delete', function () {
+										        $(this).closest('.data-item').remove();
+										  });
+									</script>
+								</div>
+								<div class="form-group sms-template-1" style="display:block;">
+									<div class="col-sm-6" style="padding-left: 0;">
+										<a class="btn btn-default btn-add-type btn1 col-sm-12 col-xs-12" href="javascript:;" onclick="addType();">
+											<i class="fa fa-plus" title=""></i>增加详情
+										</a>
+									</div>
+								</div>
+							</div>
+						</div>
+						{/if}
+				
+			</div>
+			<div class="form-group">
+				<label class="col-sm-2 control-label"></label>
+				<div class="col-sm-9">
+					<input type="submit" name="submit" value="提交" class="btn btn-primary min-width" />
+					<input type="hidden" name="token" value="{$_W['token']}" />
+				</div>
+			</div>
+		</form>
+	</div>
+</div>
+<script type="text/javascript">
+function showImageDialog(elm, opts, options) {
+	require(["util"], function(util){
+		var btn = $(elm);
+		var ipt = btn.parent().prev();
+		var val = ipt.val();
+		var img = ipt.parent().next().children();
+		options = {'global':false,'class_extra':'','direct':true,'multiple':false,'fileSizeLimit':8388608};
+		util.image(val, function(url){
+			if(url.url){
+				if(img.length > 0){
+					img.get(0).src = url.url;
+				}
+				ipt.val(url.attachment);
+				ipt.attr("filename",url.filename);
+				ipt.attr("url",url.url);
+			}
+			if(url.media_id){
+				if(img.length > 0){
+					img.get(0).src = url.url;
+				}
+				ipt.val(url.media_id);
+			}
+		}, options);
+	});
+}
+function deleteImage(elm){
+	$(elm).prev().attr("src", "./resource/images/nopic.jpg");
+	$(elm).parent().prev().find("input").val("");
+}
+</script>
+<script>
+			function addType(){
+				$('#datas').append(`
+						<div class="col-sm-12 data-item" style="margin-bottom: 10px;padding-left: 0;padding-right: 0;">
+	    <div class="input-group form-group col-sm-6" style="margin: 0px;padding-left: 0;float: left;">
+	    	<span class="input-group-addon">标题</span>
+			<input type="text" name="details[title][]" class="form-control" value="">
+											
+	    
+		</div>
+	
+	    <div class="input-group form-group col-sm-6" style="margin: 0px;padding-right: 0;float: left;">
+			<span class="input-group-addon">小标题</span>
+			<input type="text" name="details[small_title][]" class="form-control" value="">
+		</div>
+		<div class="input-group ">
+        	<input type="text" name="details[thumb][]" value="" class="form-control" autocomplete="off">
+        	<span class="input-group-btn">
+        		<button class="btn btn-default" type="button" onclick="showImageDialog(this);">选择图片</button>
+        	</span>
+        </div>
+        <div class="input-group " style="margin-top:.5em;">
+        	<img src="" onerror="this.src='./resource/images/nopic.jpg'; this.title='图片未找到.'" class="img-responsive img-thumbnail" width="150">
+        	<em class="close" style="position:absolute; top: 0px; right: -14px;" title="删除这张图片" onclick="deleteImage(this)">×</em>
+        </div>
+		<div class="input-group form-group col-sm-6" style="margin: 0px;padding-right: 0;float: left;">
+			<span class="input-group-addon btn btn-default data-item-delete">
+				<i class="fa fa-remove"></i>删除
+			</span>
+		</div>
+	</div>
+	</div>
+					`)
+			}
+
+</script>
+
+<script>
+	$('input[name="nav[thumb]"]').attr('required','required');
+	$("#reset").on('click',function(){
+		$("#color").val('#666').trigger('propertychange');
+	});
+	
+</script>

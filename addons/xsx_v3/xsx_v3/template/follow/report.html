@@ -1,0 +1,110 @@
+{template './common/mainHeader'}
+<div class="app-container-right">
+            <style>
+    td>i{cursor:pointer; display:inline-block; width:100%; height:100%; color:#428bca;}
+    .category-caret{display:inline-block; width:20px; margin: 0 10px; text-align:center; cursor:pointer; color:#d9534f;}
+    .add.add_level0{cursor:pointer;}
+    .scrollLoading{border-radius: 50px;}
+</style>
+<ul class="nav nav-tabs">
+    <li  class="active" ><a href="#">患者报道管理</a></li>
+</ul>
+<div class="app-content">
+    <div class="app-filter">
+		<div class="filter-list">
+			<form action="" method="get">
+				<input type="hidden" name="c" value="site" />
+				<input type="hidden" name="a" value="entry" />
+				<input type="hidden" name="m" value="xsx_v3" />
+				<input type="hidden" name="op" value="report" />
+				<input type="hidden" name="ac" value="report" />
+				<input type="hidden" name="do" value="follow" />
+				<div class="form-group">
+					<label class="col-sm-2 control-label">关键字</label>
+					<div class="col-sm-9">
+					    <select name="keywordtype" class="form-control">
+							<option value="" {if $keywordtype == ''} selected="" {/if}>搜索内容</option>
+							<option value="1" {if $keywordtype == '1'} selected="" {/if}>患者姓名</option>
+							<option value="2" {if $keywordtype == '2'} selected="" {/if}>医生姓名</option>
+						
+						</select>
+						<input type="text" name="keyword" class="form-control" value="{$keyword}" placeholder="请输入关键字" />
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="col-sm-2 control-label"></label>
+					<div class="col-sm-9">
+						<button class="btn btn-primary">筛选</button>
+					</div>
+				</div>
+			</form>
+		</div>
+	</div>
+    <div class="app-table-list">
+        <div class="table-responsive">
+                <table class="table table-hover">
+                    <thead>
+                        <tr>
+                            <th class="text-center" width="10%">ID</th>
+                            <th class="text-center" width="10%">用户信息</th>
+                            <th class="text-center" width="30%">医生信息</th>
+                            <th class="text-center" width="10%">报道时间</th>
+                            <th class="text-center" width="10%">状态</th>
+                            <th class="text-center" width="20%">操作</th>
+                        </tr>
+                    </thead>
+                    <tbody >
+                        {loop $res $list}
+                        <tr class="text-center">
+                            <td>{$list['id']}</td>
+                            <td class="text-center">
+                                姓名：{$list['names']}<br>
+                                性别：{$list['sex']}<br>
+                                年龄：{$list['age']}<br>
+                                <img class="scrollLoading" src="{if empty($list['u_thumb'])}../web/resource/images/nopic.jpg{else}{php echo tomedia($list['u_thumb'])}{/if}"  height="45" width="45" >
+                            </td>
+                            <td class="text-center">
+                                医生姓名：{$list['z_name']}<br>
+                                医生电话：{$list['z_telphone']}<br>
+                                所属科室：{$list['keshi']}<br>
+                                所属机构：{$list['hospital']}<br>
+                                <img class="scrollLoading" src="{if empty($list['advertisement'])}../web/resource/images/nopic.jpg{else}{php echo tomedia($list['advertisement'])}{/if}"  height="45" width="45" >
+                            </td>
+                            <td class="text-center">
+                                <div>
+                                    <span>{$list['cerated_time']}</span>
+                                </div>
+                            </td>
+                            <td  class="text-center">
+                                <label class='label label-success'>{if $list['ifqianyue']=='2'}审核通过{elseif $list['ifqianyue'] == '5'}审核拒绝{elseif $list['ifqianyue'] == 1}待审核{/if}</label>
+                            </td>
+                            
+                            <td  class="text-center">
+                                {if $list['ifqianyue'] == 1}
+                                <a href="{php echo $this->createWebUrl('follow',array('ac'=>'report','op'=>'change_report','id'=>$list['id'],'ifqianyue'=>'2'))}" class="btn btn-default btn-sm" data-toggle="tooltip" data-placement="top" title="审核通过">
+                                    审核通过
+                                </a>
+                                <a href="{php echo $this->createWebUrl('follow',array('ac'=>'report','op'=>'change_report','id'=>$list['id'],'ifqianyue'=>'5'))}" class="btn btn-default btn-sm" data-toggle="tooltip" data-placement="top" title="审核拒绝">
+                                    审核拒绝
+                                </a>
+                                {/if}
+                                <!--<a href="{php echo $this->createWebUrl('follow',array('ac'=>'report','op'=>'edit_report','id'=>$list['id'],'status'=>'2'))}" class="btn btn-default btn-sm" data-toggle="tooltip" data-placement="top" title="查看">-->
+                                <!--    查看-->
+                                <!--</a>-->
+                                -
+                                <a href="{php echo $this->createWebUrl('follow',array('ac'=>'report','op'=>'del_report','id'=>$list['id']))}" class="btn btn-danger btn-sm" data-toggle="tooltip" data-placement="top" title="删除">
+                                    删除
+                                </a>
+                            </td>
+                        </tr>
+                        
+                        {/loop}
+                </tbody>
+
+                </table>
+            </div>
+            {$pager}
+    </div>
+</div>
+
+{template './common/mainfooter'}

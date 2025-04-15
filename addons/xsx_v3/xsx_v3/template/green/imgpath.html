@@ -1,0 +1,29 @@
+
+{template '/common/mainHeader'}
+<div class="app-container-right">
+			<ul class="nav nav-tabs">
+	<li class="active"><a href="javascript:;">绿通图片</a></li>
+</ul>
+<div class="app-content">
+    <div class="app-form">
+         <div class="panel panel-default">
+            <form  method="post" class="form-horizontal form" novalidate="novalidate" id="dataform">
+                <div class="form-group">
+                    <label class="col-sm-2 control-label">图片</label>
+                    <div class="col-sm-9">
+                        {php echo tpl_form_field_multi_image('imgpath', $item['imgpath'])}
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-sm-2 control-label"></label>
+                    <div class="col-sm-9">
+                        <input type="submit" value="提交" class="btn btn-primary min-width">
+                        <input type="hidden" name="token" value="c5514e9f">
+                        <input type="button" name="back" onclick="history.back()" style="margin-left:10px;" value="返回列表" class="btn btn-default min-width">
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{template './common/mainfooter'}

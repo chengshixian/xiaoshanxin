@@ -1,0 +1,151 @@
+{template './common/mainHeader'}
+<div class="app-container-right">
+	<ul class="nav nav-tabs">
+		<li class="active">
+			<a href="javascript:;">角色列表</a>
+		</li>
+	</ul>
+	<div class="app-content">
+		<div class="app-filter">
+			<div class="filter-action">
+				<span class="btn btn-primary" id="addCate">
+					<i class="fa fa-plus"></i> 新建角色
+				</span>
+			</div>
+		</div>
+		<div class="app-table-list">
+			<div class="table-responsive">
+				<table class="table table-hover table-bordered">
+					<thead class="navbar-inner">
+						<tr>
+							<th style="width: 50px;">ID</th>
+							<th style="">角色名称</th>
+							<th style="width: 100px;">角色状态</th>
+							<th style="width: 350px">操作</th>
+						</tr>
+					</thead>
+					<tbody>
+					    {loop $row $item}
+						<tr>
+							<td>{$item['id']}</td>
+							<td>{$item['role_name']}</td>
+							<td>{if $item['visible'] == '0'} 禁用 {else} 启用 {/if}</td>
+							<td><span class="btn btn-primary editCate" data-id="{$item['id']}" data-name="{$item['role_name']}" data-status="{$item['visible']}">
+        <i class="fa fa-pencil"></i> 修改角色
+    </span> <a class="btn btn-primary" href="/web/index.php?c=site&a=entry&do=quanxian&op=editrole&ac=editrole&m=xsx_v3&id={$item['id']}&h_id={$_SESSION['hid']}&keyword={$item['role_name']}" title="编辑角色权限">  编辑角色权限</a>
+    								
+
+    </td>
+						</tr>
+                        {/loop}
+					</tbody>
+				</table>
+			</div>
+			<div class="app-table-foot clearfix">
+				<div class="pull-left">
+
+				</div>
+				<div class="pull-right">
+				</div>
+			</div>
+		</div>
+		<div class="modal fade" id="addCateModal" aria-hidden="false">
+			<div class="modal-dialog">
+				<div class="modal-content">
+					<div class="modal-header">
+						<button data-dismiss="modal" class="close" type="button">×</button>
+						<h4 class="modal-title">新建角色</h4>
+					</div>
+					<div class="modal-body form-horizontal">
+						<div class="form-group">
+							<div class="col-sm-2 control-label">角色名称</div>
+							<div class="col-sm-9">
+							<input class="form-control" placeholder="请输入菜单名称" id="rolename" value="" />
+							</div>
+						</div>
+						<div class="form-group">
+							<div class="col-sm-2 control-label">角色状态</div>
+							<div class="col-sm-9">
+								<label class="radio-inline">
+									<input type="radio" value="1" name="visible" checked="checked">启用</label>
+                                        <label class="radio-inline">
+                                    <input type="radio" value="0" name="visible">禁用</label>
+							</div>
+						</div>
+					</div>
+					<div class="modal-footer">
+						<div class="btn btn-primary" id="saveCate">保存</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+
+    <script type="text/javascript" src="{php echo XSX_ADMIN}/js/table_edit.js"></script>
+	<script type="text/javascript">
+
+		$("#addCate").unbind('click').click(function () {
+		    // 清空弹出窗的内容
+		    $("#rolename").val("");
+		    $('input[name="visible"][value="1"]').prop('checked', true);
+
+		    $("#addCateModal").modal();
+		});
+
+$(".editCate").unbind('click').click(function () {
+    var id = $(this).data('id');
+    var name = $(this).data('name');
+    var status = $(this).data('status');
+  
+// console.log(name);
+    $("#rolename").val(name);
+    $("#rolename").attr("roleid", id);
+    $('input[name="visible"][value="' + status + '"]').prop('checked', true);
+
+    $("#addCateModal").modal();
+});
+$("#saveCate").unbind('click').click(function () {
+		            var status = $(this).data('status');
+		            if(status) {
+		                util.tips("正在保存，请稍候。");
+		                return;
+		            }
+		            var name = $.trim($("#rolename").val());
+		            console.log(name);
+		            if(!name) {
+		                util.tips("请填写名称！");
+		                $("#rolename").focus();
+		                return;
+		            }
+		          
+		            var status = $('input[name="visible"]:checked').val();
+		            var id = $("#rolename").attr("roleid");
+		          //  console.log(sort);
+		          //  console.log(menuurl);
+		          //  console.log(name);
+		          //  console.log(status);
+		          //  console.log(parentname);
+		          //  console.log(id);
+		          //  return;
+		            $(this).data('status',1).text('保存中');
+		            var url = "{$_W['siteroot']}web/index.php?c=site&a=entry&do=quanxian&op=roleset&ac=roleset&m=xsx_v3";
+		            $.post(url, {
+		                rolename: name,
+		                status: status,
+		                id:id,
+		            }, function (ret) {
+		            	console.log(ret)
+                        util.tips("保存成功！");
+		                $("#addCateModal .close").trigger('click');
+		                setTimeout(function () {
+		                    location.reload();
+		                }, 500);
+		            }, 'json');
+		        });
+
+	</script>
+</div>
+</div>
+</div>
+</body>
+</html>

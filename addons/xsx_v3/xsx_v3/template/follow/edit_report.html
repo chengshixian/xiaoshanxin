@@ -1,0 +1,246 @@
+{template './common/mainHeader'}
+<div class="app-container-right">
+	<ul class="nav nav-tabs">
+		<li class="active">
+			<a href="">患者报道详情</a>
+		</li>
+	</ul>
+	<div class="app-content">
+		<div class="order-detail">
+			<div class="col-sm-4 padding-0">
+				<div class="panel panel-display">
+					<div class="panel-heading">
+						<h3>订单信息</h3>
+					</div>
+					<div class="panel-body">
+						<table class="table">
+							<tr>
+								<td width="150">患者微信：</td>
+								<td>
+									<img src="{$res['u_thumb']}" style="width: 30px;height: 30px;margin-right: 5px;">{$res['u_name']}</td>
+							</tr>
+							<tr>
+								<td width="150">患者姓名：</td>
+								<td>{$res['names']}</td>
+							</tr>
+							<tr>
+								<td width="150">患者电话：</td>
+								<td>{php echo empty($res['tel']) ? '暂无' : $res['tel']}</td>
+							</tr>
+							<tr>
+								<td width="150">患者地址：</td>
+								<td>{php echo empty($res['region']) ? '暂无' : $res['region']}</td>
+							</tr>
+							<tr>
+								<td width="150">订单编号：</td>
+								<td>{$res['ordersn']}</td>
+							</tr>
+							<tr>
+								<td>报道时间：</td>
+								<td>{$res['time']}</td>
+							</tr>
+							
+							<tr>
+								<td>订单状态：</td>
+								<td>
+									<span class="label label-info">{if $res['status']=='0'} 待审核 {/if}</span>
+									<span class="label label-info">{if $res['status']=='1'} 审核成功 {/if}</span>
+									<span class="label label-info">{if $res['status']=='2'} 审核拒绝 {/if}</span>
+									
+								</td>
+							</tr>
+						</table>
+					</div>
+				</div>
+				<div class="panel panel-display">
+					<div class="panel-heading">
+						<h3>订单日志</h3>
+					</div>
+					<div class="panel-body">
+						<table class="table">
+						{if $res['status'] =='0'}
+							<tr >
+								<td>
+									<p>
+										<i class="fa fa-info-circle"></i>
+										<strong>{$res['create_time']} 用户报道成功</strong>
+									</p>
+									<p style="padding-left:15px; ">单号:{$res['orders']}，等待医生审核</p>
+								</td>
+							</tr>
+							{/if}
+							{if $res['status'] =='1'}
+							<tr >
+								<td>
+									<p>
+										<i class="fa fa-info-circle"></i>
+										<strong>{$res['sh_time']} 医生审核成功</strong>
+									</p>
+									<p style="padding-left:15px; ">审核成功</p>
+								</td>
+							</tr>
+							{/if}
+							{if $res['status'] =='2'}
+							<tr >
+								<td>
+									<p>
+										<i class="fa fa-info-circle"></i>
+										<strong>{$res['sh_time']} 医生审核成功</strong>
+									</p>
+									<p style="padding-left:15px; ">审核拒绝</p>
+								</td>
+							</tr>
+							{/if}
+							
+						</table>
+					</div>
+				</div>
+			</div>
+			<div class="col-sm-8 padding-r-0">
+				<div class="panel panel-display">
+					<div class="panel-heading">
+						<h3>订单费用</h3>
+					</div>
+					<div class="panel-body">
+						<table class="table">
+							<tr>
+								<td width="150">实际到账：</td>
+								<td>+￥ {$res['amoney']} </td>
+							</tr>
+							 <tr>
+								<td width="150">分销推广支出：</td>
+								<td>-￥ {php echo $res['tk_one'] + $res['tk_two']} </td>
+
+							</tr>
+							<tr>
+								<td width="150">推荐人：</td>
+								<td>{php echo empty($res['tk']) ? '暂无' : $res['tk']}</td>
+
+							</tr>
+							<tr>
+								<td width="150">会员折扣：</td>
+								<td>-￥ {$res['hy_dk']} </td>
+
+							</tr>
+							<tr>
+								<td width="150">年卡折扣：</td>
+								<td>-￥ {$res['year_dk']} </td>
+
+							</tr>
+							<tr>
+								<td width="150">优惠券抵扣：</td>
+								<td>-￥ {$res['coupon_dk']} </td>
+
+							</tr>
+							<tr>
+								<td width="150">平台抽成：</td>
+								<td>-￥ {$res['ptmoney']} </td>
+
+							</tr>
+							<td width="150">机构抽成：{$res['hosmoney']}</td>
+							<td>
+								暂未结算 (本单用户实际支付:￥{$res['moneyss']})</td>
+							</tr>
+
+						</table>
+					</div>
+				</div>
+				<div class="panel panel-display">
+					<div class="panel-heading">
+						<h3>签约信息</h3>
+					</div>
+					<div class="panel-body">
+						<table class="table table-hover">
+							<thead>
+								<tr>
+									<th style="width: 20rem;">医生名</th>
+									<th>科室</th>
+									<th>职称</th>
+									<th>所属机构</th>
+									<th></th>
+								</tr>
+							</thead>
+							<tr>
+								<td>
+									<img src="{$docinfo['advertisement']}" style="width: 30px;height: 30px;margin-right: 5px;"> {$docinfo['z_name']}</td>
+								<td> {$docinfo['name']} </td>
+								<td>{$docinfo['job_name']}</td>
+								<td>{$docinfo['agentname']}</td>
+								<td class="text-right">
+									<a class="btn btn-primary btn-sm" target="_blank" href="./index.php?c=site&a=entry&op=edit&zid={$docinfo['zid']}&do=team&m=xsx_v3">医生信息</a>
+								</td>
+							</tr>
+						</table>
+					</div>
+				</div>
+				<div class="panel panel-display">
+					<div class="panel-heading">
+						<h3>患者信息</h3>
+					</div>
+					<div class="panel-body">
+						<table class="table">
+							<table class="table">
+								<tr>
+									<td width="150">用户头像：</td>
+									<td>
+									    <img src='{$userinfo['u_thumb']}' style='width:100px;height:100px;padding:1px;border:1px solid #ccc' />
+										
+									</td>
+
+								<tr>
+									<td width="150">用户姓名：</td>
+									<td>{$userjiaren['names']</td>
+								</tr>
+								<tr>
+									<td width="150">用户性别：</td>
+									<td class="text-left">
+										{$userjiaren['sex']}
+									</td>
+								</tr>
+								<tr>
+									<td width="150">用户联系方式：</td>
+									<td class="text-left">
+										{$userjiaren['tel']}
+									</td>
+								</tr>
+							</table>
+					</div>
+				</div>
+			</div>
+		</div>
+
+	</div>
+</div>
+</div>
+</div>
+
+
+
+
+<script>
+	require(['bootstrap'], function ($) {
+			    $('[data-toggle="tooltip"]').tooltip({
+		            container: $(document.body)
+		        });
+		        $('[data-toggle="popover"]').popover({
+		            container: $(document.body)
+		        });
+		        $('[data-toggle="dropdown"]').dropdown({
+		            container: $(document.body)
+		        });
+		    });
+			myrequire(['js/init']);
+					$('.app-login-info-name, .app-login-info-sel').mouseover(function(){
+				$('.app-login-info-sel').show();
+			});
+			$('.app-login-info-name, .app-login-info-sel').mouseout(function(){
+				$('.app-login-info-sel').hide();
+			});
+			$('.app-login-info-sel .login-out').hover(function(){
+				$('.app-login-info-sel-arrow').css('border-color', '#1ab394 transparent transparent transparent');
+			},function(){
+				$('.app-login-info-sel-arrow').css('border-color', '#f2f2f2 transparent transparent transparent');
+			});
+</script>
+</body>
+</html>

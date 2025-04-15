@@ -1,0 +1,103 @@
+{template './common/mainHeader'}
+<div class="app-container-right">
+        <ul class="nav nav-tabs">
+            <li {if $ca_state == '0'&&$op=='doctor'} class="active" {/if}>
+                <a href="{php echo $this->createWebUrl('ca',array('ac'=>'docindex','op'=>'doctor','ca_state'=>'0','keywordtype'=>$keywordtype,'keyword'=>$keyword,'keshi'=>$keshi,'zhicheng'=>$zhicheng,'gzstype'=>$gzstype,'hid'=>$_SESSION['hid']))}">未备案医生
+                </a>
+            </li>
+            <li {if $ca_state == '1'&&$op=='doctor'} class="active" {/if}>
+                <a href="{php echo $this->createWebUrl('ca',array('ac'=>'docindex','op'=>'doctor','ca_state'=>'1','keywordtype'=>$keywordtype,'keyword'=>$keyword,'keshi'=>$keshi,'zhicheng'=>$zhicheng,'gzstype'=>$gzstype,'hid'=>$_SESSION['hid']))}">已备案医生
+                </a>
+            </li>
+            <li {if $ca_state == '2'&&$op=='doctor'} class="active" {/if}>
+                <a href="{php echo $this->createWebUrl('ca',array('ac'=>'docindex','op'=>'doctor','ca_state'=>'2','keywordtype'=>$keywordtype,'keyword'=>$keyword,'keshi'=>$keshi,'zhicheng'=>$zhicheng,'gzstype'=>$gzstype,'hid'=>$_SESSION['hid']))}">备案中医生
+                </a>
+            </li>
+            <li {if $ca_state == '3'&&$op=='doctor'} class="active" {/if}>
+                <a href="{php echo $this->createWebUrl('ca',array('ac'=>'docindex','op'=>'doctor','ca_state'=>'3','keywordtype'=>$keywordtype,'keyword'=>$keyword,'keshi'=>$keshi,'zhicheng'=>$zhicheng,'gzstype'=>$gzstype,'hid'=>$_SESSION['hid']))}">未通过医生
+                </a>
+            </li>
+            <li {if $ca_state == '0'&&$op=='yaoshi'} class="active" {/if}>
+                <a href="{php echo $this->createWebUrl('ca',array('ac'=>'docindex','op'=>'yaoshi','ca_state'=>'0','keywordtype'=>$keywordtype,'keyword'=>$keyword,'keshi'=>$keshi,'zhicheng'=>$zhicheng,'gzstype'=>$gzstype,'hid'=>$_SESSION['hid']))}">未备案药师
+                </a>
+            </li>
+            <li {if $ca_state == '1'&&$op=='yaoshi'} class="active" {/if}>
+                <a href="{php echo $this->createWebUrl('ca',array('ac'=>'docindex','op'=>'yaoshi','ca_state'=>'1','keywordtype'=>$keywordtype,'keyword'=>$keyword,'keshi'=>$keshi,'zhicheng'=>$zhicheng,'gzstype'=>$gzstype,'hid'=>$_SESSION['hid']))}">已备案药师
+                </a>
+            </li>
+            <li {if $ca_state == '2'&&$op=='yaoshi'} class="active" {/if}>
+                <a href="{php echo $this->createWebUrl('ca',array('ac'=>'docindex','op'=>'yaoshi','ca_state'=>'2','keywordtype'=>$keywordtype,'keyword'=>$keyword,'keshi'=>$keshi,'zhicheng'=>$zhicheng,'gzstype'=>$gzstype,'hid'=>$_SESSION['hid']))}">备案中药师
+                </a>
+            </li>
+            <li {if $ca_state == '3'&&$op=='yaoshi'} class="active" {/if}>
+                <a href="{php echo $this->createWebUrl('ca',array('ac'=>'docindex','op'=>'yaoshi','ca_state'=>'3','keywordtype'=>$keywordtype,'keyword'=>$keyword,'keshi'=>$keshi,'zhicheng'=>$zhicheng,'gzstype'=>$gzstype,'hid'=>$_SESSION['hid']))}">未通过药师
+                </a>
+            </li>
+            <li {if $op=='setting'} class="active" {/if}>
+                <a href="{php echo $this->createWebUrl('ca',array('ac'=>'setting','op'=>'setting'))}">
+                接口参数配置 
+                </a>
+            </li>
+
+        </ul>
+<div class="app-content">
+    <div class="app-form">
+        <form action="" method="post" class="form-horizontal form form-validate" id="setting-form">
+            <div class="panel panel-default">
+                <div class="panel-heading">CA接口设置</div>
+               
+                <div class="form-group">
+                    <label class="col-sm-2 control-label">CA对接是否开启</label>
+                    <div class="col-sm-9">
+                        <label class="radio-inline" onclick="$('#proportion').show()" >
+                            <input type="radio" name="ca_switch" value="1" {if $res['ca_switch'] == '1'} checked="checked" {/if}>开启
+                        </label>
+                        <label class="radio-inline" onclick="$('#proportion').hide()">
+                            <input type="radio" name="ca_switch" value="0" {if $res['ca_switch'] == '0'} checked="checked"  {/if}>关闭
+                        </label>
+                    </div>
+                </div>
+                 <div class="form-group">
+                    <label class="col-sm-2 control-label">clientid</label>
+                    <div class="col-sm-9">
+                        <div class="input-group">
+                            <input type="text" name="ca_clientid" class="form-control" value="{$res['ca_clientid']}">
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-sm-2 control-label">APPsecret</label>
+                    <div class="col-sm-9">
+                        <div class="input-group">
+                            <input type="text" name="ca_secret" class="form-control" value="{$res['ca_secret']}">
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-2 control-label"></label>
+                <div class="col-sm-9">
+                    <input type="submit" name="submit" value="提交" class="btn btn-primary min-width" />
+                    <input type="hidden" name="p_id" value="{$res['p_id']}">
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+<script>
+$(function () {
+		window.optionchanged = false;
+		$('#myTab a').click(function (e) {
+			e.preventDefault();//阻止a链接的跳转行为
+			$(this).tab('show');//显示当前选中的链接及关联的content
+		})
+	});
+</script>
+			</div>
+		</div>
+	</div>
+	<div class="foot" id="footer">
+		
+	</div>
+	</body>
+</html>

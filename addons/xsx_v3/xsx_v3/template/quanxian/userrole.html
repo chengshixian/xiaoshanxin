@@ -1,0 +1,54 @@
+{template './common/mainHeader'}
+<div class="app-container-right">
+	<ul class="nav nav-tabs">
+		<li class="active">
+			<a href="javascript:;">用户权限</a>
+		</li>
+	</ul>
+	<div class="app-content">
+		<div class="app-table-list">
+			<div class="table-responsive">
+				<table class="table table-hover table-bordered">
+					<thead class="navbar-inner">
+						<tr>
+							<th style="width: 50px;">UID</th>
+							<th style="">用户名称</th>
+							<th style="">加入时间</th>
+							<th style="width: 180px">操作</th>
+						</tr>
+					</thead>
+					<tbody>
+					    {loop $list $item}
+						<tr>
+							<td>{$item['uid']}</td>
+							<td>{$item['username']}</td>
+							<td>{$item['joindate']}</td>
+				
+							<td style="position: relative;">
+								<a class="btn btn-primary btn-sm" href="/web/index.php?c=site&a=entry&do=quanxian&op=edituserrole&ac=edituserrole&m=xsx_v3&id={$item['uid']}&h_id={$_SESSION['hid']}&keyword={$item['username']}" title="设置用户下角色">设置用户下角色</a>
+							</td>
+						</tr>
+                        {/loop}
+					</tbody>
+				</table>
+			</div>
+			<div class="app-table-foot clearfix">
+				<div class="pull-left">
+
+				</div>
+				<div class="pull-right">
+				</div>
+			</div>
+		</div>
+	</div>
+
+    <script type="text/javascript" src="{php echo XSX_ADMIN}/js/table_edit.js"></script>
+	
+</div>
+</div>
+</div>
+
+
+
+</body>
+</html>

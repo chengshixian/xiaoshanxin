@@ -1,0 +1,611 @@
+{template '/common/mainHeader'}
+{if $type=='display'}
+<style>
+    .col-sm-4 {
+        width: auto
+    }
+
+    .col-sm-2 {
+        width: auto
+    }
+
+    .zhe {
+        position: fixed;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.6);
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .zhe .imgBig {
+        width: 20%;
+    }
+</style>
+
+<div class="app-container-right">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/css/select2.min.css" rel="stylesheet" />
+    <div class="app-content">
+        <div class="app-filter">
+            <div class="filter-list">
+                <form action="" method="post" class="form-horizontal" role="form" id="form1">
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label">关键字</label>
+                        <div class="col-md-5">
+                            <input type="text" name="keyword" class="form-control" value="" placeholder="请输入关键字">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-md-9">
+                            <button class="btn btn-primary" id="search">筛选</button>
+                            <a class="btn btn-danger "
+                                href="{php echo $this->createWeburl('medicine',array('type'=>'addmoban','op'=>'chufangmuban','pid'=>$id))}"
+                                data-confirm="是否压缩二维码？">添加模板</a>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+        <div class="app-table-list">
+            <div class="table-responsive">
+                <table class="table table-hover">
+                    <thead>
+                        <tr>
+                            <th style="width: 30px;">
+                                <input type="checkbox"
+                                    onclick="var ck = this.checked;$(':checkbox').each(function(){this.checked = ck});" />
+                            </th>
+                            <th>分类名称</th>
+                            <th>操作</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {loop $list $item}
+                        <tr>
+                            <td>
+                                <center>
+                                    <input type="checkbox" name="checkbox[]" class="checkbox" value="{$item['id']}" />
+                                </center>
+                            </td>
+                            <td>{$item['title']}</td>
+                            <td style="position: relative;">
+                                <a class="btn btn-default btn-sm"
+                                    href="{php echo $this->createWeburl('medicine',array('type'=>'addmoban','op'=>'chufangmuban','id'=>$item['id']))}"
+                                    title="编辑">编辑</a>
+                                <a class="btn btn-default btn-sm"
+                                    href="{php echo $this->createWeburl('medicine',array('op'=>'chufangmubanpost','type'=>'post','ac'=>'chufangmuban','id'=>$item['id'],'hid'=>$_SESSION['hid']))}"
+                                    title="管理入口">处方列表</a>
+                                <!-- <a class="btn btn-danger btn-sm" href="{php echo $this->createWeburl('medicine',array('op'=>'delchufangmo','ac'=>'chufangmuban','id'=>$item['id'],'hid'=>$_SESSION['hid']))}" data-toggle="ajaxRemove" data-confirm="删除机构会导致机构下医生和药品无法使用，确定要删除吗？" title="删除">删除</a> -->
+                            </td>
+                        </tr>
+                        {/loop}
+                    </tbody>
+                </table>
+                {$pager}
+            </div>
+            {if is_agent != '1'}
+            <div class="app-table-foot clearfix">
+                <div class="pull-left">
+                    <div id="de1" class="pull-left">
+                        <!-- <a href="javascript:;" class="btn btn-default min-width js-batch js-delete pass">删除选中</a> -->
+                    </div>
+                </div>
+                <div class="pull-right">
+                </div>
+            </div>
+            {/if}
+        </div>
+    </div>
+    <script>
+        $(document).on('click', '.bigImg', function () {
+            var src = $(this).attr('data-src')
+            $('body').append(`
+					<div class="zhe">
+					<img class="imgBig" src="${src}"/>
+					</div>
+					`)
+        })
+        $(document).on('click', '.zhe', function () {
+            $(this).remove()
+        })
+        var enabled = "1";
+        $('#de1').delegate('.pass', 'click', function (e) {
+            e.stopPropagation();
+            var order_ids = [];
+            var $checks = $('.checkbox:checkbox:checked');
+            $checks.each(function () {
+                if (this.checked) {
+                    order_ids.push(this.value);
+                };
+            });
+            var $this = $(this);
+            var ids = order_ids;
+            util.nailConfirm(this, function (state) {
+                if (!state) return;
+                if (enabled == 4) {
+                    var type = 2;
+                } else {
+                    var type = 1;
+                }
+                $.post("{php echo $this->createWeburl('medicine',array('op'=>'delchufanglists','type'=>'display'))}", { ids: ids, type: type }, function (data) {
+                    if (data.errno == '1') {
+                        util.tips("操作成功！");
+                        setTimeout(function () {
+                            window.location.reload();
+                        }, 1000);
+                    } else {
+                        util.tips("操作失败");
+                    };
+                }, 'json');
+            }, { html: '确认删除所选商户?' });
+        });
+    </script>
+</div>
+{/if}
+
+{if $type=='post'}
+<div class="app-container-right">
+    <div class="app-content">
+        <div class="app-filter">
+            <div class="filter-list">
+                <form action="" method="post" class="form-horizontal" role="form" id="form1">
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label">关键字</label>
+                        <div class="col-md-5">
+                            <input type="text" name="keyword" class="form-control" value="" placeholder="请输入关键字">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-md-9">
+                            <button class="btn btn-primary" id="search">筛选</button>
+                            <a class="btn btn-danger "
+                                href="{php echo $this->createWeburl('medicine',array('type'=>'add','op'=>'chufangmuban','pid'=>$id))}"
+                                >添加处方模板</a>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+        <div class="app-table-list">
+            <div class="table-responsive">
+                <table class="table table-hover">
+                    <thead>
+                        <tr>
+                            <th style="width: 30px;">
+                                <input type="checkbox"
+                                    onclick="var ck = this.checked;$(':checkbox').each(function(){this.checked = ck});" />
+                            </th>
+                            <th>模板名称</th>
+                            <th>疾病</th>
+                            <th>操作</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {loop $cflist $item}
+                        <tr>
+                            <td>
+                                <center>
+                                    <input type="checkbox" name="checkbox[]" class="checkbox" value="{$item['id']}" />
+                                </center>
+                            </td>
+                            <td>{$item['title']}</td>
+                            <td>{$item['jibing']}</td>
+                            <td style="position: relative;">
+                                <a class="btn btn-default btn-sm"
+                                    href="{php echo $this->createWeburl('medicine',array('type'=>'add','op'=>'chufangmuban','pid'=>$item['pid'],'id'=>$item['id']))}"
+                                    title="编辑">编辑</a>
+                                <a class="btn btn-danger btn-sm" href="{php echo $this->createWeburl('medicine',array('op'=>'delchufangmuban','ac'=>'drugstorelist','id'=>$item['id'],'hid'=>$_SESSION['hid'],'pid'=>$id))}" data-toggle="ajaxRemove" data-confirm="确定要删除吗？" title="删除">删除</a>
+                            </td>
+                        </tr>
+                        {/loop}
+                    </tbody>
+                </table>
+                {$pager}
+            </div>
+            {if is_agent != '1'}
+            <div class="app-table-foot clearfix">
+                <div class="pull-left">
+                    <div id="de1" class="pull-left">
+                        <!-- <a href="javascript:;" class="btn btn-default min-width js-batch js-delete pass">删除选中</a> -->
+                    </div>
+                </div>
+                <div class="pull-right">
+                </div>
+            </div>
+            {/if}
+        </div>
+    </div>
+    <script>
+        $(document).on('click', '.bigImg', function () {
+            var src = $(this).attr('data-src')
+            $('body').append(`
+					<div class="zhe">
+					<img class="imgBig" src="${src}"/>
+					</div>
+					`)
+        })
+        $(document).on('click', '.zhe', function () {
+            $(this).remove()
+        })
+        var enabled = "1";
+        $('#de1').delegate('.pass', 'click', function (e) {
+            e.stopPropagation();
+            var order_ids = [];
+            var $checks = $('.checkbox:checkbox:checked');
+            $checks.each(function () {
+                if (this.checked) {
+                    order_ids.push(this.value);
+                };
+            });
+            var $this = $(this);
+            var ids = order_ids;
+            util.nailConfirm(this, function (state) {
+                if (!state) return;
+                if (enabled == 4) {
+                    var type = 2;
+                } else {
+                    var type = 1;
+                }
+                $.post("{php echo $this->createWeburl('medicine',array('op'=>'delchufanglists','type'=>'post'))}", { ids: ids, type: type }, function (data) {
+                    if (data.errno == '1') {
+                        util.tips("操作成功！");
+                        setTimeout(function () {
+                            window.location.reload();
+                        }, 1000);
+                    } else {
+                        util.tips("操作失败");
+                    };
+                }, 'json');
+            }, { html: '确认删除所选商户?' });
+        });
+    </script>
+</div>
+{/if}
+{if $type=='add'}
+
+<div class="app-container-right">
+    <script type="text/javascript" src="https://img.xiaoshanxin.com/saas/web/diyarea.js"></script>
+    <ul class="nav nav-tabs" id="myTab">
+        <li class="active">
+            <a href="#tab_1">编辑处方模板</a>
+        </li>
+    </ul>
+    <div class="app-content">
+        <div class="app-form">
+            <form action="" method="post" class="form-horizontal form form-validate"
+                onsubmit="return checkValidate(this.form);">
+                <input type="hidden" name="id" value="" />
+                <div class="tab-content">
+                    <div class="tab-pane  active" id="tab_1">
+                        <div class="panel panel-default">
+                            <div class="panel-heading">
+                                处方模板信息
+                            </div>
+                            <div class="panel-body">
+                                <div class="form-group">
+                                    <label class="col-sm-2 control-label">处方模板名称<span class="must-fill">*</span>
+                                    </label>
+                                    <div class="col-sm-9">
+                                        <input type="text" name="title" id="login_name" required placeholder="请输处方名称"
+                                            class="form-control" value="{$item['title']}">
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-sm-2 control-label">治疗疾病<span class="must-fill">*</span></label>
+                                    <div class="col-sm-9">
+                                        <input type="hidden" id="id"  name="jibing" value="{$item['name']}">
+                                        <div class="input-group">
+                                            <input type="text" name="jibing" maxlength="30" value="{$item['jibing']}"
+                                                id="jibing" class="form-control" readonly="">
+                                            <div class="input-group-btn">
+                                                <button class="btn btn-default" type="button" data-toggle="modal"
+                                                    data-target="#jibingModal"
+                                                    onclick="clearSearchInput()">选择疾病</button>
+                                            </div>
+                                        </div>
+                                        <div class="modal fade" id="jibingModal" tabindex="-1" role="dialog"
+                                            aria-labelledby="jibingModalLabel" aria-hidden="true">
+                                            <div class="modal-dialog" style="width: 660px;">
+                                                <div class="modal-dialog" style="width: 660px;">
+                                                    <div class="modal-content">
+                                                        <div class="modal-header">
+                                                            <button aria-hidden="true" data-dismiss="modal"
+                                                                class="close" type="button">×</button>
+                                                            <h3 id="diseaseTitle">选择疾病(最多显示前200条)</h3>
+                                                        </div>
+                                                        <div class="modal-body">
+                                                            <div class="row">
+                                                                <div class="input-group">
+                                                                    <input type="text" class="form-control"
+                                                                        name="keyword" value="" id="search-kwd"
+                                                                        placeholder="可搜索疾病名称">
+                                                                    <span class="input-group-btn">
+                                                                        <button type="button" class="btn btn-default"
+                                                                            onclick="search_jibing();">搜索</button>
+                                                                    </span>
+                                                                </div>
+                                                            </div>
+                                                            <div id="jibing-module-menus" style="padding-top:5px;">
+                                                            </div>
+                                                        </div>
+                                                        <div class="modal-footer">
+                                                            <a href="#" class="btn btn-default" data-dismiss="modal"
+                                                                aria-hidden="true">关闭</a>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                <script>
+                                                    function clearSearchInput() {
+                                                        document.getElementById('search-kwd').value = ''; // 清空输入框内容
+                                                    }
+
+                                                </script>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group" style="">
+                                        <label class="col-sm-2 control-label">诊断建议</label>
+                                        <div class="col-sm-9" style="">
+                                            <textarea rows="6" cols="20"
+                                                class="form-control ng-pristine ng-untouched ng-valid ng-empty"
+                                                name="zhenduan" id="zhenduan">{$item['zhenduan']}</textarea>
+                                        </div>
+                                    </div>
+                                    <div class="form-group" style="">
+                                        <label class="col-sm-2 control-label">用药建议</label>
+                                        <div class="col-sm-9" style="">
+                                            <textarea rows="6" cols="20"
+                                                class="form-control ng-pristine ng-untouched ng-valid ng-empty"
+                                                name="yongyao" id="yongyao">{$item['yongyao']}</textarea>
+                                        </div>
+                                    </div>
+                                    <div class="form-group" style="">
+                                        <label class="col-sm-2 control-label">处方描述</label>
+                                        <div class="col-sm-9" style="">
+                                            <textarea rows="6" cols="20"
+                                                class="form-control ng-pristine ng-untouched ng-valid ng-empty"
+                                                name="desc" id="desc">{$item['desc']}</textarea>
+                                        </div>
+                                    </div>
+                                    <!--                                  <div class="form-group" style="">
+                                                                    <label class="col-sm-2 control-label">处方详情<span class="must-fill">*</span></label>
+                                                                    <div class="col-sm-9" style="">
+                                                                       <textarea rows="6" cols="20" class="form-control ng-pristine ng-untouched ng-valid ng-empty" name="content" id="content">{$item['content']}</textarea>
+                                                                    </div>
+                                                                </div> -->
+                                    <div class="form-group">
+                                        <label class="col-sm-2 control-label">处方详情</label>
+                                        <div class="col-md-9">
+                                            <div id="datas" class="sms-template-1" style="display:block;">
+
+                                                {loop $content $it}
+
+                                                <div class="col-sm-12 data-item"
+                                                    style="margin-bottom: 10px;padding-left: 0;padding-right: 0;"
+                                                    id="item_{$it['id']}">
+                                                    <!-- 药品名称 -->
+                                                    <div class="input-group form-group col-sm-6"
+                                                        style="margin: 0px; padding-left: 0; float: left;">
+                                                        <span class="input-group-addon">药品名称{if $it['yaopin_leixin'] == 1}【中药】{/if}</span>
+                                                        <input type="hidden" name="registerdate[id][]"
+                                                            value="{$it['id']}">
+                                                        <div class="input-group">
+                                                            <input  type="text" name="registerdate[ypname][]"
+                                                                maxlength="70" value="{$it['ypname']}"
+                                                                id="yaopin_{$it['id']}"
+                                                                class="form-control select-ypname" readonly>
+                                                            <input type="hidden" name="registerdate[sid][]"
+                                                                value="{$it['sid']}" id="sid_{$it['id']}" value="">
+                                                            <input type="hidden" name="registerdate[yaopin_leixin][]"
+                                                                value="{$it['yaopin_leixin']}"
+                                                                id="yaopin_leixin_{$it['id']}" value="">
+                                                            <div class="input-group-btn">
+                                                                <button class="btn btn-default" type="button"
+                                                                    data-toggle="modal"
+                                                                    data-target="#yaoModal_{$it['id']}"
+                                                                    onclick="clearyaopinInput()">选择药品</button>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+
+                                                    <!-- 数量 -->
+                                                    <div class="input-group form-group col-sm-6"
+                                                        style="margin: 0px;padding-left: 0;float: left;">
+                                                        <span class="input-group-addon">数量</span>
+                                                        <input type="text" name="registerdate[num][]"
+                                                            class="form-control" value="{$it['num']}">
+                                                    </div>
+
+                                                    <!-- 用法 -->
+                                                    <!-- <div class="input-group form-group col-sm-6" style="margin: 0px;padding-left: 0;float: left;">
+                                                                                    <span class="input-group-addon">用法</span>
+                                                                                    <input type="text" name="registerdate[yfa][]" class="form-control" value="{$it['yfa']}">
+                                                                                </div> -->
+
+                                                    <!-- 单次用量 -->
+                                                    <!-- <div class="input-group form-group col-sm-6" style="margin: 0px;padding-left: 0;float: left;">
+                                                                                    <span class="input-group-addon">单次用量</span>
+                                                                                    <input type="text" name="registerdate[yliang][]" class="form-control" value="{$it['yliang']}">
+                                                                                </div> -->
+
+                                                    <!-- 用药次数 -->
+                                                    <!-- <div class="input-group form-group col-sm-6" style="margin: 0px;padding-left: 0;float: left;">
+                                                                                    <span class="input-group-addon">用药次数</span>
+                                                                                    <input type="text" name="registerdate[jiliang][]" class="form-control" value="{$it['jiliang']}">
+                                                                                </div> -->
+
+                                                    <!-- 删除按钮 -->
+                                                    <div class="col-sm-12" style="text-align: right;">
+                                                        <button type="button" class="btn btn-danger data-item-delete" data-item-id="item_{$it['id']}">删除药品</button>
+                                                    </div>
+
+
+                                                    <!--药品选择弹框 -->
+                                                    <div class="modal fade" id="yaoModal_{$it['id']}" tabindex="-1"
+                                                        role="dialog" aria-labelledby="yaoModal" aria-hidden="true">
+                                                        <div class="modal-dialog" style="width: 660px;">
+                                                            <div class="modal-content">
+                                                                <div class="modal-header">
+                                                                    <button aria-hidden="true" data-dismiss="modal"
+                                                                        class="close" type="button">×</button>
+                                                                    <h3>选择药品(最多显示前1000条)</h3>
+                                                                </div>
+                                                                <div class="modal-body">
+                                                                    <div class="input-group">
+                                                                        <input type="text" class="form-control"
+                                                                            id="search-kwd_{$it['id']}"
+                                                                            placeholder="可搜索药品名称">
+                                                                        <span class="input-group-btn">
+                                                                            //
+                                                                            <script>
+                                                                                function clearyaopinInput() {
+                                                                                    document.getElementById("search-kwd_{$it['id']}").value = ''; // 清空输入框内容
+                                                                                }
+
+                                                                            </script>
+                                                                            <button type="button"
+                                                                                class="btn btn-default"
+                                                                                onclick="search_yaopin('{$it['id']}');">搜索</button>
+                                                                        </span>
+                                                                    </div>
+                                                                    <div id="yao-module-menus_{$it['id']}"
+                                                                        style="padding-top:5px;"></div>
+                                                                </div>
+                                                                <div class="modal-footer">
+                                                                    <a href="#" class="btn btn-default"
+                                                                        data-dismiss="modal" aria-hidden="true">关闭</a>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+
+                                                </div>
+                                                {/loop}
+                                            </div>
+
+
+                                            <!-- 增加药品按钮 -->
+                                            <div class="form-group sms-template-1" style="display:block;">
+                                                <div class="col-sm-6" style="padding-left: 0;">
+                                                    <a class="btn btn-default btn-add-type btn1 col-sm-12 col-xs-12"
+                                                        href="javascript:;" onclick="addType();">
+                                                        <i class="fa fa-plus" title=""></i> 增加药品
+                                                    </a>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+
+                                </div>
+                            </div>
+                        </div>
+                        <input type="hidden" name="id" value="{$id}">
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label"></label>
+                            <div class="col-sm-9">
+                                <input type="submit" name="submit" value="提交" class="btn btn-primary min-width" />
+                                <input type="hidden" name="token" value="{$_W['token']}" />
+                            </div>
+                        </div>
+            </form>
+        </div>
+    </div>
+    <script type="text/javascript">
+        $(function () {
+            window.optionchanged = false;
+            $('#myTab a').click(function (e) {
+                e.preventDefault();//阻止a链接的跳转行为
+                $(this).tab('show');//显示当前选中的链接及关联的content
+            })
+        });
+    </script>
+</div>
+
+{/if}
+
+{if $type=='addmoban'}
+
+<div class="app-container-right">
+    <script type="text/javascript" src="https://img.xiaoshanxin.com/saas/web/diyarea.js"></script>
+    <ul class="nav nav-tabs" id="myTab">
+        <li class="active">
+            <a href="#tab_1">编辑处方</a>
+        </li>
+    </ul>
+    <div class="app-content">
+        <div class="app-form">
+            <form action="" method="post" class="form-horizontal form form-validate"
+                onsubmit="return checkValidate(this.form);">
+                <input type="hidden" name="id" value="" />
+                <div class="tab-content">
+                    <div class="tab-pane  active" id="tab_1">
+                        <div class="panel panel-default">
+                            <div class="panel-heading">
+                                模板信息
+                            </div>
+                            <div class="panel-body">
+                                <div class="form-group">
+                                    <label class="col-sm-2 control-label">模板名称<span class="must-fill">*</span>
+                                    </label>
+                                    <div class="col-sm-9">
+                                        <input type="text" name="title" id="login_name" required placeholder="请输模板名称"
+                                            class="form-control" value="{$item['title']}">
+                                    </div>
+                                </div>
+                                <!--                                  <div class="form-group">
+                                                                    <label class="col-sm-2 control-label">模板分类<span class="must-fill">*</span>
+                                                                    </label>
+                                                                    <div class="col-sm-9">
+                                                                    <select class="form-control tpl-category-parent we7-select" id="category_parent" name="pid">
+                                                                    <option value="0">请选择一级分类</option>
+                                                                    {loop $fllist $items}
+                                                                    <option value="{$items['id']}" {if $items['id']==$item['pid']} selected="selected" {/if}>{$items['title']}</option>
+                                                                    {/loop}
+                                                                    </select>
+                                                                    </div>
+                                                                 </div> -->
+                            </div>
+                        </div>
+                    </div>
+                    <input type="hidden" name="id" value="{$id}">
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label"></label>
+                        <div class="col-sm-9">
+                            <input type="submit" name="submit" value="提交" class="btn btn-primary min-width" />
+                            <input type="hidden" name="token" value="{$_W['token']}" />
+                        </div>
+                    </div>
+            </form>
+        </div>
+    </div>
+    <script type="text/javascript">
+        $(function () {
+            window.optionchanged = false;
+            $('#myTab a').click(function (e) {
+                e.preventDefault();//阻止a链接的跳转行为
+                $(this).tab('show');//显示当前选中的链接及关联的content
+            })
+        });
+    </script>
+</div>
+{/if}
+<script>
+</script>
+<script type="text/javascript">
+    // 删除按钮的点击事件
+    $(document).on('click', '.data-item-delete', function() {
+        var itemId = $(this).data('item-id'); // 获取当前点击按钮的 data-item-id
+        $('#' + itemId).remove(); // 删除对应的药品项
+    });
+</script>
+
+<script src="{php echo XSX_ADMIN}/js/jibing.js" type="text/javascript"></script>
+<script src="{php echo XSX_ADMIN}/js/yaopin.js?v=1.2" type="text/javascript"></script>
+</body>
+
+</html>

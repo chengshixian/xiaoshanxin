@@ -1,0 +1,54 @@
+{template './common/mainHeader'}
+<div class="app-container-right">
+	<ul class="nav nav-tabs">
+		<li class="active">
+			<a href="javascript:;">分组权限</a>
+		</li>
+	</ul>
+	<div class="app-content">
+		<div class="app-table-list">
+			<div class="table-responsive">
+				<table class="table table-hover table-bordered">
+					<thead class="navbar-inner">
+						<tr>
+							<th style="width: 50px;">ID</th>
+							<th style="">分组名称</th>
+							<th style="width: 80px">操作</th>
+						</tr>
+					</thead>
+					<tbody>
+					    {loop $list $item}
+						<tr>
+							<td>{$item['id']}</td>
+							<td>
+								
+									{$item['title']} 
+							</td>
+							<td style="position: relative;">
+								<a class="btn btn-default btn-sm" href="/web/index.php?c=site&a=entry&do=jiancha&op=editrole&ac=editrole&m=xsx_v3&id={$item['id']}&h_id={$_SESSION['hid']}&keyword={$item['keyword']}" title="编辑">编辑</a>
+							</td>
+						</tr>
+                        {/loop}
+					</tbody>
+				</table>
+			</div>
+			<div class="app-table-foot clearfix">
+				<div class="pull-left">
+
+				</div>
+				<div class="pull-right">
+				</div>
+			</div>
+		</div>
+	</div>
+
+    <script type="text/javascript" src="{php echo XSX_ADMIN}/js/table_edit.js"></script>
+	
+</div>
+</div>
+</div>
+
+
+
+</body>
+</html>

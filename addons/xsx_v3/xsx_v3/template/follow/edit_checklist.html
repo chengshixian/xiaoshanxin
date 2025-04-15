@@ -1,0 +1,230 @@
+{template './common/mainHeader'}
+<ul class="nav nav-tabs">
+	<li>
+	
+	<a href="/web/index.php?c=site&a=entry&do=follow&m=xsx_v3&op=checklist&ac=checklist">随访检查单</a>
+	
+	</li>
+	<li {if empty($id)}class="active"{/if}><a href="">添加随访检查单</a></li>
+	{if !empty($id)}
+	<li class="active"><a href="#">编辑随访检查单</a></li>
+	{/if}
+</ul>
+<div class="app-content">
+	<div class="app-form">
+		<form action="" method="post" class="form-horizontal form" enctype="multipart/form-data" >
+			<input type="hidden" name="id" value="{$id}" />
+			<div class="panel panel-default">
+				<div class="panel-heading">随访检查单设置</div>
+				
+				<div class="form-group">
+					<label class="col-sm-2 control-label">标题<span class="must-fill">*</span></label>
+					<div class="col-sm-9">
+						<input type="text" name="title" required class="form-control" value="{$item['title']}" >
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="col-sm-2 control-label">图片<span class="must-fill">*</span></label>
+					<div class="col-sm-9">
+						{php echo tpl_form_field_image('thumb', $item['thumb'])}
+						<span class="help-block">建议图片大小80*80</span>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="col-sm-2 control-label">提示语<span class="must-fill">*</span></label>
+					<div class="col-sm-9">
+						<input type="text" name="tips" required class="form-control" value="{$item['tips']}" >
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="col-sm-2 control-label">一级分类<span class="must-fill">*</span></label>
+
+					<div class="col-sm-9">
+		      			<select name="one_type" id="one_type" class="form-control valid" aria-invalid="false" required="" onchange="changeone()">
+		      				<option value="" {if $item['one_type'] == ''} selected="" {/if}>请选择一级分类</option>
+		      				{loop $one_type $types}
+        					<option value="{$types['id']}" {if $item['one_type'] == $types['id']} selected="" {/if}>{$types['title']}</option>
+        					{/loop}
+      					</select>
+		    		</div>
+				</div>
+				<div class="form-group">
+					<label class="col-sm-2 control-label">二级分类<span class="must-fill">*</span></label>
+
+					<div class="col-sm-9">
+		      			<select name="two_type" id="two_type" class="form-control valid" aria-invalid="false" required="">
+		      				<option value="" {if $item['two_type'] == ''} selected="" {/if}>请选择二级分类</option>
+		      				{loop $two_type $typess}
+        					<option value="{$typess['id']}" {if $item['two_type'] == $typess['id']} selected="" {/if}>{$typess['title']}</option>
+        					{/loop}
+      					</select>
+		    		</div>
+				</div>
+				<script>
+				    function changeone()
+				    {
+				        var id = $("#one_type").val();
+				        console.log(id);
+				        $.ajax({  
+                            type: 'get',  
+                            url: "/index.php?c=site&a=entry&do=follow&op=two_checklist_types&ac=check_type&m=xsx_v3",  
+                            dataType: "json",  
+                            data: {id: id},  
+                            success: function(res){ 
+                                var html = "";
+                                html += "<select name='two_type' id='two_type' class='form-control valid' aria-invalid='false'>";
+                                html += "<option value=''>请选择二级分类</option>";
+                                for(var i=0;i<res.length;i++)
+                                {
+                                    
+                                    html += "<option value='"+res[i].id+"'>"+res[i].title+"</option>";
+                                    
+                                }
+                                html += "</select>";
+                                $("#two_type").html(html);
+                          }
+				        })
+				    }
+				</script>
+				<div class="form-group">
+					<label class="col-sm-2 control-label">是否仅可上传图片</label>
+					<div class="col-sm-9">
+						<div class="radio-inline">
+							<input type="radio" name='is_upload' id="is_upload" value='1' {if $item['is_upload']==1}checked{/if}>是
+						</div>
+						<div class="radio-inline">
+							<input type="radio" name='is_upload' id="is_upload" value='0' {if $item['is_upload']==0}checked{/if}>否
+						</div>
+					</div>
+				</div>
+				<div id="noimg" {if $item['is_upload'] == 1} style="display:none" {/if}>
+    				
+    				<div class="form-group">
+    					<label class="col-sm-2 control-label">是否为文字描述</label>
+    					<div class="col-sm-9">
+    						<div class="radio-inline">
+    							<input type="radio" name='is_word' id="is_word" value='1' {if $item['is_word']==1}checked{/if}>是
+    						</div>
+    						<div class="radio-inline">
+    							<input type="radio" name='is_word' id="is_word" value='0' {if $item['is_word']==0}checked{/if}>否
+    						</div>
+    					</div>
+    				</div>
+    				<div id="no_word" {if $item['is_word'] == 1} style="display:none" {/if}>
+        				<div class="form-group" style="display: block;">
+        					<label class="col-xs-2 col-sm-2 col-md-2 col-lg-2 control-label">参考值</label>
+        					<div class="col-md-2" style="padding-right: 0;">
+        						<div class="input-group">
+        							<span class="input-group-addon">≧</span>
+        							<input type="text" name="min_value" id="min_value" placeholder="请输入最小值" class="form-control" value="{$item['min_value']}">
+        						</div>
+        					</div>
+        					<label class="col-xs-1 col-sm-1 col-md-1 col-lg-1 control-label" style="padding-left: 0;padding-right: 0;">--------------</label>
+        					<div class="col-md-2" style="padding-right: 0;">
+        						<div class="input-group">
+        							
+        							<input type="text" name="max_value" placeholder="请输入最大值" class="form-control" value="{$item['max_value']}">
+        						</div>
+        					</div>
+        					
+        					<br><br><div class="help-block col-md-10 col-lg-offset-2">
+        					超过正常值后，即为指标异常</div>
+        				</div>
+        				<div class="form-group">
+        					<label class="col-sm-2 control-label">单位<span class="must-fill">*</span></label>
+        					<div class="col-sm-9">
+        						<input type="text" name="danwei" class="form-control" value="{$item['danwei']}" >
+        					</div>
+    				    </div>
+        				<div class="form-group">
+        					<label class="col-sm-2 control-label">是否需连接设备</label>
+        					<div class="col-sm-9">
+        						<div class="radio-inline">
+        							<input type="radio" name='is_equiment' id="is_equiment" value='1' {if $item['is_equiment']==1}checked{/if}>是
+        						</div>
+        						<div class="radio-inline">
+        							<input type="radio" name='is_equiment' id="is_equiment" value='0' {if $item['is_equiment']==0}checked{/if}>否
+        						</div>
+        					</div>
+        				</div>
+        				<div class="form-group" id="equiment"  {if $item['is_equiment'] == 0} style="display:none" {/if}>
+        					<label class="col-sm-2 control-label">所需设备</label>
+        					<div class="col-sm-9">
+        					    {loop $equipment_arr $equipment}
+        						<label class="radio-inline">
+        							<input type="radio" id="inlineRadio3" name="equiment_id" {if $item['equiment_id'] == $equipment['id']} checked="checked" {/if} value="{$equipment['id']}">{$equipment['title']}
+        						</label>
+        						{/loop}
+        						
+        					</div>
+        				</div>
+    				</div>
+    			</div>
+    			<script>
+    			    $('input[type=radio][name=is_upload]').change(function() {
+    
+    			        var value = this.value;
+    			        if(value == 1)
+    			        {
+    			            $("#noimg").attr("style",'display:none')
+    			        }else{
+    			            $("#noimg").attr("style",'display:block')
+    			        }
+                     
+                 });
+                 $('input[type=radio][name=is_word]').change(function() {
+    
+    			        var value = this.value;
+    			        if(value == 1)
+    			        {
+    			            $("#no_word").attr("style",'display:none')
+    			        }else{
+    			            $("#no_word").attr("style",'display:block')
+    			        }
+                     
+                 });
+                 
+                 $('input[type=radio][name=is_equiment]').change(function() {
+    			        console.log(this.value)
+    			        var value = this.value;
+    			        if(value == 1)
+    			        {
+    			            $("#equiment").attr("style",'display:block')
+    			        }else{
+    			            $("#equiment").attr("style",'display:none')
+    			        }
+                     
+                 });
+    			</script>
+				<div class="form-group">
+					<label class="col-sm-2 control-label">是否显示</label>
+					<div class="col-sm-9">
+						<div class="radio-inline">
+							<input type="radio" name='status' value='1' {if $item['status']==1}checked{/if}>是
+						</div>
+						<div class="radio-inline">
+							<input type="radio" name='status' value='0' {if $item['status']==0}checked{/if}>否
+						</div>
+					</div>
+				</div>
+				
+			</div>
+			<div class="form-group">
+				<label class="col-sm-2 control-label"></label>
+				<div class="col-sm-9">
+					<input type="submit" name="submit" value="提交" class="btn btn-primary min-width" />
+					<input type="hidden" name="token" value="{$_W['token']}" />
+				</div>
+			</div>
+		</form>
+	</div>
+</div>
+
+
+<script>
+	$('input[name="nav[thumb]"]').attr('required','required');
+	$("#reset").on('click',function(){
+		$("#color").val('#666').trigger('propertychange');
+	});
+	
+</script>

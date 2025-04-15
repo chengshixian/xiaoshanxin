@@ -1,0 +1,168 @@
+{template './common/mainHeader'}
+<div class="app-container-right">
+	<ul class="nav nav-tabs">
+		<li {if $type == '1'} class="active" {/if}>
+			<a href="{php echo $this->createWeburl('base',array('op'=>'diseaselist','type'=>'1','keywordtype'=>$keywordtype,'keyword'=>$keyword,'start'=>$start,'end'=>$end));}">中医疾病
+			</a>
+		</li>
+		<li {if $type == '0'} class="active" {/if}>
+			<a href="{php echo $this->createWeburl('base',array('op'=>'diseaselist','type'=>'0','keywordtype'=>$keywordtype,'keyword'=>$keyword,'start'=>$start,'end'=>$end));}">西医疾病
+			</a>
+		</li>
+	</ul>
+	<div class="app-content">
+
+		<!-- <div class="app-filter">
+			<div class="filter-list">
+				<form action="./index.php" method="get" class="form-horizontal" role="form">
+					<input type="hidden" name="c" value="site" />
+					<input type="hidden" name="a" value="entry" />
+					<input type="hidden" name="m" value="xsx_v3" />
+					<input type="hidden" name="ac" value="base" />
+					<input type="hidden" name="do" value="base" />
+					<input type="hidden" name="op" value="diseaselist" />
+
+					<div class="form-group form-inline">
+						<div class="col-sm-9">
+							<input type="text" name="keyword" class="form-control" value="{$keyword}" placeholder="请输入关键字" />
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="col-sm-2 control-label"></label>
+						<div class="col-sm-9">
+							<button class="btn btn-primary">筛选</button>
+						</div>
+					</div>
+				</form>
+			</div>
+		</div> -->
+		<div class="app-filter">
+			<div class="filter-action">
+				<a class="btn btn-primary" href="{php echo $this->createWeburl('base',array('op'=>'adddisease'));}">添加疾病</a>
+			</div>
+		</div>
+		<div class="app-table-list">
+			<form class="form form-horizontal form-validate" action="" method="post">
+				<input type="hidden" name="statusflag" value="" />
+				<input type="hidden" name="ishotflag" value="" />
+				<input type="hidden" name="keywordtype" value="" />
+				<input type="hidden" name="agentname" value="" />
+				<div class="table-responsive">
+					<table class="table table-hover">
+						<thead>
+							<tr>
+								<th style="width: 30px;">
+									序号
+		                        </th>
+								
+								<th style="width:100px; text-align:center;">疾病名称</th>
+								<th style="width:100px; text-align:center;">疾病类型</th>
+								<th style="width:100px; text-align:center;">操作</th>
+							</tr>
+						</thead>
+						<tbody>
+                          {loop $list $item}
+							<tr>
+								<td>
+									{$item['id']}
+		                        </td>
+								<td class="text-center">
+									{$item['name']}
+								</td>
+								<!-- <td class="text-center">
+									{$item['first']}
+								</td> -->
+								<td class="text-center">
+									{if $item['type'] == '0'}
+										西医疾病
+									{else if $item['type'] == '1'}
+										中医疾病
+									{/if}
+								</td>
+                               
+								<td class="text-center">
+									<a class="btn btn-success btn-sm"  href="{php echo $this->createWeburl('base',array('op'=>'adddisease','id'=>$item['id']));}"">编辑疾病</a>
+								</td>
+							</tr>
+                          {/loop}
+						</tbody>
+					</table>
+					<div class="app-table-foot clearfix">
+			            <div class="pull-right">{$pager}</div>
+			        </div>
+				</div>
+				
+		</div>
+		</form>
+	</div>
+</div>
+</div>
+</div>
+</div>
+
+
+</body>
+</html>
+<script type="text/javascript">
+    // 批量删除
+    $('#de1').delegate('.pass_delete','click',function(e){
+        e.stopPropagation();
+        var order_ids = [];
+        var $checks=$('.checkbox:checkbox:checked');
+
+        $checks.each(function() {
+            if (this.checked) {
+                order_ids.push(this.value);
+            };
+        });
+        var $this = $(this);
+        var ids = order_ids;
+
+        util.nailConfirm(this, function(state) {console.log(state)
+        if(!state)  return;
+            $.post("<?php echo $this->copysiteUrl('ceshi.del_diseaselists');?>&ac=diseaselist", { ids : ids }, function(data){
+                if(data.errno=='1'){ 
+                    util.tips("操作成功！");
+                    setTimeout(function(){ 
+                        window.location.reload();
+                    }, 1000);
+                }else{
+                    util.tips("操作失败");  
+                };
+            }, 'json');
+        }, {html: '确认批量删除?'});
+    });
+</script>
+<script>
+	$('.js-switch').on('click',function(){
+      var id=$(this).val()
+      if($(this).next('.checked').length==0){
+                var url ="{$_W['siteroot']}/web/index.php?c=site&a=entry&do=copysite&m=xsx_v3&act=ceshi.ajaxinfo&ac=adddisease&op=type";
+                $.ajax({
+                    type: 'post',
+                    dataType: 'json',
+                    url: url,
+                    data: {
+                        id: id
+                    },
+                    success: function(result) {
+                         console.log('关闭')
+                    }
+                });
+      }else{
+                var url ="{$_W['siteroot']}/web/index.php?c=site&a=entry&do=copysite&m=xsx_v3&act=ceshi.ajaxinfo&ac=adddisease&op=kqtype";
+                $.ajax({
+                    type: 'post',
+                    dataType: 'json',
+                    url: url,
+                    data: {
+                        id: id
+                    },
+                    success: function(result) {
+                         console.log('开启')
+                    }
+                });
+         
+         }
+    })
+</script>

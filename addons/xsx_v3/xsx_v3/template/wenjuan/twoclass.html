@@ -1,0 +1,340 @@
+{template './common/mainHeader'}
+<div class="app-container-right">
+	<ul class="nav nav-tabs">
+		<li class="active">
+			<a href="javascript:;">问卷二级分类列表</a>
+		</li>
+	</ul>
+	<div class="app-content">
+		<div class="app-filter">
+			<div class="filter-action">
+				<span class="btn btn-primary" id="addCate">
+					<i class="fa fa-plus"></i> 新建二级分类
+				</span>
+			</div>
+			<div class="filter-list">
+				<form action="" method="get">
+					<input type="hidden" name="c" value="site" />
+					<input type="hidden" name="a" value="entry" />
+					<input type="hidden" name="m" value="xsx_v3" />
+					<input type="hidden" name="op" value="twoclass" />
+					<input type="hidden" name="ac" value="twoclass" />
+					<input type="hidden" name="do" value="follow" />
+					<div class="form-group">
+						<label class="col-sm-2 control-label">关键字</label>
+						<div class="col-sm-9">
+							<input type="text" name="keyword" class="form-control" value="{$keyword}" placeholder="请输入关键字" />
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="col-sm-2 control-label"></label>
+						<div class="col-sm-9">
+							<button class="btn btn-primary">筛选</button>
+						</div>
+					</div>
+				</form>
+			</div>
+		</div>
+		<div class="app-table-list">
+			<div class="table-responsive">
+				<table class="table table-hover table-bordered">
+					<thead class="navbar-inner">
+						<tr>
+							<th style="width: 10%;">ID</th>
+							<th style="width: 18%;">一级分类名称</th>
+							<th style="width: 18%;">分类名称(点击编辑)</th>
+							<th style="width: 18%;">排序(点击编辑)</th>
+							<th style="width: 18%;">状态(点击编辑)</th>
+							<th style="width: 18%;">操作</th>
+						</tr>
+					</thead>
+					<tbody>
+					    {loop $row $item}
+						<tr>
+							<td>{$item['id']}</td>
+							<td>
+								{$item['one_name']}
+							</td>
+							<td>
+								<a href='javascript:;' data-toggle='ajaxEdit' data-href="{php echo $this->createWeburl('follow',array('op'=>'change2','change'=>'two_name','id'=>$item['id']));}">
+									{$item['two_name']} </a>
+							</td>
+							<td>
+								<a href='javascript:;' data-toggle='ajaxEdit' data-href="{php echo $this->createWeburl('follow',array('op'=>'change2','change'=>'two_strot','id'=>$item['id']));}">
+									{$item['two_strot']} </a>
+							</td>
+							<td>
+								<span class="change">
+								    <span style="float: left;" class='label {if $item['two_type'] == '0'} label-primary {else} label-default {/if}'
+										  data-toggle='ajaxSwitch'
+										  data-switch-value="{$item['two_type']}"
+                                          
+										  data-switch-value0='1|禁用|label label-default|./index.php?c=site&a=entry&op=change2&change=two_type&id={$item['id']}&do=follow&m=xsx_v3&value=0'
+                                       
+										  data-switch-value1='0|启用|label label-primary|./index.php?c=site&a=entry&op=change2&change=two_type&id={$item['id']}&do=follow&m=xsx_v3&value=1'
+										  >
+									
+										  {if $item['two_type'] == '0'} 启用 {else} 禁用 {/if} </span>
+								</span>
+							</td>
+							<td style="position: relative;">
+								<a class="btn btn-primary btn-sm editCate" onclick="editCate(this)" data-id="{$item['id']}" title="编辑">编辑</a>
+								<!--<a class="btn btn-sm btn-danger" data-toggle="ajaxRemove" href="{php echo $this->createWebUrl('wenjuan',array('op'=>'twoclassdel','id'=>$item['id']))}" data-confirm="删除二级分类会影响到问卷报告,确认删除此分类吗？">删除</a>-->
+								<a class="btn btn-sm btn-danger" onclick="confirmDel(this)" data-id="{$item['id']}" data-confirm="删除二级分类会影响到问卷报告,确认删除此分类吗？">删除</a>
+							</td>
+						</tr>
+                        {/loop}
+					</tbody>
+				</table>
+			</div>
+			<div class="app-table-foot clearfix">
+				<div class="pull-left">
+
+				</div>
+				<div class="pull-right">
+				</div>
+			</div>
+		</div>
+		<div class="modal fade" id="addCateModal" aria-hidden="false">
+			<div class="modal-dialog">
+				<div class="modal-content">
+					<div class="modal-header">
+						<button data-dismiss="modal" class="close" type="button">×</button>
+						<h4 class="modal-title">新建级别</h4>
+					</div>
+					<div class="modal-body form-horizontal">
+					    <div class="form-group">
+    						<label class="col-sm-2 control-label">一级分类<span class="must-fill">*</span>
+    						</label>
+    						<div class="col-sm-9">
+    							<select name="one_id" class="form-control">
+    								<option value="0">请选择一级分类</option>
+    								{loop $one_class $item}
+                                        <option value="{$item['id']}">{$item['one_name']}</option>
+    								{/loop}
+    							</select>
+    						</div>
+    					</div>
+						<div class="form-group">
+							<div class="col-sm-2 control-label">级别名称<span class="must-fill">*</span></div>
+							<div class="col-sm-9">
+								<input class="form-control" placeholder="请输入标签名称" id="saveTempName" value="" />
+							</div>
+						</div>
+						<div class="form-group">
+							<div class="col-sm-2 control-label">级别排序</div>
+							<div class="col-sm-9">
+								<input class="form-control" type="tel" placeholder="请输入标签排序" id="saveSort" value="" />
+							</div>
+						</div>
+						<div class="form-group">
+							<div class="col-sm-2 control-label">级别状态</div>
+							<div class="col-sm-9">
+								<label class="radio-inline">
+									<input type="radio" value="1" name="saveStatus" checked="checked">启用</label>
+								<label class="radio-inline">
+									<input type="radio" value="0" name="saveStatus">禁用</label>
+							</div>
+						</div>
+					</div>
+					<div class="modal-footer">
+						<div class="btn btn-primary" id="saveCate">保存</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="modal fade" id="editCateModal">
+			<div class="modal-dialog">
+				<div class="modal-content">
+					<div class="modal-header">
+						<button data-dismiss="modal" class="close" type="button">×</button>
+						<h4 class="modal-title">新建级别</h4>
+					</div>
+					<div class="modal-body form-horizontal">
+					    <input type="hidden" name="two_id" id="two_id" value="" />
+					    <div class="form-group">
+    						<label class="col-sm-2 control-label">一级分类<span class="must-fill">*</span>
+    						</label>
+    						<div class="col-sm-9">
+    							<select name="one_id" id="one_id" class="form-control">
+    								
+    							</select>
+    						</div>
+    					</div>
+						<div class="form-group">
+							<div class="col-sm-2 control-label">级别名称<span class="must-fill">*</span></div>
+							<div class="col-sm-9">
+								<input class="form-control" placeholder="请输入标签名称" id="saveTempName2" value="" />
+							</div>
+						</div>
+						<div class="form-group">
+							<div class="col-sm-2 control-label">级别排序</div>
+							<div class="col-sm-9">
+								<input class="form-control" type="tel" placeholder="请输入标签排序" id="saveSort2" value="" />
+							</div>
+						</div>
+						<div class="form-group">
+							<div class="col-sm-2 control-label">级别状态</div>
+							<div class="col-sm-9" id="two_type">
+
+							</div>
+						</div>
+					</div>
+					<div class="modal-footer">
+						<div class="btn btn-primary" id="updateCate">保存</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+
+    <script type="text/javascript" src="{php echo XSX_ADMIN}/js/table_edit.js"></script>
+	<script type="text/javascript">
+		$("#addCate").unbind('click').click(function () {
+	        $("#addCateModal").modal();
+	        $("#saveCate").unbind('click').click(function () {
+	            var status = $(this).data('status');
+	            if(status) {
+	                util.tips("正在保存，请稍候。");
+	                return;
+	            }
+	            var one_id = $.trim($("select").val());
+	            if(one_id<1) {
+	                util.tips("请选择一级分类！");
+	                return;
+	            }
+	            var name = $.trim($("#saveTempName").val());
+	            if(!name) {
+	                util.tips("请填写名称！");
+	                $("#saveTempName").focus();
+	                return;
+	            }
+	            var sort = $.trim($("#saveSort").val());
+	            var status = $('input[name="saveStatus"]:checked').val();
+	            $(this).data('status',1).text('保存中');
+	            var url = "{$_W['siteroot']}web/index.php?c=site&a=entry&do=follow&op=twoclass&ac=twoclass&m=xsx_v3";
+	            $.post(url, {
+	                one_id: one_id,
+	                two_name: name,
+	                two_strot: sort,
+	                two_type: status
+	            }, function (ret) {
+	            	console.log(ret)
+                    util.tips("保存成功！");
+	                $("#addCateModal .close").trigger('click');
+	                setTimeout(function () {
+	                    location.reload();
+	                }, 500);
+	            }, 'json');
+	        });
+	    });
+	    
+	    $(".editCate").unbind('click').click(function () {
+	        $("#updateCate").unbind('click').click(function () {
+	            var status = $(this).data('status');
+	            if(status) {
+	                util.tips("正在保存，请稍候。");
+	                return;
+	            }
+	            var two_id = $("#two_id").val();
+	            if(two_id<1) {
+	                util.tips("缺少必要参数,请刷新重试！");
+	                return;
+	            }
+	            var one_id = $("#one_id").val();
+	            if(one_id<1) {
+	                util.tips("请选择一级分类！");
+	                return;
+	            }
+	            var name = $.trim($("#saveTempName2").val());
+	            if(!name) {
+	                util.tips("请填写名称！");
+	                $("#saveTempName2").focus();
+	                return;
+	            }
+	            var sort = $.trim($("#saveSort2").val());
+	            var type = $('input[name="saveStatus"]:checked').val();
+
+                console.log(status)
+                console.log(two_id)
+                console.log(one_id)
+                console.log(name)
+                console.log(sort)
+                console.log(type)
+	            $(this).data('status',1).text('保存中');
+	            var url = "{$_W['siteroot']}web/index.php?c=site&a=entry&do=follow&op=edit_wenjuan&ac=edit_wenjuan&m=xsx_v3";
+	            $.post(url, {
+	                one_id: one_id,
+	                two_id: two_id,
+	                two_name: name,
+	                two_strot: sort,
+	                two_type: type
+	            }, function (ret) {
+	            	console.log(ret)
+                    util.tips("保存成功！");
+	                $("#editCateModal .close").trigger('click');
+	                setTimeout(function () {
+	                    location.reload();
+	                }, 500);
+	            }, 'json');
+	        });
+	    });
+	    
+        function editCate(data){
+            $("#editCateModal").modal();
+            var data_id = $(data).attr("data-id");
+            console.log(data_id)
+            var url = "{$_W['siteroot']}web/index.php?c=site&a=entry&do=follow&op=editzhangshi&ac=editzhangshi&m=xsx_v3";
+            $.post(url, {
+                id: data_id,
+            }, function (res) {
+            	console.log(res)
+                var option = "<option value='0'>请选择一级分类</option>";
+                for(var i=0; i<res.one_class.length; i++ ){
+                    if(res.one_id==res.one_class[i]['id']){
+                        option += "<option value="+res.one_class[i]['id']+" selected >"+res.one_class[i]['one_name']+"</option>";
+                    }else{
+                        option += "<option value="+res.one_class[i]['id']+">"+res.one_class[i]['one_name']+"</option>";
+                    }
+                }
+                $("#one_id").html(option); 
+                
+                $("#saveTempName2").val(res.two_name);
+                $("#saveSort2").val(res.two_strot);
+                $("#two_id").val(res.id);
+                
+                if(res.two_type==1){
+                    var labels = '<label class="radio-inline"><input type="radio" value="1" name="saveStatus" checked="checked">启用</label><label class="radio-inline"><input type="radio" value="0" name="saveStatus">禁用</label>'
+                }else if(res.two_type==0){
+                    var labels = '<label class="radio-inline"><input type="radio" value="1" name="saveStatus">启用</label><label class="radio-inline"><input type="radio" value="0" name="saveStatus" checked="checked">禁用</label>'
+                }
+                $("#two_type").html(labels); 
+
+            }, 'json');
+        }
+        
+        function confirmDel(data){
+            var data_confirm = $(data).attr("data-confirm");
+            var data_id = $(data).attr("data-id");
+            console.log(data_id)
+            if(confirm(data_confirm)){
+                var url = "{$_W['siteroot']}web/index.php?c=site&a=entry&do=follow&op=twoclassdel&ac=twoclassdel&m=xsx_v3";
+                $.post(url, {
+                    id: data_id,
+                }, function (ret) {
+                	console.log(ret)
+                    util.tips("操作成功！");
+                    setTimeout(function () {
+                        location.reload();
+                    }, 500);
+                }, 'json');
+            }
+        }
+	</script>
+</div>
+</div>
+</div>
+
+
+</body>
+</html>

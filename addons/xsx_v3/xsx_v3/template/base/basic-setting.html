@@ -1,0 +1,214 @@
+{template './common/mainHeader'}
+<!-- 订阅消息列表 -->
+<div class="app-container-right">
+    <ul class="nav nav-tabs" id="myTab">
+        <li {if $op=='basesite' } class="active" {/if}>
+            <a href="{php echo $this->createWeburl('base',array('op'=>'basesite'));}">基础设置
+            </a>
+        </li>
+        <li {if $op=='xieyi' } class="active" {/if}>
+            <a href="{php echo $this->createWeburl('base',array('op'=>'xieyi'));}">协议设置
+            </a>
+        </li>
+    </ul>
+    <div class="app-content">
+
+        <div class="app-form" id="interfaceManagement">
+            <form action="" method="post" novalidate="novalidate">
+                <div class="panel-heading">基础设置</div>
+                <div class="tab-content">
+                    <div class="form-group">
+
+                        <label class="col-sm-2 control-label">小程序标题</label>
+                        <div class="col-sm-9">
+                            <input type="text" class="form-control max128 J-isDisable" value="{$res['show_title']}"
+                                required="" name="show_title">
+                            <span class="help-block">不填则小程序没有标题</span>
+                        </div>
+                    </div>
+
+                    <!--                     <div class="form-group">
+                        <label class="col-sm-2 control-label">首页幻灯片</label>
+                        <div class="col-sm-9">
+
+                            {php echo tpl_form_field_multi_image('show_thumb', $res['show_thumb'])}
+                            <span class="help-block">不填则小程序首页无幻灯片，幻灯片尺寸为750x375</span>
+                        </div>
+                    </div> -->
+                </div>
+                <div class="panel-heading">版权/授权/处方公章/设置</div>
+                <div class="tab-content">
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label">版权logo</label>
+                        <div class="col-sm-9">
+                            {php echo tpl_form_field_image('bq_thumb', $res['bq_thumb'])}
+                            <span class="help-block">不填则无版权显示</span>
+                        </div>
+
+                    </div>
+
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label">授权logo</label>
+                        <div class="col-sm-9">
+                            {php echo tpl_form_field_image('yy_thumb', $res['yy_thumb'])}
+                            <span class="help-block">不填则授权页面无logo</span>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label">处方公章</label>
+                        <div class="col-sm-9">
+                            {php echo tpl_form_field_image('slide', $res['slide'])}
+                            <span class="help-block">不填则无版权显示规定大小：250px*250px 必须为jpg格式的公章，否则后果自负</span>
+                        </div>
+
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label">自定义个人中心背景图</label>
+                        <div class="col-sm-9">
+                            {php echo tpl_form_field_image('mybg', $res['mybg'])}
+                            <span class="help-block">显示到患者个人中心的背景图,不设置则显示官方背景图</span>
+                        </div>
+
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label">首页推荐文章背景</label>
+                        <div class="col-sm-9">
+                            {php echo tpl_form_field_image('tuijianwenzhangbg', $res['tuijianwenzhangbg'])}
+                            <span class="help-block">显示到患者个人中心的背景图,不设置则显示官方背景图</span>
+                        </div>
+
+                    </div>
+                </div>
+                <div class="panel-heading">其他设置</div>
+                <div class="tab-content">
+
+
+
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label">小程序全局背景色</label>
+                        <div class="col-sm-9">
+
+                            {php echo tpl_form_field_color('ztcolor', $res['ztcolor'])}
+                        </div>
+                    </div>
+
+                    <!-- <div class="form-group">
+                        <label class="col-sm-2 control-label">评论案例</label>
+                        <div class="col-sm-9">
+
+                            {php echo tpl_ueditor('comment_example',$res['comment_example']);}
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label">评论协议</label>
+                        <div class="col-sm-9">
+
+                            {php echo tpl_ueditor('comment_content',$res['comment_content']);}
+                        </div>
+                    </div> -->
+
+
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label">是否开启搜索</label>
+                        <div class="col-sm-9">
+                            <label class="radio-inline">
+                                <input type="radio" name='is_search' value='1' {if $res['is_search']=='1' }
+                                    checked="checked" {/if}>是
+                            </label>
+                            <label class="radio-inline">
+                                <input type="radio" name='is_search' value='0' {if $res['is_search']=='0' || !$res}
+                                    checked="checked" {/if}>否
+                            </label>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label">个人中心是否医生入驻</label>
+                        <div class="col-sm-9">
+                            <label class="radio-inline">
+                                <input type="radio" name='is_yishengrz' value='1' {if $res['is_yishengrz']=='1' }
+                                    checked="checked" {/if}>是
+                            </label>
+                            <label class="radio-inline">
+                                <input type="radio" name='is_yishengrz' value='0' {if $res['is_yishengrz']=='0' || !$res}
+                                    checked="checked" {/if}>否
+                            </label>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label">个人中心是否药师入驻</label>
+                        <div class="col-sm-9">
+                            <label class="radio-inline">
+                                <input type="radio" name='is_yaoshirz' value='1' {if $res['is_yaoshirz']=='1' }
+                                    checked="checked" {/if}>是
+                            </label>
+                            <label class="radio-inline">
+                                <input type="radio" name='is_yaoshirz' value='0' {if $res['is_yaoshirz']=='0' || !$res}
+                                    checked="checked" {/if}>否
+                            </label>
+                        </div>
+                    </div>
+                    <!-- <div class="form-group">
+                        <label class="col-sm-2 control-label">是否首页展示机构</label>
+                        <div class="col-sm-9">
+                            <label class="radio-inline">
+                                <input type="radio" name='is_hospital' value='1' {if $res['is_hospital']=='1' }
+                                    checked="checked" {/if}>是
+                            </label>
+                            <label class="radio-inline">
+                                <input type="radio" name='is_hospital' value='0' {if $res['is_hospital']=='0' || !$res}
+                                    checked="checked" {/if}>否
+                            </label>
+                        </div>
+                    </div> -->
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label">是否首页展示医生</label>
+                        <div class="col-sm-9">
+                            <label class="radio-inline">
+                                <input type="radio" name='is_zhuanjia' value='1' {if $res['is_zhuanjia']=='1' }
+                                    checked="checked" {/if}>是
+                            </label>
+                            <label class="radio-inline">
+                                <input type="radio" name='is_zhuanjia' value='0' {if $res['is_zhuanjia']=='0' || !$res}
+                                    checked="checked" {/if}>否
+                            </label>
+                        </div>
+                    </div>
+
+
+
+
+                    <div class="form-group">
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">首页是否显示就诊人</label>
+                            <div class="col-sm-9">
+                                <label class="radio-inline">
+                                    <input type="radio" name='is_jz' value='1' {if $res['is_jz']=='1' }
+                                        checked="checked" {/if}>是
+                                </label>
+                                <label class="radio-inline">
+                                    <input type="radio" name='is_jz' value='0' {if $res['is_jz']=='0' || !$res}
+                                        checked="checked" {/if}>否
+                                </label>
+                            </div>
+                        </div>
+
+
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label"></label>
+                            <div class="col-sm-9">
+                                <button class="btn btn-primary btn-sml J-submit-btn" type="submit">保存</button>
+                                <input name="token" type="hidden" value="{$_W['token']}" />
+                            </div>
+            </form>
+        </div>
+    </div>
+</div>
+</div>
+
+
+
+
+
+</body>
+
+</html>

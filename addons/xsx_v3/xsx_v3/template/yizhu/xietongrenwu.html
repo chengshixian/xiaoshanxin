@@ -1,0 +1,266 @@
+{template '/common/mainHeader'}
+<style>
+	.col-sm-4{
+   	width:auto   
+  }
+  .col-sm-2{
+   	width:auto   
+  }
+  .zhe{
+  	position: fixed;
+  	top: 0;
+  	width: 100%;
+  	height: 100%;
+  	background: rgba(0,0,0,0.6);
+  	display: flex;
+  	justify-content: center;
+  	align-items: center;
+  }
+  .zhe .imgBig{
+  	width: 20%;
+  }
+</style>
+			<div class="app-content">
+				<div class="app-filter">
+					<div class="filter-list">
+						<form action="" method="post" class="form-horizontal" role="form" id="form1">
+			    <!--          	<div class="form-group">-->
+							<!--	<label class="col-sm-2 control-label">关键字</label>-->
+							<!--	<div class="col-md-3">-->
+							<!--		<select name="keywordtype" class="form-control">-->
+							<!--			<option value="">关键字类型</option>-->
+							<!--			<option value="1" {if $keywordtype == '1'} selected="" {/if}>医助姓名</option>-->
+							<!--			<option value="2" {if $keywordtype == '2'} selected="" {/if}>绑定医生</option>-->
+							<!--			<option value="3" {if $keywordtype == '3'} selected="" {/if}>联系电话</option>-->
+							<!--		</select>-->
+			    <!--                </div>-->
+							<!--	<div class="col-md-5">-->
+							<!--		<input type="text" name="keyword" class="form-control" value="{$keyword}" placeholder="请输入关键字" />-->
+							<!--	</div>-->
+							<!--</div>-->
+                            <div class="form-group" style="display: flex;">
+								<label class="col-sm-2 control-label" style="white-space: nowrap;">任务状态</label>
+								<div class="col-sm-3">
+									<select name="renwuzhuangtai" class="form-control" id="one" >
+										<option value="">--任务状态--</option>
+										
+										<option value="1" {if $renwuzhuangtai == '1'} selected="" {/if}>待处理</option>
+										<option value="2" {if $renwuzhuangtai == '2'} selected="" {/if}>处理中</option>
+									    <option value="3" {if $renwuzhuangtai == '3'} selected="" {/if}>已完成</option>
+									</select>
+								</div>
+
+								<div class="col-md-4">
+									<label class="col-sm-2 control-label">是否分配医助</label>
+									<div class="col-sm-8">
+										<select name="isfenpei" class="form-control">
+											<option value="">是否分配医助</option>
+											<option value="1" {if $isfenpei == '1'} selected="" {/if}>是</option>
+											<option value="2" {if $isfenpei == '2'} selected="" {/if}>否</option>
+										</select>
+									</div>
+								</div>
+							</div>
+							<div class="form-group">
+								<div class="col-md-9">
+									<button class="btn btn-primary" id="search">筛选</button>
+								</div>
+							</div>
+						</form>
+					</div>
+				</div>
+
+				<div class="app-table-list">
+					<div class="table-responsive">
+						<table class="table table-hover">
+							<thead>
+								<tr>
+									<!--<th style="width: 30px;">-->
+									<!--	<input type="checkbox" onclick="var ck = this.checked;$(':checkbox').each(function(){this.checked = ck});" />-->
+									<!--</th>-->
+									<th>ID</th>
+									<th >任务标题</th>
+									<th>任务内容</th>
+									<th>任务时间</th>
+									<th>患者信息</th>
+									<th>发布者信息</th>
+									<th>医助信息</th>
+									
+									<th>发布时间</th>
+									<th>状态</th>
+									<th>操作</th>
+								</tr>
+							</thead>
+							{loop $res $item}
+							<tbody>
+								<tr>
+									<!--<td>-->
+									<!--	<center>-->
+									<!--		<input type="checkbox" name="checkbox[]" class="checkbox" value="{$item['id']}" />-->
+									<!--	</center>-->
+									<!--</td>-->
+									<td>{$item['id']}</td>
+
+									<td>{$item['task_title']}	</td>
+									<td>{$item['task_cont']}	</td>
+									<td>
+									    开始时间{$item['taskdate']}<br/>
+									    截止时间{$item['jztime_text']}<br/>
+									</td>
+									<td class="text-left">
+										<span>{$item['hzname']}</span>
+										<span>{$item['hzsex']}</span>
+										<span>{$item['hzage']}岁</span>
+									</td>
+									<td class="text-left">
+										<span>{$item['zjname']}</span>
+										<span>{$item['yijikeshi']} {$item['erjikeshi']}</span>
+										<span>{$item['yiyuan']}</span>
+									</td>
+									<td class="text-left">
+										<span>{$item['yzname']}</span>
+										<span>{if $item['yzsex']==1}男{else if $item['yzsex']==2}女{/if}</span>
+									</td>
+									<td>{$item['addtime']}</td>
+									<td>
+									    {if $item['ststus']==0}待处理
+									    {else if $item['ststus']==1}处理中
+									    {else if $item['ststus']==2}已完成
+									    {/if}
+									</td>
+									<td style="overflow:visible;">
+                                        <a class="btn btn-danger btn-sm"  href="{php echo $this->createWebUrl('yizhu',array('op'=>'delxietongrenwu','id'=>$item['id'],'ac'=>'xietongrenwu','hid'=>$_SESSION['hid']))}" data-confirm="确定要删除吗？">删除</a>
+                                    </td>
+								</tr>
+							</tbody>
+							{/loop}
+						</table>
+				
+					</div>
+					<div class="app-table-foot clearfix">
+						<!--<div class="pull-left">-->
+						<!--	<div id="de1" class="pull-left">-->
+						<!--		<a href="javascript:;" class="btn btn-default min-width js-batch js-delete pass">删除选中医助</a>-->
+						<!--	</div>-->
+						<!--</div>-->
+						<div class="pull-right">{$pager}</div>
+					</div>
+				</div>
+			</div>
+
+			<script>
+				var enabled = "1";
+					$('#de1').delegate('.pass','click',function(e){
+						e.stopPropagation();
+						var order_ids = [];
+						var $checks=$('.checkbox:checkbox:checked');
+						$checks.each(function() {
+							if (this.checked) {
+								order_ids.push(this.value);
+							};
+						});
+						var $this = $(this);
+						var ids = order_ids;
+						util.nailConfirm(this, function(state) {
+						if(!state) return;
+							if(enabled == 4){
+								var type = 2;
+							}else{
+								var type = 1;
+							}
+							$.post("/web/index.php?c=site&a=entry&m=weliam_merchant&p=store&ac=merchant&do=deletes&hid=$_SESSION['hid']&", { ids : ids ,type:type}, function(data){
+								if(!data.errno){
+								util.tips("删除成功！");
+								location.reload();
+								}else{
+								util.tips(data.message);	
+								};
+							}, 'json');
+						}, {html: '确认删除所选商户?'});
+					});
+					
+			</script>
+		</div>
+	</div>
+</div>
+{template './common/mainfooter'}
+<script>
+myrequire(['/js/tip']);
+  $(document).on("click", '[data-toggle="ajaxRemove"]', function (e) { //行删除
+                    e.preventDefault();
+                    var obj = $(this), url = obj.attr('href') || obj.data('href') || obj.data('url'), confirm = obj.data('msg') || obj.data('confirm');
+
+                    var submit = function () {
+
+                        obj.html('<i class="fa fa-spinner fa-spin"></i> ' + tip.lang.processing);
+                        $.post(url).done(function (data) {
+                             
+                            data = eval("(" + data + ")");
+                             
+                            if (data.status == 1) {
+                               window.location.reload()
+                            }
+                            else {
+                                obj.button('reset'), tip.msgbox.err(data.result.message || tip.lang.error, data.result.url);
+                            }
+                        }).fail(function () {
+                            obj.button('reset');
+                            tip.msgbox.err(tip.lang.exception);
+                        })
+                    };
+
+                    if (confirm) {
+                        tip.confirm(confirm, submit, function () {
+                            obj.removeAttr("disabled", "disabled");
+                             
+                        });
+
+                    } else {
+                    	
+                        submit();
+                    }
+
+                });
+
+</script> 
+
+
+<script>
+	require(['bootstrap'], function ($) {
+			    $('[data-toggle="tooltip"]').tooltip({
+		            container: $(document.body)
+		        });
+		        $('[data-toggle="popover"]').popover({
+		            container: $(document.body)
+		        });
+		        $('[data-toggle="dropdown"]').dropdown({
+		            container: $(document.body)
+		        });
+		    });
+			myrequire(['js/init']);
+					$('.app-login-info-name, .app-login-info-sel').mouseover(function(){
+				$('.app-login-info-sel').show();
+			});
+			$('.app-login-info-name, .app-login-info-sel').mouseout(function(){
+				$('.app-login-info-sel').hide();
+			});
+			$('.app-login-info-sel .login-out').hover(function(){
+				$('.app-login-info-sel-arrow').css('border-color', '#1ab394 transparent transparent transparent');
+			},function(){
+				$('.app-login-info-sel-arrow').css('border-color', '#f2f2f2 transparent transparent transparent');
+			});
+
+			$(document).on('click','.bigImg',function(){
+				var src=$(this).attr('data-src')
+				$('body').append(`
+					<div class="zhe">
+					<img class="imgBig" src="${src}"/>
+					</div>
+					`)
+			})
+			$(document).on('click','.zhe',function(){
+				$(this).remove()
+			})
+</script>
+</body>
+</html>

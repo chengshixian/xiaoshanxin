@@ -1,0 +1,90 @@
+{template './common/mainHeader'}
+<div class="app-container-right">
+	<ul class="nav nav-tabs">
+		<li class="active">
+			<a href="#">分组列表</a>
+		</li>
+	</ul>
+	<div class="app-content">
+		<div class="app-filter">
+			<div class="filter-action">
+				<a href="/web/index.php?c=site&a=entry&do=jiancha&op=groupEdit&ac=groupEdit&m=xsx_v3" class="btn btn-primary">添加分组</a>
+			</div>
+		</div>
+		<div class="app-table-list">
+			<div class="table-responsive">
+				<table class="table table-hover">
+					<thead>
+						<tr>
+							<th>分组名称</th>
+							<th>应用权限</th>
+							<th>是否默认</th>
+							<th>是否开启</th>
+							<th>操作</th>
+						</tr>
+					</thead>
+					<tbody>
+					{loop $res $item}
+						<tr>
+							<td>
+								{$item['name']} </td>
+							<td>
+								{$item['grouparr']} </td>
+							<td>
+								<label class='label {if $item['default'] =='1'} label-success {else} label-error {/if}'>{if $item['default'] =='1'}是{else} 否 {/if}</label>
+							</td>
+							<td>
+								<label class='label {if $item['state'] =='1'} label-success {else} label-error {/if}'>{if $item['state'] =='1'}开启{else} 否 {/if}</label>
+							</td>
+							<td>
+								<a href="/web/index.php?c=site&a=entry&do=jiancha&op=groupEdit&ac=groupEdit&m=xsx_v3&id={$item['id']}">编辑</a> -
+								<a href="/web/index.php?c=site&a=entry&do=jiancha&op=groupDelete&ac=groupDelete&m=xsx_v3&id={$item['id']}"">删除</a>
+							</td>
+						</tr>
+						{/loop}
+					</tbody>
+				</table>
+			</div>
+			<div class="app-table-foot clearfix">
+				<div class="pull-left">
+
+				</div>
+				<div class="pull-right">
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+</div>
+</div>
+
+
+
+
+<script>
+	require(['bootstrap'], function ($) {
+			    $('[data-toggle="tooltip"]').tooltip({
+		            container: $(document.body)
+		        });
+		        $('[data-toggle="popover"]').popover({
+		            container: $(document.body)
+		        });
+		        $('[data-toggle="dropdown"]').dropdown({
+		            container: $(document.body)
+		        });
+		    });
+			myrequire(['js/init']);
+					$('.app-login-info-name, .app-login-info-sel').mouseover(function(){
+				$('.app-login-info-sel').show();
+			});
+			$('.app-login-info-name, .app-login-info-sel').mouseout(function(){
+				$('.app-login-info-sel').hide();
+			});
+			$('.app-login-info-sel .login-out').hover(function(){
+				$('.app-login-info-sel-arrow').css('border-color', '#1ab394 transparent transparent transparent');
+			},function(){
+				$('.app-login-info-sel-arrow').css('border-color', '#f2f2f2 transparent transparent transparent');
+			});
+</script>
+</body>
+</html>

@@ -1,0 +1,105 @@
+{template '/common/mainHeader'}
+<div class="app-container-right">
+    <ul class="nav nav-tabs">
+        <li class="active">
+            <a href="/web/index.php?c=site&a=entry&m=xsx_v3&op=jiancha&ac=editrole&do=editrole&keyword={$keyword}&id={$id}">编辑权限</a>
+        </li>
+    </ul>
+    <div class="app-content">
+        <div class="app-form">
+            <form action="" method="post" class="form-horizontal form form-validate">
+                <input type="hidden" name="id" value="{$id}" />
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        权限设置
+                    </div>
+                    <div class="panel-body">
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">角色名称<span class="must-fill">*</span>
+                            </label>
+                            <div class="col-sm-9">
+                                <input type="text" name="title" disabled="disabled" placeholder="请输入分组名称" class="form-control" value="{$data['rolename']}">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">权限<span class="must-fill">*</span></label>
+                            <div class="col-sm-9" >
+                                {loop $allMenuList $topmenus}
+                                     <input  type='checkbox' style="margin-bottom: 10px;margin-top: 50px;" name='role[]'  {if in_array($topmenus['id'],$checkedMenu)} checked="checked" {/if} class="form-control" value='{$topmenus['id']}' /><b>{$topmenus['menuname']}</b></span></br>
+                                    {loop $topmenus['child'] $item}
+                                        <label style="width: 100px;" >
+                                             <input type='checkbox' name='role[]'  {if in_array($item['id'],$checkedMenu)} checked="checked" {/if} class="form-control" value='{$item['id']}' />{$item['menuname']}
+                                        </label>
+                                    {/loop}  
+                                {/loop}
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label"></label>
+                            <div class="col-sm-9">
+                                <input type="submit" name="submit" lay-submit value="提交" class="btn btn-primary min-width" />
+                                <input type="hidden" name="token" value="{$_W['token']}" />
+                                <input type="hidden" name="id" value="{$id}" />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div> 
+    </div>
+</div>
+</div>
+</div>
+<div class="foot" id="footer">
+    <ul class="links ft">
+        <li class="links_item">
+          
+        </li>
+    </ul>
+</div>
+</body>
+</html>
+<script type="text/javascript">
+    $('.checkbox input').on('click',function () {
+        // body...
+        var checkids = [];
+        $("input[name='plugins[]']:checked").each(function(inx,val){
+                checkids.push($(val).parents('label').text().trim())
+        })
+        $('#plugins').val(checkids)
+    })
+</script>
+<script type="text/javascript">
+    // 取消勾选权限的操作
+    function deleteRole(id, mid) {
+        $.ajax({
+            type: 'POST',
+            url: '{php echo $this->createWebUrl('quanxian', array('op' => 'deleteRole', 'hid' => $hid, 'id' => $id))}',
+
+            data: {id: id, mid: mid},
+            success: function(data) {
+                if (data.status === 'success') {
+                    // 刷新页面或更新界面
+                    window.location.reload();
+                } else {
+                    console.log('取消勾选失败');
+                }
+            },
+            error: function() {
+                // 处理错误
+                console.log('取消勾选失败');
+            }
+        });
+    }
+
+    // 监听复选框的点击事件
+    $('.form-control[type="checkbox"]').on('click', function() {
+        var id = {$id}; // 获取角色ID
+        var mid = $(this).val(); // 获取菜单ID
+        console.log('Checkbox clicked');
+        // 如果是取消勾选，执行删除操作
+        if (!$(this).prop('checked')) {
+            deleteRole(id, mid);
+        }
+    });
+</script>

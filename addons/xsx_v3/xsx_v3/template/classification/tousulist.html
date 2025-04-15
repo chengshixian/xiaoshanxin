@@ -1,0 +1,103 @@
+{template './common/mainHeader'}
+
+<style type='text/css'>
+	.trbody td {text-align: center; vertical-align:top;border-left:1px solid #ccc; border-bottom: 1px solid #ddd;}
+							.order-rank img{width:16px; height:16px;}
+							.js-remark,.js-admin-remark{word-break:break-all; overflow:hidden; background: #FDEEEE;color: #ED5050;padding: 5px 10px;}
+							td.goods-info{position:relative; padding-left:60px;}
+							.goods-info .img{position:absolute;top:50%; margin-top:-25px; background: url(https://test3.xiaoshanxin.com/addons/xsx_v3/public/resource/images/loading.gif) center center no-repeat; width:50px;height:50px; }
+							.goods-info span {white-space: inherit;overflow: hidden;text-overflow: ellipsis;display: block;}
+							.status-text{cursor:pointer;}
+							.table>thead>tr>th, .table>tbody>tr>th, .table>tfoot>tr>th, .table>thead>tr>td, .table>tbody>tr>td, .table>tfoot>tr>td {border-top: 1px solid rgba(221, 221, 221, 0);}
+							.col-md-1{padding-right: 0px;}
+							.asd{cursor: pointer;}
+</style>
+<ul class="nav nav-tabs">
+	所有投诉
+</ul>
+<div class="app-content">
+	<div class="app-table-list">
+		<div class="panel-body table-responsive collapse in" id="order-template-item-4" style="padding: 0;">
+			<table class="table table-bordered">
+				<thead style="background-color: #FFFFFF;">
+					<tr>
+						<th width="5%" class="text-center">
+							<input type="checkbox" onclick="var ck = this.checked;$(':checkbox').each(function(){this.checked = ck});" />
+						</th>
+						<th width="15%" class="text-left">投诉内容</th>
+						<th width="10%" class="text-center">投诉人</th>
+						<th width="10%" class="text-center">投诉订单号</th>
+						<th width="10%" class="text-center">投诉员工</th>
+						<th width="10%" class="text-center">处理意见</th>
+						<th width="10%" class="text-center">创建时间</th>
+						<th width="10%" class="text-center">状态</th>
+						<th width="10%" class="text-center">操作</th>
+					</tr>
+				</thead>
+				<tbody>
+					{loop $row $item}
+					<tr>
+						<td style="width: 50px;">
+							<center>
+								<input type="checkbox" name="checkbox[]" class="checkbox" value="{$item['id']}" />
+							</center>
+						</td>
+						<td class="goods-info line-feed" style="width:170px;">
+							<div class="title">
+								<span>{$item['content']}</span>
+							</div>
+						</td>
+						<td class="text-center" style="width:100px;">
+
+							<div class="title">
+								<a href="/web/index.php?c=site&a=entry&op=adduser&do=copysite&m=xsx_v3&act=profile.adduser&ac=notice&u_id={$item['u_id']}&hid={$_SESSION['hid']}"> {$item['u_name']}</a>
+								<br />{$item['u_tel']}
+							</div>
+						</td>
+						<td class="text-center" style="width:90px;">
+							<p>{$item['orderno']}</p>
+						</td>
+						<td class="text-center" style="width:100px;">
+							<span>{$item['user']}</span>
+						</td>
+						<td class="text-center" style="width:100px;">
+							<span>{$item['results']}</span>
+						</td>
+						<td class="goods-info line-feed" style="width:180px;padding-left: 10px;">
+							<span>{$item['create_time']}</span>
+						</td>
+						<td class="text-center" style="width:80px;">
+							{if $item['state']=='0'}
+							<span class="label label-success">待处理</span>
+							{else}
+							<span class="label label-error">已处理</span>
+							{/if}
+						</td>
+						<td class="text-center" style="text-align: center;">
+
+							{if $item['state']=='0'}
+							<a class="btn btn-default btn-sm" href="index.php?c=site&a=entry&do=classification&op=edittousu&m=xsx_v3&id={$item['id']}" title="设为已处理">设为已处理</a>
+							{/if}
+						</td>
+					</tr>
+					{/loop}
+				</tbody>
+			</table>
+			{$pager}
+		</div>
+
+	</div>
+</div>
+<script type="text/javascript">
+	$("#search").click(function(){
+					$('#form1')[0].submit();
+				});
+</script>
+</div>
+</div>
+</div>
+
+
+
+</body>
+</html>
