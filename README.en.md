@@ -14,8 +14,7 @@ You can switch between Chinese and English content by viewing the following lang
 - Mini-program address
 ![输入图片说明](https://img.xiaoshanxin.com/images/gitee/tiyan.jpg)
 - Backend address
-[https://demo.xiaoshanxin.com/web/index.php?c=user&a=login&
-账号:admin 密码:QWE123qwe](https://demo.xiaoshanxin.com/web/index.php?c=user&a=login&
+https://demo.xiaoshanxin.com/web/index.php?c=user&a=login&
 Username: admin Password: QWE123qwe)
 # System Introduction
 
@@ -33,7 +32,7 @@ Username: admin Password: QWE123qwe)
 ![输入图片说明](https://img.xiaoshanxin.com/images/gitee/8.png)
 # System Installation
 You can refer to the tutorial at
-[https://bbs.xiaoshanxin.com/thread-494-1-1.html](https://bbs.xiaoshanxin.com/thread-494-1-1.html)
+[bbs](https://bbs.xiaoshanxin.com/thread-494-1-1.html)
 # Notes
 
 - If you want to use a more feature-rich Internet hospital system, please contact our customer service to obtain the professional version:
