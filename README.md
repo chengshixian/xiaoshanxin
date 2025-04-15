@@ -3,6 +3,8 @@
 ## 语言切换说明
 你可以通过查看下面不同语言块来切换中英文内容。
 
+[https://github.com/chengshixian/xiaoshanxin](中文)
+[https://github.com/chengshixian/xiaoshanxin/blob/main/README.en.md](English)
 ### 中文内容
 ![输入图片说明](https://img.xiaoshanxin.com/images/gitee/jieshao.png)
 # 使用说明
